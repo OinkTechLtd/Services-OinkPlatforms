@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1> Oink Translate</h1>
+        <div class="input-group">
+            <label for="urlInput">URL сайта:</label>
+            <input type="url" id="urlInput" placeholder="Введите URL сайта">
+        </div>
+        <div class="input-group">
+            <label for="languageSelect">Язык перевода:</label>
+            <select id="languageSelect">
+                <option value="en">Английский</option>
+                <option value="de">Немецкий</option>
+                <option value="fr">Французский</option>
+                <option value="es">Испанский</option>
+                <option value="ru" selected>Русский</option>
+                       <option value="ru">Russian</option>
+                <option value="en">English</option>
+                <option value="fr">French</option>
+                <option value="en">Английский</option>
+                <option value="de">Немецкий</option>
+                <option value="fr">Французский</option>
+                <option value="es">Испанский</option>
+                <option value="ja">Японский</option>
+                <!-- Добавьте другие языки -->
+            </select>
+        </div>
+        <button id="translateButton">Перевести</button>
+    </div>
+
+    <script>
+        document.getElementById('translateButton').addEventListener('click', function() {
+            const url = document.getElementById('urlInput').value;
+            const language = document.getElementById('languageSelect').value;
+
+            // URL Google Translate
+            const googleTranslateURL = `https://translate.google.com/translate?hl=${language}&sl=auto&tl=${language}&u=${url}`;
+
+            // Открываем ссылку в новой вкладке
+            window.open(googleTranslateURL, '_blank');
+        });
+    </script>
+</body>
+</html>
+<style>/* style.css */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #121212; /* Темный фон */
+    color: #fff; /* Белый текст */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.container {
+    background-color: #222; /* Более темный контейнер */
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 255, 255, 0.2); /* Неоновая тень */
+    padding: 40px;
+    width: 80%;
+    max-width: 800px;
+    text-align: center;
+}
+
+h1 {
+    color: #00ff99; /* Неоновый цвет заголовка */
+    margin-bottom: 30px;
+    text-shadow: 0 0 10px #00ff99; /* Неоновое свечение текста */
+}
+
+.input-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    color: #bbb;
+    font-size: 14px;
+}
+
+input[type="url"],
+select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #444; /* Более темная обводка */
+    border-radius: 25px;
+    background-color: #333; /* Темный фон для полей */
+    color: #eee;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+input[type="url"]:focus,
+select:focus {
+    background-color: #444; /* Еще более темный фон при фокусе */
+    outline: none;
+    box-shadow: 0 3px 6px rgba(0, 255, 255, 0.1); /* Неоновая тень при фокусе */
+}
+
+button {
+    background-color: #00cc66; /* Неоновая кнопка */
+    color: #fff;
+    border: none;
+    border-radius: 25px;
+    padding: 12px 30px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-shadow: 0 0 5px #00ff99; /* Неоновое свечение текста */
+}
+
+button:hover {
+    background-color: #00994d; /* Более темный цвет при наведении */
+}
+</style>

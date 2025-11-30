@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .panel h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .domain-info {
+            background: #f8f9ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+        }
+
+        .domain-url {
+            font-family: monospace;
+            background: #333;
+            color: #00ff00;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            word-break: break-all;
+        }
+
+        .file-upload {
+            border: 2px dashed #667eea;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .file-upload:hover {
+            border-color: #764ba2;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .file-upload.dragover {
+            border-color: #764ba2;
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .file-list {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+
+        .file-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .file-item:last-child {
+            border-bottom: none;
+        }
+
+        .editor-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            height: 400px;
+        }
+
+        .editor {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            padding: 15px;
+            resize: none;
+            background: #f8f9fa;
+        }
+
+        .preview {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: white;
+            overflow: auto;
+            padding: 15px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #6c757d, #495057);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #28a745, #20c997);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #dc3545, #fd7e14);
+        }
+
+        .sites-list {
+            grid-column: 1 / -1;
+        }
+
+        .site-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .site-info h3 {
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .site-url {
+            font-family: monospace;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .file-input-label {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .file-input-label:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(40, 167, 69, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .editor-container {
+                grid-template-columns: 1fr;
+                height: 600px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo"> OinkHost</div>
+            <div class="subtitle">хостинг-сервис с собственными доменами</div>
+        </div>
+
+        <div class="main-content">
+            <div class="panel">
+                <h2>📁 Файловый менеджер</h2>
+                
+                <div class="domain-info">
+                    <strong>Ваш домен:</strong>
+                    <div class="domain-url" id="currentDomain">a4x9k2m1p.oinkhost.ru</div>
+                    <button class="btn btn-secondary" onclick="generateNewDomain()">🔄 Новый домен</button>
+                </div>
+
+                <div class="file-upload" id="fileUpload">
+                    <p>📤 Перетащите файлы сюда или</p>
+                    <label for="fileInput" class="file-input-label">Выберите файлы</label>
+                    <input type="file" id="fileInput" multiple accept="*/*">
+                </div>
+
+                <div class="file-list" id="fileList">
+                    <div class="file-item">
+                        <span>📄 index.html</span>
+                        <button class="btn btn-danger" onclick="deleteFile('index.html')">❌</button>
+                    </div>
+                </div>
+
+                <div class="controls">
+                    <button class="btn btn-success" onclick="createNewFile()">📝 Новый файл</button>
+                    <button class="btn" onclick="openSite()">🌐 Открыть сайт</button>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h2>⚡ Редактор кода</h2>
+                
+                <div style="margin-bottom: 15px;">
+                    <select id="fileSelector" onchange="loadFileToEditor()">
+                        <option value="index.html">index.html</option>
+                    </select>
+                    <button class="btn btn-success" onclick="saveFile()">💾 Сохранить</button>
+                </div>
+
+                <div class="editor-container">
+                    <textarea class="editor" id="codeEditor" placeholder="Введите ваш HTML/CSS/JS код здесь...">&lt;!DOCTYPE html&gt;
+&lt;html lang="ru"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;Мой сайт&lt;/title&gt;
+    &lt;style&gt;
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 600px;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .btn {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: transform 0.3s;
+        }
+        .btn:hover {
+            transform: translateY(-3px);
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class="container"&gt;
+        &lt;h1&gt;🎉 Добро пожаловать!&lt;/h1&gt;
+        &lt;p&gt;Это ваш первый сайт на OinkHost!&lt;/p&gt;
+        &lt;p&gt;Редактируйте этот код в редакторе слева и смотрите результат справа.&lt;/p&gt;
+        &lt;button class="btn" onclick="alert('Привет от OinkHost!:) Это ваш Первый сайт Можете Редактировать его чтобы создать сайт Удачи:)')"&gt;Нажми меня!&lt;/button&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</textarea>
+                    
+                    <div class="preview" id="preview"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel sites-list">
+            <h2>🌍 Мои сайты</h2>
+            <div id="sitesList">
+                <div class="site-card">
+                    <div class="site-info">
+                        <h3>Мой первый сайт</h3>
+                        <div class="site-url">a4x9k2m1p.oinkhost.ru</div>
+                    </div>
+                    <button class="btn" onclick="openSiteInNewTab('file://a4x9k2m1p.oinkhost.ru')">🌐 Открыть</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Глобальные переменные
+        let currentDomain = 'file://a4x9k2m1p.oinkhost.ru';
+        let files = {
+            'index.html': document.getElementById('codeEditor').value
+        };
+        let sites = [
+            { name: 'Мой первый сайт', domain: 'file://a4x9k2m1p.oinkhost.ru' }
+        ];
+
+        // Генерация случайного домена (как на Glitch.com)
+        function generateRandomUsername() {
+            const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+            let result = '';
+            
+            // Генерируем случайную строку из 8-12 символов
+            const length = Math.floor(Math.random() * 5) + 8; // от 8 до 12 символов
+            
+            for (let i = 0; i < length; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            
+            return result;
+        }
+
+        function generateNewDomain() {
+            const username = generateRandomUsername();
+            currentDomain = `file://${username}.oinkhost.ru`;
+            document.getElementById('currentDomain').textContent = currentDomain;
+            
+            // Добавляем новый сайт в список
+            const siteName = `Сайт ${sites.length + 1}`;
+            sites.push({ name: siteName, domain: currentDomain });
+            updateSitesList();
+        }
+
+        // Обновление списка сайтов
+        function updateSitesList() {
+            const sitesList = document.getElementById('sitesList');
+            sitesList.innerHTML = '';
+            
+            sites.forEach(site => {
+                const siteCard = document.createElement('div');
+                siteCard.className = 'site-card';
+                siteCard.innerHTML = `
+                    <div class="site-info">
+                        <h3>${site.name}</h3>
+                        <div class="site-url">${site.domain}</div>
+                    </div>
+                    <button class="btn" onclick="openSiteInNewTab('${site.domain}')">🌐 Открыть</button>
+                `;
+                sitesList.appendChild(siteCard);
+            });
+        }
+
+        // Функции работы с файлами
+        function updateFileList() {
+            const fileList = document.getElementById('fileList');
+            const fileSelector = document.getElementById('fileSelector');
+            
+            fileList.innerHTML = '';
+            fileSelector.innerHTML = '';
+            
+            Object.keys(files).forEach(filename => {
+                // Добавляем в список файлов
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item';
+                fileItem.innerHTML = `
+                    <span>📄 ${filename}</span>
+                    <button class="btn btn-danger" onclick="deleteFile('${filename}')">❌</button>
+                `;
+                fileList.appendChild(fileItem);
+                
+                // Добавляем в селектор
+                const option = document.createElement('option');
+                option.value = filename;
+                option.textContent = filename;
+                fileSelector.appendChild(option);
+            });
+        }
+
+        function loadFileToEditor() {
+            const selectedFile = document.getElementById('fileSelector').value;
+            const editor = document.getElementById('codeEditor');
+            
+            if (files[selectedFile]) {
+                editor.value = files[selectedFile];
+                updatePreview();
+            }
+        }
+
+        function saveFile() {
+            const selectedFile = document.getElementById('fileSelector').value;
+            const editor = document.getElementById('codeEditor');
+            
+            files[selectedFile] = editor.value;
+            updatePreview();
+            
+            // Показываем уведомление
+            showNotification('✅ Файл сохранен!');
+        }
+
+        function deleteFile(filename) {
+            if (Object.keys(files).length <= 1) {
+                showNotification('❌ Нельзя удалить последний файл!');
+                return;
+            }
+            
+            delete files[filename];
+            updateFileList();
+            
+            // Переключаемся на первый доступный файл
+            const firstFile = Object.keys(files)[0];
+            document.getElementById('fileSelector').value = firstFile;
+            loadFileToEditor();
+            
+            showNotification('🗑️ Файл удален!');
+        }
+
+        function createNewFile() {
+            const filename = prompt('Введите имя файла (с расширением):');
+            if (filename && !files[filename]) {
+                files[filename] = filename.endsWith('.html') ? 
+                    '<!DOCTYPE html>\n<html>\n<head>\n    <title>Новый файл</title>\n</head>\n<body>\n    <h1>Новый файл</h1>\n</body>\n</html>' :
+                    filename.endsWith('.css') ? 'body {\n    margin: 0;\n    font-family: Arial, sans-serif;\n}' :
+                    filename.endsWith('.js') ? 'console.log("Hello, OinkHost!");' :
+                    '';
+                
+                updateFileList();
+                document.getElementById('fileSelector').value = filename;
+                loadFileToEditor();
+                showNotification('📝 Файл создан!');
+            }
+        }
+
+        // Обновление предпросмотра
+        function updatePreview() {
+            const code = document.getElementById('codeEditor').value;
+            const preview = document.getElementById('preview');
+            
+            if (code.trim() === '') {
+                preview.innerHTML = '<p style="color: #999; text-align: center; padding: 50px;">Предпросмотр будет здесь...</p>';
+                return;
+            }
+            
+            try {
+                // Создаем iframe для безопасного отображения
+                preview.innerHTML = `<iframe style="width: 100%; height: 100%; border: none;" srcdoc="${code.replace(/"/g, '&quot;')}"></iframe>`;
+            } catch (error) {
+                preview.innerHTML = `<div style="color: red; padding: 20px;">Ошибка: ${error.message}</div>`;
+            }
+        }
+
+        // Функции работы с файлами через drag & drop
+        const fileUpload = document.getElementById('fileUpload');
+        const fileInput = document.getElementById('fileInput');
+
+        fileUpload.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            fileUpload.classList.add('dragover');
+        });
+
+        fileUpload.addEventListener('dragleave', () => {
+            fileUpload.classList.remove('dragover');
+        });
+
+        fileUpload.addEventListener('drop', (e) => {
+            e.preventDefault();
+            fileUpload.classList.remove('dragover');
+            handleFiles(e.dataTransfer.files);
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+        });
+
+        function handleFiles(fileList) {
+            Array.from(fileList).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    files[file.name] = e.target.result;
+                    updateFileList();
+                    showNotification(`📁 Файл ${file.name} загружен!`);
+                };
+                reader.readAsText(file);
+            });
+        }
+
+        // Открытие сайта
+        function openSite() {
+            openSiteInNewTab(currentDomain);
+        }
+
+        function openSiteInNewTab(domain) {
+            // Получаем HTML содержимое
+            const htmlContent = files['index.html'] || '<h1>Сайт не найден</h1><p>Создайте файл index.html для отображения вашего сайта.</p>';
+            
+            // Создаем Blob с HTML содержимым
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            
+            // Открываем в новой вкладке
+            const newWindow = window.open(url, '_blank');
+            
+            // Альтернативный метод если первый не сработал
+            if (!newWindow) {
+                // Создаем временную ссылку для скачивания
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `${domain.replace('file://', '').replace('.oinkhost.ru', '')}.html`;
+                link.target = '_blank';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                showNotification('🚀 Сайт открыт! Если новая вкладка не открылась, проверьте блокировщик всплывающих окон.');
+            } else {
+                // Устанавливаем заголовок для нового окна
+                setTimeout(() => {
+                    try {
+                        newWindow.document.title = `${domain} - OinkHost`;
+                    } catch (e) {
+                        console.log('Не удалось изменить заголовок');
+                    }
+                }, 100);
+                
+                showNotification('🚀 Сайт открыт в новой вкладке!');
+            }
+            
+            // Очищаем URL после использования
+            setTimeout(() => {
+                URL.revokeObjectURL(url);
+            }, 1000);
+        }
+
+        // Уведомления
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, #28a745, #20c997);
+                color: white;
+                padding: 15px 25px;
+                border-radius: 8px;
+                box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+                z-index: 1000;
+                font-weight: 600;
+                animation: slideIn 0.3s ease;
+            `;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // CSS анимации
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            
+            @keyframes slideOut {
+                from {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Автообновление предпросмотра
+        document.getElementById('codeEditor').addEventListener('input', updatePreview);
+
+        // Инициализация
+        updatePreview();
+        updateFileList();
+    </script>
+</body>
+</html>

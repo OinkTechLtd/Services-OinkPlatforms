@@ -1,0 +1,335 @@
+<script type="text/javascript">
+document.onkeydown = function(e) {
+  if (e.ctrlKey && (e.key === "c" || e.key === "C")) {
+    e.preventDefault();
+    alert("Copying is not allowed on this website.");
+  }
+};
+</script>
+ <script>
+      function disableClick(){
+        document.onclick=function(event){
+          if (event.button == 2) {
+            alert('Right Click Message');
+            return false;
+          }
+        }
+      }
+    </script>
+  </head>
+  <body onLoad="disableClick()">
+  </body>
+<script type='text/javascript'>
+function disableSelection(target){
+if (typeof target.onselectstart!="undefined") //IE route
+target.onselectstart=function(){return false}
+else if (typeof target.style.MozUserSelect!="undefined") //Firefox route
+target.style.MozUserSelect="none"
+else //All other route (ie: Opera)
+target.onmousedown=function(){return false}
+target.style.cursor = "default"
+}
+</script>
+<body oncontextmenu='return false;'>
+<script type='text/javascript'>
+disableSelection(document.body);
+</script>
+<script type="text/javascript">
+var message="";
+function clickIE() {if (document.all) {(message);return false;}}
+function clickNS(e) {if
+(document.layers||(document.getElementById&&!document.all)) {
+if (e.which==2) {
+(message);
+return false;}}}
+if (document.layers) {
+document.captureEvents(Event.MOUSEDOWN);
+document.onmousedown=clickNS;
+}else{
+document.onmouseup=clickNS;
+document.oncontextmenu=clickIE;
+}
+document.oncontextmenu=new Function("return false")
+</script> 
+<!doctype html>
+<!DOCTYPE html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex">
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <script src="fingerprint2.js"></script>
+    <link rel="stylesheet" href="mediaelementplayer.min.css?version=3.1.1" />
+    <script src="mediaelement-and-player.min.js?version=3.1.1"></script>
+    <script src="quality.min.js?version=3.1.1"></script>
+    <link rel="stylesheet" href="quality.min.css?version=3.1.1" />
+          <script src="plyr.polyfilled.js"></script>
+  <link rel="stylesheet" href="plyr.css" />
+    <script src="https://94.228.165.26:7777/oink.ru/themes/default/js/Fingerprintjs2/fingerprint2.js"></script>
+    <link rel="stylesheet" href="https://94.228.165.26:7777/oink.ru/themes/default/player/css/mediaelementplayer.min.css?version=3.1.1" />
+    <script src="https://94.228.165.26:7777/oink.ru/themes/default/player/js/mediaelement-and-player.min.js?version=3.1.1"></script>
+    <script src="https://94.228.165.26:7777/oink.ru/themes/default/player/plugins/quality/quality.min.js?version=3.1.1"></script>
+    <link rel="stylesheet" href="https://94.228.165.26:7777/oink.ru/themes/default/player/plugins/quality/quality.min.css?version=3.1.1" />
+          <script src="https://94.228.165.26:7777/oink.ru/themes/default/js/plyr.polyfilled.js"></script>
+  <link rel="stylesheet" href="https://94.228.165.26:7777/oink.ru/themes/default/player/css/plyr.css" />
+    <script src="https://fillshowyt.temp.swtest.ru/themes/default/js/Fingerprintjs2/fingerprint2.js"></script>
+    <link rel="stylesheet" href="https://fillshowyt.temp.swtest.ru/themes/default/player/css/mediaelementplayer.min.css?version=3.1.1" />
+    <script src="https://fillshowyt.temp.swtest.ru/themes/default/player/js/mediaelement-and-player.min.js?version=3.1.1"></script>
+    <script src="https://fillshowyt.temp.swtest.ru/themes/default/player/plugins/quality/quality.min.js?version=3.1.1"></script>
+    <link rel="stylesheet" href="https://fillshowyt.temp.swtest.ruthemes/default/player/plugins/quality/quality.min.css?version=3.1.1" />
+          <script src="https://fillshowyt.temp.swtest.ru/themes/default/js/plyr.polyfilled.js"></script>
+  <link rel="stylesheet" href="https://fillshowyt.temp.swtest.ru/themes/default/player/css/plyr.css" />
+</head>
+<body>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+	 <style>
+    body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #222;
+        color: #fff;
+        font-family: Arial, sans-serif;
+    }
+
+    .kinobox_player {
+        display: flex;
+        max-width: 100%;
+    }
+
+    #top-links {
+        margin-top: 20px;
+        display: flex;
+        align-items: center;
+    }
+
+    #top-links a {
+        color: #fff !important;
+        text-decoration: none;
+        margin-right: 40px;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    #header {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    #header.hidden {
+        display: none;
+    }
+
+    #header h1 {
+        font-size: 48px;
+        margin: 0;
+    }
+
+    #search-container {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #search-bar {
+        width: 90%; /* Изменено с 400px на проценты для лучшей адаптации */
+        max-width: 400px; /* Максимальная ширина ограничена для больших экранов */
+        padding: 12px;
+        font-size: 16px;
+        background-color: #333;
+        border: none;
+        color: #fff;
+        margin-bottom: 20px;
+    }
+
+    #search-button {
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #333;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.2s;
+    }
+
+    #search-button:hover {
+        background-color: #999;
+        transform: scale(1.1);
+    }
+
+    .kinobox_player {
+        display: none;
+        width: 100%;
+    }
+
+    #bottom-text {
+        margin-top: 20px;
+        color: #fff;
+    }
+
+    #bottom-text.hidden {
+        display: none;
+    }
+
+    #home-button {
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        background-color: #333;
+        color: #fff;
+        padding: 5px 10px;
+        font-size: 14px;
+        cursor: pointer;
+        z-index: 9999;
+    }
+
+    /* Медиазапросы для мобильных устройств */
+    @media (max-width: 768px) {
+        #header h1 {
+            font-size: 24px; /* Уменьшение размера заголовка */
+        }
+
+        #top-links a {
+            margin-right: 20px; /* Уменьшение расстояния между ссылками */
+        }
+    }
+</style>
+
+</head>
+<body>
+    <a href="" id="home-button" class="hidden">Cервис спонсируется во благо автора разработчика станьте им в пару кликов</a>
+
+
+
+
+
+
+        
+    </div>
+    <div id="header">
+        <h1>CМОТРЕТЬ БОНУС - Смотреть вместе с друзьями</h1>
+
+  
+  <div style="text-align: center">
+   <br>
+   <input type="text" id="search-bar" name="search-bar" placeholder="Введи ссылку на видео которое будете смотреть" onchange="update_href('link', this.value );" size=30 style="width: 300px;">
+   <br><br>
+   <a href="oinkplayersNEWServices.html?file=" id="link">Cмотреть</a><br>
+</div>
+  
+  <script>
+  function update_href(id,value){
+    document.getElementById(id).href='shortsnewplayer.html?file='+value;
+}
+   </script>
+<style>
+	kinobox_player {
+	    width: 100%;
+	    min-height: 600px;
+	    height: 100vh;
+	    position: relative;
+	    overflow: hidden;
+	    z-index: 1;
+}
+.kinobox_player{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+</style>
+
+ </head>
+									</div> 
+									<div class="loader">
+									</div>
+</section>
+<!-- copied to clipboard -->
+</div>
+    </div>
+    <!-- main area end -->
+
+    <!-- footer area start -->
+        <!-- footer area end -->       
+</body>
+    </div>
+<!-- Cloudflare Pages Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "28f6d44d84a8414286e09c836c4f08db"}'></script><!-- Cloudflare Pages Analytics --></body>
+</html>
+<style type="text/css">
+   </style>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex">
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <script src="fingerprint2.js"></script>
+    <link rel="stylesheet" href="mediaelementplayer.min.css?version=3.1.1" />
+    <script src="mediaelement-and-player.min.js?version=3.1.1"></script>
+    <script src="quality.min.js?version=3.1.1"></script>
+    <link rel="stylesheet" href="quality.min.css?version=3.1.1" />
+          <script src="plyr.polyfilled.js"></script>
+  <link rel="stylesheet" href="plyr.css" />
+    <script src="http://94.228.165.26:7777/oink.ru/themes/default/js/Fingerprintjs2/fingerprint2.js"></script>
+    <link rel="stylesheet" href="http://94.228.165.26:7777/oink.ru/themes/default/player/css/mediaelementplayer.min.css?version=3.1.1" />
+    <script src="http://94.228.165.26:7777/oink.ru/themes/default/player/js/mediaelement-and-player.min.js?version=3.1.1"></script>
+    <script src="http://94.228.165.26:7777/oink.ru/themes/default/player/plugins/quality/quality.min.js?version=3.1.1"></script>
+    <link rel="stylesheet" href="http://94.228.165.26:7777/oink.ru/themes/default/player/plugins/quality/quality.min.css?version=3.1.1" />
+          <script src="http://94.228.165.26:7777/oink.ru/themes/default/js/plyr.polyfilled.js"></script>
+  <link rel="stylesheet" href="http://94.228.165.26:7777/oink.ru/themes/default/player/css/plyr.css" />
+    <script src="http://fillshowyt.temp.swtest.ru/themes/default/js/Fingerprintjs2/fingerprint2.js"></script>
+    <link rel="stylesheet" href="http://fillshowyt.temp.swtest.ru/themes/default/player/css/mediaelementplayer.min.css?version=3.1.1" />
+    <script src="http://fillshowyt.temp.swtest.ru/themes/default/player/js/mediaelement-and-player.min.js?version=3.1.1"></script>
+    <script src="http://fillshowyt.temp.swtest.ru/themes/default/player/plugins/quality/quality.min.js?version=3.1.1"></script>
+    <link rel="stylesheet" href="http://fillshowyt.temp.swtest.ruthemes/default/player/plugins/quality/quality.min.css?version=3.1.1" />
+          <script src="http://fillshowyt.temp.swtest.ru/themes/default/js/plyr.polyfilled.js"></script>
+  <link rel="stylesheet" href="http://fillshowyt.temp.swtest.ru/themes/default/player/css/plyr.css" />
+</head>
+<body>
+
+<!-- JS here -->
+    <script src="/frontend/js/vendor/jquery-3.5.1.js"></script>
+    <script src="/frontend/js/popper.min.js"></script>
+    <script src="/frontend/js/bootstrap.min.js"></script>
+    <script src="/frontend/js/infinite-scroll.pkgd.min.js"></script>
+    <script src="/frontend/js/jquery.pjax.js"></script>
+    <script src="/frontend/js/nprogress.js"></script>
+    <script src="/frontend/js/main.js"></script>
+    <script src="/frontend/js/custom-pjax.js"></script>
+    <script src="/frontend/js/loadmore/loadmore.js"></script>
+    <script src="/frontend/js/loadmore/videoloadmore.js"></script>
+    <script src="/frontend/js/settings/settings.js"></script>
+    <script src="/frontend/js/settings/customsettings.js"></script>
+    <script src="/frontend/js/modal/modal.js"></script>
+    <script src="/frontend/js/loadmore/userloadmore.js"></script>
+	    <!-- CSS here -->
+    <link rel="stylesheet" href="/frontend/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/frontend/css/fontawesome-all.min.css">
+    <link rel="stylesheet" href="/frontend/css/font.css">
+    <link rel="stylesheet" href="/frontend/css/nprogress.css">
+    <link rel="stylesheet" href="/frontend/css/default.css">
+        <link id="mode" rel="stylesheet" href="/frontend/css/style.css">
+        <link rel="stylesheet" href="/frontend/css/responsive.css">
+</head>
+
+<html lang="ru">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="shortcut icon" href="/favicon.svg">
+    <link rel="stylesheet" href="/main/main.css?v=gJX3iQmaZOwMqxDci0efD7RLhqo5ovXtfDccGPrfCU4">
+    <script defer src="/main/main.js?v=n03imwXmzcbCpLAbZoqrNqpqQkm_rkhcwvBG_kH5qsc"></script>
+    <link rel="stylesheet" href="/lib/prismjs/prism.css?v=hFQsXqOjBtpzggvqOHIJAFKC4S-ajNd7EucaSVsGbx8">
+    <script defer src="/lib/prismjs/prism.js?v=CKhKKLAsAfAgDG29CVpli4JvqGzptjmBjO_r5DJdSPk"></script>
+    
+</head>
+<body>
+</html>

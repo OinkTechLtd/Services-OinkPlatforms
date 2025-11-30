@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(45deg, #1a1a2e, #16213e, #0f3460);
+            overflow: hidden;
+            position: relative;
+        }
+
+        #gameCanvas {
+            border: 3px solid #00ff41;
+            box-shadow: 0 0 30px rgba(0, 255, 65, 0.5);
+            border-radius: 10px;
+            background: radial-gradient(circle at center, #0a0a0a, #000);
+        }
+
+        .ui {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            color: #00ff41;
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(0, 255, 65, 0.8);
+            z-index: 100;
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #00ff41;
+            text-align: center;
+            font-size: 16px;
+            text-shadow: 0 0 5px rgba(0, 255, 65, 0.8);
+        }
+
+        .game-over {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            border: 3px solid #ff0040;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            color: #fff;
+            display: none;
+            backdrop-filter: blur(10px);
+        }
+
+        .game-over h2 {
+            color: #ff0040;
+            font-size: 36px;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(255, 0, 64, 0.8);
+        }
+
+        .restart-btn {
+            background: linear-gradient(45deg, #00ff41, #00cc33);
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            color: #000;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+
+        .restart-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.6);
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: -1;
+        }
+    </style>
+</head>
+<body>
+    <canvas class="particles" id="particles"></canvas>
+    
+    <div class="ui">
+        <div>Счёт: <span id="score">0</span></div>
+        <div>Длина: <span id="length">1</span></div>
+    </div>
+
+    <div class="controls">
+        Управление: Мышь или WASD / Стрелки<br>
+        Ускорение: Пробел или ЛКМ
+    </div>
+
+    <div class="game-over" id="gameOver">
+        <h2>Игра окончена!</h2>
+        <p>Финальный счёт: <span id="finalScore">0</span></p>
+        <p>Длина змейки: <span id="finalLength">0</span></p>
+        <button class="restart-btn" onclick="restartGame()">Играть снова</button>
+    </div>
+
+    <canvas id="gameCanvas"></canvas>
+
+    <script>
+        // Настройка canvas
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const particlesCanvas = document.getElementById('particles');
+        const particlesCtx = particlesCanvas.getContext('2d');
+
+        // Установка размеров
+        function resizeCanvas() {
+            canvas.width = window.innerWidth - 40;
+            canvas.height = window.innerHeight - 40;
+            canvas.style.position = 'fixed';
+            canvas.style.top = '20px';
+            canvas.style.left = '20px';
+            
+            particlesCanvas.width = window.innerWidth;
+            particlesCanvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // Игровые переменные
+        let gameRunning = true;
+        let score = 0;
+        let mouse = { x: canvas.width / 2, y: canvas.height / 2 };
+        let keys = {};
+
+        // Змейка
+        class Snake {
+            constructor(x, y) {
+                this.segments = [{ x, y }];
+                this.direction = { x: 1, y: 0 };
+                this.speed = 3;
+                this.maxSpeed = 6;
+                this.normalSpeed = 3;
+                this.boosting = false;
+                this.color = `hsl(${Math.random() * 360}, 70%, 60%)`;
+                this.headRadius = 12;
+            }
+
+            update() {
+                if (!gameRunning) return;
+
+                // Управление
+                const dx = mouse.x - this.segments[0].x;
+                const dy = mouse.y - this.segments[0].y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (distance > 10) {
+                    this.direction.x = dx / distance;
+                    this.direction.y = dy / distance;
+                }
+
+                // Клавиатурное управление
+                if (keys['ArrowUp'] || keys['KeyW']) {
+                    this.direction.y = -1;
+                    this.direction.x = 0;
+                }
+                if (keys['ArrowDown'] || keys['KeyS']) {
+                    this.direction.y = 1;
+                    this.direction.x = 0;
+                }
+                if (keys['ArrowLeft'] || keys['KeyA']) {
+                    this.direction.x = -1;
+                    this.direction.y = 0;
+                }
+                if (keys['ArrowRight'] || keys['KeyD']) {
+                    this.direction.x = 1;
+                    this.direction.y = 0;
+                }
+
+                // Ускорение
+                this.boosting = keys['Space'] || mouse.boost;
+                this.speed = this.boosting ? this.maxSpeed : this.normalSpeed;
+
+                // Движение головы
+                const head = this.segments[0];
+                const newHead = {
+                    x: head.x + this.direction.x * this.speed,
+                    y: head.y + this.direction.y * this.speed
+                };
+
+                // Граничные условия (телепорт)
+                if (newHead.x < 0) newHead.x = canvas.width;
+                if (newHead.x > canvas.width) newHead.x = 0;
+                if (newHead.y < 0) newHead.y = canvas.height;
+                if (newHead.y > canvas.height) newHead.y = 0;
+
+                // Добавление новой головы
+                this.segments.unshift(newHead);
+
+                // Если змейка не растёт, удаляем хвост
+                if (!this.growing) {
+                    this.segments.pop();
+                }
+                this.growing = false;
+
+                // Обновление UI
+                document.getElementById('length').textContent = this.segments.length;
+            }
+
+            grow() {
+                this.growing = true;
+                score += 10;
+                document.getElementById('score').textContent = score;
+                
+                // Небольшое увеличение скорости
+                if (this.segments.length % 5 === 0) {
+                    this.normalSpeed += 0.1;
+                    this.maxSpeed += 0.1;
+                }
+            }
+
+            draw() {
+                // Рисуем тело змейки
+                for (let i = this.segments.length - 1; i > 0; i--) {
+                    const segment = this.segments[i];
+                    const radius = Math.max(4, this.headRadius - i * 0.5);
+                    
+                    ctx.beginPath();
+                    ctx.arc(segment.x, segment.y, radius, 0, Math.PI * 2);
+                    ctx.fillStyle = this.color;
+                    ctx.fill();
+                    
+                    // Эффект свечения
+                    ctx.shadowColor = this.color;
+                    ctx.shadowBlur = 10;
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+                }
+
+                // Рисуем голову
+                const head = this.segments[0];
+                ctx.beginPath();
+                ctx.arc(head.x, head.y, this.headRadius, 0, Math.PI * 2);
+                ctx.fillStyle = this.boosting ? '#ffff00' : this.color;
+                ctx.fill();
+                
+                // Эффект ускорения
+                if (this.boosting) {
+                    ctx.shadowColor = '#ffff00';
+                    ctx.shadowBlur = 20;
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+                }
+
+                // Глаза
+                const eyeOffset = 6;
+                const eyeAngle = Math.atan2(this.direction.y, this.direction.x);
+                
+                ctx.fillStyle = '#fff';
+                ctx.beginPath();
+                ctx.arc(
+                    head.x + Math.cos(eyeAngle + 0.5) * eyeOffset,
+                    head.y + Math.sin(eyeAngle + 0.5) * eyeOffset,
+                    3, 0, Math.PI * 2
+                );
+                ctx.fill();
+                
+                ctx.beginPath();
+                ctx.arc(
+                    head.x + Math.cos(eyeAngle - 0.5) * eyeOffset,
+                    head.y + Math.sin(eyeAngle - 0.5) * eyeOffset,
+                    3, 0, Math.PI * 2
+                );
+                ctx.fill();
+            }
+        }
+
+        // Еда
+        class Food {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.radius = 4 + Math.random() * 6;
+                this.color = `hsl(${Math.random() * 360}, 80%, 60%)`;
+                this.pulse = 0;
+            }
+
+            update() {
+                this.pulse += 0.1;
+            }
+
+            draw() {
+                const pulseSize = Math.sin(this.pulse) * 2;
+                
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius + pulseSize, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+                
+                ctx.shadowColor = this.color;
+                ctx.shadowBlur = 15;
+                ctx.fill();
+                ctx.shadowBlur = 0;
+            }
+        }
+
+        // Частицы для фона
+        class Particle {
+            constructor() {
+                this.x = Math.random() * particlesCanvas.width;
+                this.y = Math.random() * particlesCanvas.height;
+                this.vx = (Math.random() - 0.5) * 2;
+                this.vy = (Math.random() - 0.5) * 2;
+                this.size = Math.random() * 3;
+                this.opacity = Math.random() * 0.5;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                if (this.x < 0 || this.x > particlesCanvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > particlesCanvas.height) this.vy *= -1;
+            }
+
+            draw() {
+                particlesCtx.beginPath();
+                particlesCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                particlesCtx.fillStyle = `rgba(0, 255, 65, ${this.opacity})`;
+                particlesCtx.fill();
+            }
+        }
+
+        // Инициализация игры
+        let snake = new Snake(canvas.width / 2, canvas.height / 2);
+        let food = [];
+        let particles = [];
+
+        // Создание еды
+        function spawnFood() {
+            for (let i = 0; i < 50; i++) {
+                food.push(new Food());
+            }
+        }
+
+        // Создание частиц
+        function createParticles() {
+            for (let i = 0; i < 100; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        // Проверка столкновений
+        function checkCollisions() {
+            const head = snake.segments[0];
+            
+            // Столкновение с едой
+            food = food.filter(f => {
+                const dx = head.x - f.x;
+                const dy = head.y - f.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                if (distance < snake.headRadius + f.radius) {
+                    snake.grow();
+                    return false;
+                }
+                return true;
+            });
+
+            // Добавляем новую еду
+            while (food.length < 50) {
+                food.push(new Food());
+            }
+        }
+
+        // Игровой цикл
+        function gameLoop() {
+            // Очистка canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particlesCtx.clearRect(0, 0, particlesCanvas.width, particlesCanvas.height);
+
+            if (gameRunning) {
+                // Обновление частиц
+                particles.forEach(particle => {
+                    particle.update();
+                    particle.draw();
+                });
+
+                // Обновление еды
+                food.forEach(f => f.update());
+
+                // Обновление змейки
+                snake.update();
+
+                // Проверка столкновений
+                checkCollisions();
+
+                // Отрисовка еды
+                food.forEach(f => f.draw());
+
+                // Отрисовка змейки
+                snake.draw();
+            }
+
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Обработчики событий
+        canvas.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            mouse.x = e.clientX - rect.left;
+            mouse.y = e.clientY - rect.top;
+        });
+
+        canvas.addEventListener('mousedown', () => {
+            mouse.boost = true;
+        });
+
+        canvas.addEventListener('mouseup', () => {
+            mouse.boost = false;
+        });
+
+        document.addEventListener('keydown', (e) => {
+            keys[e.code] = true;
+        });
+
+        document.addEventListener('keyup', (e) => {
+            keys[e.code] = false;
+        });
+
+        // Функция перезапуска
+        function restartGame() {
+            gameRunning = true;
+            score = 0;
+            snake = new Snake(canvas.width / 2, canvas.height / 2);
+            food = [];
+            document.getElementById('score').textContent = '0';
+            document.getElementById('length').textContent = '1';
+            document.getElementById('gameOver').style.display = 'none';
+            spawnFood();
+        }
+
+        // Запуск игры
+        spawnFood();
+        createParticles();
+        gameLoop();
+    </script>
+</body>
+</html>

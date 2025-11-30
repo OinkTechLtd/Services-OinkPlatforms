@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>WikiPro</h1>
+        <input type="text" id="query" placeholder="Введите запрос...">
+        <button id="searchBtn">Поиск</button>
+        <button id="speakBtn" disabled>Озвучить</button>
+        <div id="result" class="result"></div>
+    </div>
+    <script>
+        document.getElementById("searchBtn").addEventListener("click", () => {
+            const query = document.getElementById("query").value;
+            if (query) {
+                Promise.all([
+                    fetch(`https://ru.wikipedia.org/w/api.php?action=query&prop=extracts&exintro&explaintext&titles=${encodeURIComponent(query)}&format=json&origin=*`).then(response => response.json()),
+                    fetch(`https://ru.ruwiki.ru/w/api.php?action=query&prop=extracts&exintro&explaintext&titles=${encodeURIComponent(query)}&format=json&origin=*`).then(response => response.json()),
+                    fetch(`https://neolurk.org/w/api.php?action=query&prop=extracts&exintro&explaintext&titles=${encodeURIComponent(query)}&format=json&origin=*`).then(response => response.json()),
+
+                    // fetch(`https://lurkmore.com/api.php?action=query&prop=extracts&exintro&explaintext&titles=${encodeURIComponent(query)}&format=json&origin=*`).then(response => response.json())
+                    // Если lurkmore.com не работает из-за CORS, можно использовать прокси:
+                    // fetch(`https://cors-anywhere.herokuapp.com/https://lurkmore.com/api.php?action=query&prop=extracts&exintro&explaintext&titles=${encodeURIComponent(query)}&format=json&origin=*`).then(response => response.json())
+                ])
+                .then(data => {
+                    let combinedSummary = "";
+                    data.forEach(result => {
+                        if (result && result.query && result.query.pages) {
+                            const page = result.query.pages;
+                            const pageId = Object.keys(page)[0];
+                            if (pageId !== "-1" && page[pageId].extract) {
+                                combinedSummary += page[pageId].extract + "\n\n";
+                            }
+                        }
+                    });
+
+                    if (combinedSummary) {
+                        document.getElementById("result").textContent = combinedSummary;
+                        document.getElementById("speakBtn").disabled = false;
+                    } else {
+                        document.getElementById("result").textContent = "Статья не найдена. Возможно этой статьи нету на вики проектах. Попробуйте написать Россия:)";
+                        document.getElementById("speakBtn").disabled = true;
+                    }
+                })
+                .catch(error => {
+                    document.getElementById("result").textContent = "Ошибка при загрузке данных: " + error;
+                    console.error(error);
+                });
+            }
+        });
+
+        document.getElementById("speakBtn").addEventListener("click", () => {
+            const text = document.getElementById("result").textContent;
+            if (text) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'ru-RU';
+                speechSynthesis.speak(utterance);
+            }
+        });
+    </script>
+</body>
+</html>
+<style>
+body {
+    background-color: #0e0e0e;
+    color: #ffffff;
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    text-align: center;
+    border: 2px solid #00ff88;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+    background: rgba(0, 0, 0, 0.7);
+}
+
+input[type="text"] {
+    padding: 10px;
+    margin-bottom: 10px;
+    border: none;
+    border-radius: 5px;
+    width: 300px;
+}
+
+button {
+    padding: 10px 20px;
+    margin: 5px;
+    background-color: #00ff88;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #00cc66;
+}
+
+.result {
+    margin-top: 20px;
+    text-align: left;
+}
+</style>

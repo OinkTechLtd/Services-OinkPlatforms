@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<style>
+body {
+    font-family: sans-serif;
+    margin: 0;
+    line-height: 1.6;
+    background-color: #f7f7f7;
+    color: #333;
+}
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+    max-width: 1200px;
+}
+
+/*  Header  */
+header {
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #3498db;
+    text-decoration: none;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+
+nav ul li {
+    margin-left: 20px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #555;
+    transition: color 0.3s ease;
+}
+
+nav ul li a:hover {
+    color: #3498db;
+}
+
+/* Hero Section */
+#hero {
+    background-color: #3498db;
+    color: #fff;
+    text-align: center;
+    padding: 100px 0;
+}
+
+#hero h1 {
+    font-size: 3em;
+    margin-bottom: 20px;
+}
+
+#hero p {
+    font-size: 1.2em;
+    margin-bottom: 30px;
+}
+
+/* About Section */
+#about {
+    padding: 60px 0;
+}
+
+#about img {
+    width: 100%;
+    max-width: 600px;
+    margin-top: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Features Section */
+#features {
+    background-color: #fff;
+    padding: 60px 0;
+}
+
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.feature {
+    text-align: center;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+.feature img {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 15px;
+}
+
+.feature h3 {
+    margin-bottom: 10px;
+}
+
+/* Documentation & Support Sections */
+#documentation, #support {
+    padding: 60px 0;
+    text-align: center;
+}
+
+/* Contact Section */
+#contact {
+    background-color: #ecf0f1;
+    padding: 60px 0;
+}
+
+#contact form {
+    display: flex;
+    flex-direction: column;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+#contact input, #contact textarea {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid #bdc3c7;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+#contact textarea {
+    resize: vertical;
+    height: 150px;
+}
+
+/*  Button Style  */
+.button {
+    display: inline-block;
+    padding: 15px 30px;
+    background-color: #2980b9;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1.1em;
+    transition: background-color 0.3s ease;
+}
+
+.button:hover {
+    background-color: #21618c;
+}
+
+/* Footer */
+footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 20px 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        width: 95%;
+    }
+
+    header .container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    nav ul {
+        margin-top: 10px;
+        flex-direction: column;
+    }
+
+    nav ul li {
+        margin-left: 0;
+        margin-bottom: 10px;
+    }
+
+    #hero h1 {
+        font-size: 2.5em;
+    }
+
+    .feature-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a class="logo">OINK BALANCER</a>
+            <nav>
+                <ul>
+                    <li><a href="#about">О OINK BALANCER</a></li>
+                    <li><a href="#features">Возможности для Пользователей</a></li>
+                    <li><a href="#documentation">Документация</a></li>
+                    <li><a href="#support">Поддержка</a></li>
+                    <li><a href="#contact">Контакты</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section id="hero">
+        <div class="container">
+            <h1>Смотрите Видео без ограничений</h1>
+            <p>Станьте частью команды OINK BALANCER.</p>
+            <a href="openbalancer.html" class="button">Смотреть (Офлайн)</a>
+ <a href="OinkStudiomarket.html" class="button">Смотреть (Офлайн)</a>
+ <a href="balancer.html" class="button">Смотреть (Онлайн)</a>
+<a href="balancer2.html" class="button">Смотреть (Онлайн)</a>
+        </div>
+    </section>
+
+    <section id="about">
+        <div class="container">
+            <h2>О OINK BALANCER</h2>
+            <p>OINK BALANCER - Смотрите Видео без ограничений и  цензуры, разработанная Oink Tech Ltd Co.  
+
+Некоторые особенности сервиса:
+
+БЕЗ ИНТЕРНЕТА
+БЕЗ ЦЕНЗУРЫ
+БЕСПЛАТНО</p>
+        </div>
+    </section>
+
+    <section id="features">
+        <div class="container">
+            <h2>Возможности для Игроков</h2>
+            <div class="feature-grid">
+                <div class="feature">
+                  
+                    <h3>Увеличение аудитории</h3>
+                    <p>Доступ к широкой СНГ аудитории пользователей.</p>
+                </div>
+                <div class="feature">
+                    
+                    <h3>Функционал</h3>
+                    <p>Мы стараемся угодить всем для удобного просмотра НА ТВ </p>
+                </div>
+                <div class="feature">
+         
+                    <h3>Поддержка</h3>
+                    <p>Квалифицированная поддержка Приложения.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="documentation">
+        <div class="container">
+            <h2>Документация</h2>
+            <p>Подробные руководства и чат комнаты.</p>
+            <a href="https://t.me/oinktech" class="button">Перейти к документации</a>
+        </div>
+    </section>
+
+    <section id="support">
+        <div class="container">
+            <h2>Поддержка</h2>
+            <p>Если у вас возникли вопросы, обратитесь в нашу службу поддержки.</p>
+            <a href="#" class="button">Обратиться в поддержку</a>
+        </div>
+    </section>
+
+    <section id="contact">
+        <div class="container">
+            <h2>Контакты</h2>
+            <p>Свяжитесь с нами для обсуждения сотрудничества и других вопросов.</p>
+            <form>
+                <input type="text" placeholder="Ваше имя">
+                <input type="email" placeholder="Ваш email">
+                <textarea placeholder="Ваше сообщение"></textarea>
+                <button type="submit">Отправить</button>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>© OinkTech Ltd Co. Все права защищены.</p>
+        </div>
+    </footer>
+</body>
+</html>

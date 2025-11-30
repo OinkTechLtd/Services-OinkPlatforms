@@ -1,0 +1,1754 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #8b5cf6;
+            --accent: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --dark: #0f172a;
+            --dark-secondary: #1e293b;
+            --dark-tertiary: #334155;
+            --light: #f8fafc;
+            --text: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border: rgba(255, 255, 255, 0.1);
+            --glass: rgba(255, 255, 255, 0.05);
+            --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-item {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-item:hover {
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .nav-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: -25px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+
+        /* Main Content */
+        .main {
+            padding: 40px 0;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        /* Player Section */
+        .player-section {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .player-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 20px;
+        }
+
+        .player-title {
+            font-size: 24px;
+            font-weight: 700;
+            flex: 1;
+        }
+
+        .player-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .control-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .control-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .control-btn.secondary {
+            background: var(--dark-tertiary);
+        }
+
+        .control-btn.secondary:hover {
+            background: var(--dark-secondary);
+        }
+
+        /* Video Player */
+        .video-container {
+            position: relative;
+            background: #000;
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .video-player {
+            width: 100%;
+            height: 400px;
+            background: linear-gradient(45deg, #1a1a1a, #2a2a2a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            font-size: 18px;
+            position: relative;
+        }
+
+        .video-player video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .player-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            cursor: pointer;
+        }
+
+        .player-overlay:hover {
+            opacity: 1;
+        }
+
+        .play-btn {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            color: #000;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .play-btn:hover {
+            transform: scale(1.1);
+            background: white;
+        }
+
+        /* Logo Overlay */
+        .logo-overlay {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            max-width: 120px;
+            max-height: 80px;
+            opacity: 0.8;
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+
+        .logo-overlay img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Channel Info */
+        .channel-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--dark-secondary);
+            padding: 20px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+        }
+
+        .channel-details h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .channel-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--success);
+            animation: pulse 2s infinite;
+        }
+
+        .status-dot.offline {
+            background: var(--error);
+            animation: none;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        /* Share Controls */
+        .share-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .share-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .share-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(6, 182, 212, 0.3);
+        }
+
+        .share-btn.tv {
+            background: var(--secondary);
+        }
+
+        .share-btn.tv:hover {
+            box-shadow: 0 8px 24px rgba(139, 92, 246, 0.3);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .card {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn.secondary {
+            background: var(--dark-tertiary);
+        }
+
+        .btn.secondary:hover {
+            background: var(--dark-secondary);
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            background: var(--dark-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 12px 16px;
+            color: var(--text);
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        /* File Upload */
+        .file-upload {
+            border: 2px dashed var(--border);
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .file-upload:hover {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .file-upload.dragover {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+        }
+
+        /* Video List */
+        .video-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .video-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: var(--dark-secondary);
+            border-radius: 12px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .video-item:hover {
+            background: var(--dark-tertiary);
+            transform: translateX(5px);
+        }
+
+        .video-item.active {
+            background: var(--primary);
+        }
+
+        .video-thumbnail {
+            width: 60px;
+            height: 40px;
+            background: var(--dark);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .video-info {
+            flex: 1;
+        }
+
+        .video-name {
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .video-duration {
+            color: var(--text-secondary);
+            font-size: 12px;
+        }
+
+        /* Channel List */
+        .channel-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .channel-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: var(--dark-secondary);
+            border-radius: 12px;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .channel-item:hover {
+            background: var(--dark-tertiary);
+        }
+
+        .channel-item.playing {
+            background: var(--success);
+        }
+
+        .channel-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background: var(--dark);
+            color: var(--text);
+        }
+
+        /* Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--dark);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 24px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: var(--dark-secondary);
+            color: var(--text);
+        }
+
+        /* Notifications */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--success);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            z-index: 1001;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.error {
+            background: var(--error);
+        }
+
+        .notification.warning {
+            background: var(--warning);
+        }
+
+        .notification.info {
+            background: var(--accent);
+        }
+
+        /* Loading */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav {
+                display: none;
+            }
+            
+            .video-player {
+                height: 250px;
+            }
+            
+            .logo {
+                font-size: 24px;
+            }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--dark-secondary);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
+        }
+
+        .checkbox-list {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 10px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px;
+            border-radius: 6px;
+            transition: background 0.2s;
+        }
+
+        .checkbox-item:hover {
+            background: var(--dark-secondary);
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">StreamCast</div>
+                <nav class="nav">
+                    <a href="#" class="nav-item active">Главная</a>
+                    <a href="#" class="nav-item">Каналы</a>
+                    <a href="#" class="nav-item">Библиотека</a>
+                    <a href="#" class="nav-item">Настройки</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            <div class="grid">
+                <!-- Player Section -->
+                <div class="player-section">
+                    <div class="player-header">
+                        <h2 class="player-title">Прямой эфир</h2>
+                        <div class="player-controls">
+                            <button class="control-btn" onclick="showLogoSettings()">
+                                🎨 Логотип
+                            </button>
+                            <button class="control-btn secondary" onclick="showPlayerSettings()">
+                                ⚙️ Настройки
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="video-container">
+                        <div class="video-player" id="videoPlayer">
+                            <div id="noVideoMessage">
+                                📺 Телеканал находиться не в сети. Пожалуйста Включите если вы Владелец Канала, свою трансляцию в Студии а если вы зритель то Ожидайте Включения Трансляции Сейчас идут Технические работы!
+                            </div>
+                            <video id="mainVideo" style="display: none;" autoplay></video>
+                            <div class="player-overlay" onclick="togglePlayPause()">
+                                <button class="play-btn" id="playButton">▶</button>
+                            </div>
+                            <div class="logo-overlay" id="logoOverlay" style="display: none;">
+                                <img id="logoImage" src="" alt="Channel Logo">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="channel-info">
+                        <div class="channel-details">
+                            <h3 id="currentChannelName">Канал не выбран</h3>
+                            <div class="channel-status">
+                                <div class="status-dot offline" id="statusDot"></div>
+                                <span id="statusText">Офлайн</span>
+                            </div>
+                        </div>
+                        <div id="viewerCount">0 зрителей</div>
+                    </div>
+                    
+                    <div class="share-controls">
+                        <button class="share-btn" onclick="shareStream()">
+                            🔗 Поделиться
+                        </button>
+                        <button class="share-btn tv" onclick="castToTV()">
+                            📺 На ТВ
+                        </button>
+                        <button class="share-btn" onclick="toggleFullscreen()">
+                            ⛶ Полный экран
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Sidebar -->
+                <div class="sidebar">
+                    <!-- Upload Videos -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Загрузить видео</h3>
+                        </div>
+                        <div class="file-upload" onclick="document.getElementById('videoInput').click()">
+                            <div class="upload-icon">📹</div>
+                            <p>Нажмите или перетащите видео</p>
+                            <small>MP4, WebM, MOV до 100MB</small>
+                        </div>
+                        <input type="file" id="videoInput" accept="video/*" multiple style="display: none;">
+                    </div>
+
+                    <!-- Video Library -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Библиотека видео</h3>
+                            <span id="videoCount">0 видео</span>
+                        </div>
+                        <div class="video-list" id="videoList">
+                            <div style="text-align: center; color: var(--text-secondary); padding: 20px;">
+                                Видео не загружены
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Channel Management -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Каналы</h3>
+                            <button class="btn" onclick="showCreateChannelModal()">
+                                ➕ Создать
+                            </button>
+                        </div>
+                        <div class="channel-list" id="channelList">
+                            <div style="text-align: center; color: var(--text-secondary); padding: 20px;">
+                                Каналы не созданы
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Create Channel Modal -->
+    <div class="modal" id="createChannelModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Создать канал</h3>
+                <button class="close-btn" onclick="hideCreateChannelModal()">&times;</button>
+            </div>
+            <form id="createChannelForm">
+                <div class="form-group">
+                    <label class="form-label">Название канала</label>
+                    <input type="text" class="form-input" id="channelName" placeholder="Мой канал" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Режим воспроизведения</label>
+                    <select class="form-select" id="playbackMode">
+                        <option value="scheduled">По расписанию</option>
+                        <option value="24/7">24/7 режим</option>
+                    </select>
+                </div>
+                <div class="form-group" id="scheduleGroup">
+                    <label class="form-label">Время начала</label>
+                    <input type="time" class="form-input" id="startTime" value="22:00">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Выберите видео для плейлиста</label>
+                    <div class="checkbox-list" id="videoSelection">
+                        <div style="text-align: center; color: var(--text-secondary); padding: 20px;">
+                            Сначала загрузите видео
+                        </div>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                    <button type="button" class="btn secondary" onclick="hideCreateChannelModal()">Отмена</button>
+                    <button type="submit" class="btn">Создать канал</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Logo Settings Modal -->
+    <div class="modal" id="logoModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Настройки логотипа</h3>
+                <button class="close-btn" onclick="hideLogoModal()">&times;</button>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Загрузить логотип</label>
+                <input type="file" class="form-input" id="logoInput" accept="image/*">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Позиция логотипа</label>
+                <select class="form-select" id="logoPosition">
+                    <option value="top-right">Верх справа</option>
+                    <option value="top-left">Верх слева</option>
+                    <option value="bottom-right">Низ справа</option>
+                    <option value="bottom-left">Низ слева</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Размер логотипа</label>
+                <select class="form-select" id="logoSize">
+                    <option value="small">Маленький</option>
+                    <option value="medium">Средний</option>
+                    <option value="large">Большой</option>
+                </select>
+            </div>
+            <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                <button type="button" class="btn secondary" onclick="removeLogo()">Удалить</button>
+                <button type="button" class="btn" onclick="saveLogo()">Сохранить</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Player Settings Modal -->
+    <div class="modal" id="playerSettingsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Настройки плеера</h3>
+                <button class="close-btn" onclick="hidePlayerSettingsModal()">&times;</button>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Качество видео</label>
+                <select class="form-select" id="videoQuality">
+                    <option value="auto">Автоматически</option>
+                    <option value="1080p">1080p</option>
+                    <option value="720p">720p</option>
+                    <option value="480p">480p</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Громкость по умолчанию</label>
+                <input type="range" class="form-input" id="defaultVolume" min="0" max="100" value="50">
+            </div>
+            <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                <button type="button" class="btn secondary" onclick="hidePlayerSettingsModal()">Отмена</button>
+                <button type="button" class="btn" onclick="savePlayerSettings()">Сохранить</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification"></div>
+
+    <script>
+        // Global variables
+        let videos = [];
+        let channels = [];
+        let currentChannel = null;
+        let isPlaying = false;
+        let currentVideoIndex = 0;
+        let playlistInterval = null;
+        let viewerCount = 0;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            setupEventListeners();
+            loadStoredData();
+            updateViewerCount();
+        });
+
+        function setupEventListeners() {
+            // Video upload
+            const videoInput = document.getElementById('videoInput');
+            videoInput.addEventListener('change', handleVideoUpload);
+
+            // File drop
+            const fileUpload = document.querySelector('.file-upload');
+            fileUpload.addEventListener('dragover', handleDragOver);
+            fileUpload.addEventListener('drop', handleDrop);
+            fileUpload.addEventListener('dragleave', function(e) {
+                e.currentTarget.classList.remove('dragover');
+            });
+
+            // Channel form
+            document.getElementById('createChannelForm').addEventListener('submit', handleCreateChannel);
+            document.getElementById('playbackMode').addEventListener('change', toggleScheduleFields);
+
+            // Logo input
+            document.getElementById('logoInput').addEventListener('change', previewLogo);
+
+            // Video ended event
+            document.getElementById('mainVideo').addEventListener('ended', playNextVideo);
+        }
+
+        // Video upload handling
+        function handleVideoUpload(event) {
+            const files = event.target.files;
+            if (files.length === 0) return;
+
+            showNotification('Загрузка видео...', 'info');
+            
+            Array.from(files).forEach((file, index) => {
+                if (!file.type.startsWith('video/')) {
+                    showNotification(`"${file.name}" не является видеофайлом!`, 'error');
+                    return;
+                }
+
+                if (file.size > 100 * 1024 * 1024) { // 100MB limit
+                    showNotification(`"${file.name}" слишком большой! Максимум 100MB`, 'error');
+                    return;
+                }
+
+                const videoId = 'video_' + Date.now() + '_' + index + '_' + Math.random().toString(36).substr(2, 9);
+                const videoUrl = URL.createObjectURL(file);
+                
+                const video = {
+                    id: videoId,
+                    name: file.name,
+                    file: file,
+                    url: videoUrl,
+                    duration: 'Загрузка...',
+                    size: file.size
+                };
+
+                // Add video immediately
+                videos.push(video);
+                updateVideoList();
+                updateVideoSelection();
+
+                // Get duration with better error handling
+                const videoElement = document.createElement('video');
+                videoElement.muted = true; // Avoid autoplay issues
+                videoElement.preload = 'metadata';
+                
+                const handleSuccess = () => {
+                    try {
+                        const duration = videoElement.duration;
+                        if (duration && !isNaN(duration) && isFinite(duration)) {
+                            video.duration = formatDuration(duration);
+                        } else {
+                            video.duration = '00:00';
+                        }
+                        updateVideoList();
+                        updateVideoSelection();
+                        saveData();
+                        showNotification(`✅ "${file.name}" загружено!`, 'success');
+                    } catch (error) {
+                        console.warn('Duration parsing error:', error);
+                        video.duration = '00:00';
+                        updateVideoList();
+                        showNotification(`⚠️ "${file.name}" загружено (без длительности)`, 'warning');
+                    }
+                };
+
+                const handleError = (error) => {
+                    console.error('Video loading error:', error);
+                    // Don't remove video, just mark as ready
+                    video.duration = '00:00';
+                    updateVideoList();
+                    updateVideoSelection();
+                    showNotification(`⚠️ "${file.name}" загружено`, 'warning');
+                };
+
+                // Set up event listeners
+                videoElement.addEventListener('loadedmetadata', handleSuccess, { once: true });
+                videoElement.addEventListener('canplay', () => {
+                    if (video.duration === 'Загрузка...') {
+                        handleSuccess();
+                    }
+                }, { once: true });
+                
+                videoElement.addEventListener('error', handleError, { once: true });
+                
+                // Timeout fallback
+                setTimeout(() => {
+                    if (video.duration === 'Загрузка...') {
+                        video.duration = '00:00';
+                        updateVideoList();
+                        showNotification(`"${file.name}" загружено (timeout)`, 'warning');
+                    }
+                }, 5000);
+
+                // Set source and try to load
+                try {
+                    videoElement.src = videoUrl;
+                    videoElement.load();
+                } catch (error) {
+                    handleError(error);
+                }
+            });
+
+            event.target.value = '';
+        }
+
+        function handleDragOver(event) {
+            event.preventDefault();
+            event.currentTarget.classList.add('dragover');
+        }
+
+        function handleDrop(event) {
+            event.preventDefault();
+            event.currentTarget.classList.remove('dragover');
+            
+            const files = event.dataTransfer.files;
+            if (files.length === 0) return;
+            
+            // Create a fake input event
+            const fakeEvent = {
+                target: {
+                    files: files,
+                    value: ''
+                }
+            };
+            
+            handleVideoUpload(fakeEvent);
+        }
+
+        // Video list management
+        function updateVideoList() {
+            const videoList = document.getElementById('videoList');
+            const videoCount = document.getElementById('videoCount');
+            
+            if (videos.length === 0) {
+                videoList.innerHTML = '<div style="text-align: center; color: var(--text-secondary); padding: 20px;">Видео не загружены</div>';
+                videoCount.textContent = '0 видео';
+                return;
+            }
+
+            videoCount.textContent = `${videos.length} видео`;
+            
+            videoList.innerHTML = videos.map((video, index) => `
+                <div class="video-item" onclick="playVideo('${video.id}')" data-video-id="${video.id}">
+                    <div class="video-thumbnail">📹</div>
+                    <div class="video-info">
+                        <div class="video-name" title="${video.name}">${video.name}</div>
+                        <div class="video-duration">${video.duration}</div>
+                    </div>
+                    <button class="action-btn" onclick="event.stopPropagation(); removeVideo('${video.id}')" title="Удалить">🗑️</button>
+                </div>
+            `).join('');
+        }
+
+        function removeVideo(videoId) {
+            if (confirm('Удалить это видео из библиотеки?')) {
+                const videoIndex = videos.findIndex(v => v.id === videoId);
+                if (videoIndex !== -1) {
+                    // Revoke object URL to free memory
+                    URL.revokeObjectURL(videos[videoIndex].url);
+                    videos.splice(videoIndex, 1);
+                    updateVideoList();
+                    updateVideoSelection();
+                    saveData();
+                    showNotification('Видео удалено', 'success');
+                }
+            }
+        }
+
+        function updateVideoSelection() {
+            const videoSelection = document.getElementById('videoSelection');
+            
+            if (videos.length === 0) {
+                videoSelection.innerHTML = '<div style="text-align: center; color: var(--text-secondary); padding: 20px;">Сначала загрузите видео</div>';
+                return;
+            }
+
+            videoSelection.innerHTML = videos.map(video => `
+                <div class="checkbox-item">
+                    <input type="checkbox" id="video_${video.id}" value="${video.id}">
+                    <label for="video_${video.id}" title="${video.name}">${video.name} (${video.duration})</label>
+                </div>
+            `).join('');
+        }
+
+        // Channel management
+        function showCreateChannelModal() {
+            document.getElementById('createChannelModal').classList.add('active');
+            updateVideoSelection();
+        }
+
+        function hideCreateChannelModal() {
+            document.getElementById('createChannelModal').classList.remove('active');
+            document.getElementById('createChannelForm').reset();
+        }
+
+        function handleCreateChannel(event) {
+            event.preventDefault();
+            
+            const channelName = document.getElementById('channelName').value.trim();
+            const playbackMode = document.getElementById('playbackMode').value;
+            const startTime = document.getElementById('startTime').value;
+            
+            if (!channelName) {
+                showNotification('Введите название канала!', 'error');
+                return;
+            }
+            
+            const selectedVideos = [];
+            const checkboxes = document.querySelectorAll('#videoSelection input[type="checkbox"]:checked');
+            
+            checkboxes.forEach(checkbox => {
+                const videoId = checkbox.value;
+                const video = videos.find(v => v.id == videoId);
+                if (video) {
+                    selectedVideos.push(video);
+                }
+            });
+
+            if (selectedVideos.length === 0) {
+                showNotification('Выберите хотя бы одно видео для плейлиста!', 'error');
+                return;
+            }
+
+            const channel = {
+                id: 'channel_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
+                name: channelName,
+                mode: playbackMode,
+                startTime: startTime,
+                playlist: selectedVideos,
+                isPlaying: false,
+                currentVideoIndex: 0,
+                createdAt: new Date().toISOString()
+            };
+
+            channels.push(channel);
+            updateChannelList();
+            saveData();
+            hideCreateChannelModal();
+            showNotification(`Канал "${channelName}" создан!`, 'success');
+        }
+
+        function updateChannelList() {
+            const channelList = document.getElementById('channelList');
+            
+            if (channels.length === 0) {
+                channelList.innerHTML = '<div style="text-align: center; color: var(--text-secondary); padding: 20px;">Каналы не созданы</div>';
+                return;
+            }
+
+            channelList.innerHTML = channels.map(channel => `
+                <div class="channel-item ${channel.isPlaying ? 'playing' : ''}">
+                    <div>
+                        <div class="video-name">${channel.name}</div>
+                        <div class="video-duration">${channel.mode} • ${channel.playlist.length} видео</div>
+                    </div>
+                    <div class="channel-actions">
+                        <button class="action-btn" onclick="playChannel('${channel.id}')" title="Запустить">
+                            ${channel.isPlaying ? '⏸️' : '▶️'}
+                        </button>
+                        <button class="action-btn" onclick="deleteChannel('${channel.id}')" title="Удалить">🗑️</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function playChannel(channelId) {
+            const channel = channels.find(c => c.id === channelId);
+            if (!channel) {
+                showNotification('Канал не найден!', 'error');
+                return;
+            }
+
+            if (channel.playlist.length === 0) {
+                showNotification('В канале нет видео!', 'error');
+                return;
+            }
+
+            // Stop current channel
+            if (currentChannel) {
+                currentChannel.isPlaying = false;
+                clearInterval(playlistInterval);
+            }
+
+            // Start new channel
+            currentChannel = channel;
+            channel.isPlaying = true;
+            currentVideoIndex = channel.currentVideoIndex || 0;
+
+            // Ensure index is valid
+            if (currentVideoIndex >= channel.playlist.length) {
+                currentVideoIndex = 0;
+                channel.currentVideoIndex = 0;
+            }
+
+            updateChannelList();
+            startPlayback();
+            updateChannelInfo();
+            showNotification(`Канал "${channel.name}" запущен!`, 'success');
+        }
+
+        function startPlayback() {
+            if (!currentChannel || currentChannel.playlist.length === 0) {
+                showNotification('Нет видео для воспроизведения!', 'error');
+                return;
+            }
+
+            const video = currentChannel.playlist[currentVideoIndex];
+            if (!video || !video.url) {
+                showNotification('Видео недоступно!', 'error');
+                return;
+            }
+
+            const videoPlayer = document.getElementById('mainVideo');
+            const noVideoMessage = document.getElementById('noVideoMessage');
+
+            // Set up video
+            videoPlayer.src = video.url;
+            videoPlayer.style.display = 'block';
+            noVideoMessage.style.display = 'none';
+
+            // Handle video load
+            videoPlayer.addEventListener('loadeddata', function onLoaded() {
+                videoPlayer.removeEventListener('loadeddata', onLoaded);
+                
+                if (currentChannel.mode === '24/7') {
+                    videoPlayer.play().then(() => {
+                        isPlaying = true;
+                        updatePlayButton();
+                        updateChannelStatus(true);
+                    }).catch(error => {
+                        console.error('Play error:', error);
+                        showNotification('Ошибка воспроизведения', 'error');
+                    });
+                } else if (currentChannel.mode === 'scheduled') {
+                    schedulePlayback();
+                }
+            });
+
+            videoPlayer.addEventListener('error', function(e) {
+                console.error('Video error:', e);
+                showNotification('Ошибка загрузки видео', 'error');
+            });
+
+            // Load the video
+            videoPlayer.load();
+        }
+
+        function schedulePlayback() {
+            const now = new Date();
+            const [hours, minutes] = currentChannel.startTime.split(':');
+            const scheduledTime = new Date();
+            scheduledTime.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+
+            if (scheduledTime <= now) {
+                scheduledTime.setDate(scheduledTime.getDate() + 1);
+            }
+
+            const timeUntilStart = scheduledTime.getTime() - now.getTime();
+            
+            showNotification(`Трансляция начнется в ${currentChannel.startTime}`, 'info');
+
+            setTimeout(() => {
+                const videoPlayer = document.getElementById('mainVideo');
+                videoPlayer.play();
+                isPlaying = true;
+                updatePlayButton();
+                showNotification('Трансляция началась!', 'success');
+            }, timeUntilStart);
+        }
+
+        function playNextVideo() {
+            if (!currentChannel || currentChannel.playlist.length === 0) return;
+
+            currentVideoIndex = (currentVideoIndex + 1) % currentChannel.playlist.length;
+            currentChannel.currentVideoIndex = currentVideoIndex;
+            
+            const video = currentChannel.playlist[currentVideoIndex];
+            if (!video || !video.url) {
+                showNotification('Следующее видео недоступно!', 'error');
+                return;
+            }
+            
+            const videoPlayer = document.getElementById('mainVideo');
+            
+            videoPlayer.src = video.url;
+            videoPlayer.load();
+            
+            videoPlayer.addEventListener('loadeddata', function onLoaded() {
+                videoPlayer.removeEventListener('loadeddata', onLoaded);
+                videoPlayer.play().then(() => {
+                    isPlaying = true;
+                    updatePlayButton();
+                }).catch(error => {
+                    console.error('Next video play error:', error);
+                    showNotification('Ошибка воспроизведения следующего видео', 'error');
+                });
+            });
+            
+            saveData();
+        }
+
+        function deleteChannel(channelId) {
+            if (confirm('Удалить канал?')) {
+                channels = channels.filter(c => c.id !== channelId);
+                
+                if (currentChannel && currentChannel.id === channelId) {
+                    stopCurrentChannel();
+                }
+                
+                updateChannelList();
+                saveData();
+                showNotification('Канал удален', 'success');
+            }
+        }
+
+        function editChannel(channelId) {
+            // Implement channel editing
+            showNotification('Функция редактирования в разработке', 'info');
+        }
+
+        function stopCurrentChannel() {
+            if (currentChannel) {
+                currentChannel.isPlaying = false;
+                currentChannel = null;
+                clearInterval(playlistInterval);
+                
+                const videoPlayer = document.getElementById('mainVideo');
+                const noVideoMessage = document.getElementById('noVideoMessage');
+                
+                videoPlayer.pause();
+                videoPlayer.style.display = 'none';
+                noVideoMessage.style.display = 'block';
+                
+                updateChannelInfo();
+                updateChannelStatus(false);
+                updateChannelList();
+            }
+        }
+
+        // Player controls
+        function togglePlayPause() {
+            const videoPlayer = document.getElementById('mainVideo');
+            
+            if (videoPlayer.style.display === 'none') return;
+
+            if (isPlaying) {
+                videoPlayer.pause();
+                isPlaying = false;
+            } else {
+                videoPlayer.play();
+                isPlaying = true;
+            }
+            
+            updatePlayButton();
+        }
+
+        function updatePlayButton() {
+            const playButton = document.getElementById('playButton');
+            playButton.textContent = isPlaying ? '⏸️' : '▶️';
+        }
+
+        function playVideo(videoId) {
+            const video = videos.find(v => v.id == videoId);
+            if (!video || !video.url) {
+                showNotification('Видео не найдено!', 'error');
+                return;
+            }
+
+            stopCurrentChannel();
+            
+            const videoPlayer = document.getElementById('mainVideo');
+            const noVideoMessage = document.getElementById('noVideoMessage');
+            
+            videoPlayer.src = video.url;
+            videoPlayer.style.display = 'block';
+            noVideoMessage.style.display = 'none';
+            
+            videoPlayer.addEventListener('loadeddata', function onLoaded() {
+                videoPlayer.removeEventListener('loadeddata', onLoaded);
+                videoPlayer.play().then(() => {
+                    isPlaying = true;
+                    updatePlayButton();
+                    updateChannelStatus(true);
+                }).catch(error => {
+                    console.error('Single video play error:', error);
+                    showNotification('Ошибка воспроизведения видео', 'error');
+                });
+            });
+            
+            videoPlayer.load();
+            
+            document.getElementById('currentChannelName').textContent = video.name;
+            
+            // Highlight selected video
+            document.querySelectorAll('.video-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.querySelector(`[onclick="playVideo('${videoId}')"]`)?.classList.add('active');
+        }
+
+        // Logo management
+        function showLogoSettings() {
+            document.getElementById('logoModal').classList.add('active');
+        }
+
+        function hideLogoModal() {
+            document.getElementById('logoModal').classList.remove('active');
+        }
+
+        function previewLogo(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            if (!file.type.startsWith('image/')) {
+                showNotification('Файл должен быть изображением!', 'error');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const logoImage = document.getElementById('logoImage');
+                logoImage.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function saveLogo() {
+            const logoInput = document.getElementById('logoInput');
+            const logoPosition = document.getElementById('logoPosition').value;
+            const logoSize = document.getElementById('logoSize').value;
+            
+            if (!logoInput.files[0]) {
+                showNotification('Выберите файл логотипа!', 'error');
+                return;
+            }
+
+            const logoOverlay = document.getElementById('logoOverlay');
+            const logoImage = document.getElementById('logoImage');
+            
+            // Apply position
+            logoOverlay.style.top = 'auto';
+            logoOverlay.style.bottom = 'auto';
+            logoOverlay.style.left = 'auto';
+            logoOverlay.style.right = 'auto';
+            
+            switch(logoPosition) {
+                case 'top-left':
+                    logoOverlay.style.top = '20px';
+                    logoOverlay.style.left = '20px';
+                    break;
+                case 'top-right':
+                    logoOverlay.style.top = '20px';
+                    logoOverlay.style.right = '20px';
+                    break;
+                case 'bottom-left':
+                    logoOverlay.style.bottom = '20px';
+                    logoOverlay.style.left = '20px';
+                    break;
+                case 'bottom-right':
+                    logoOverlay.style.bottom = '20px';
+                    logoOverlay.style.right = '20px';
+                    break;
+            }
+            
+            // Apply size
+            switch(logoSize) {
+                case 'small':
+                    logoOverlay.style.maxWidth = '80px';
+                    logoOverlay.style.maxHeight = '60px';
+                    break;
+                case 'medium':
+                    logoOverlay.style.maxWidth = '120px';
+                    logoOverlay.style.maxHeight = '80px';
+                    break;
+                case 'large':
+                    logoOverlay.style.maxWidth = '160px';
+                    logoOverlay.style.maxHeight = '100px';
+                    break;
+            }
+            
+            logoOverlay.style.display = 'block';
+            hideLogoModal();
+            showNotification('Логотип сохранен!', 'success');
+        }
+
+        function removeLogo() {
+            const logoOverlay = document.getElementById('logoOverlay');
+            logoOverlay.style.display = 'none';
+            document.getElementById('logoInput').value = '';
+            hideLogoModal();
+            showNotification('Логотип удален', 'success');
+        }
+
+        // Player settings
+        function showPlayerSettings() {
+            document.getElementById('playerSettingsModal').classList.add('active');
+        }
+
+        function hidePlayerSettingsModal() {
+            document.getElementById('playerSettingsModal').classList.remove('active');
+        }
+
+        function savePlayerSettings() {
+            const quality = document.getElementById('videoQuality').value;
+            const volume = document.getElementById('defaultVolume').value;
+            
+            const videoPlayer = document.getElementById('mainVideo');
+            videoPlayer.volume = volume / 100;
+            
+            hidePlayerSettingsModal();
+            showNotification('Настройки сохранены!', 'success');
+        }
+
+        // Sharing and casting
+        function shareStream() {
+            if (!currentChannel) {
+                showNotification('Сначала запустите канал!', 'error');
+                return;
+            }
+
+            const url = `${window.location.origin}${window.location.pathname}?channel=${currentChannel.id}`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: `StreamCast - ${currentChannel.name}`,
+                    text: `Смотрите канал "${currentChannel.name}" в прямом эфире!`,
+                    url: url
+                });
+            } else {
+                navigator.clipboard.writeText(url).then(() => {
+                    showNotification('Ссылка скопирована в буфер обмена!', 'success');
+                });
+            }
+        }
+
+        function castToTV() {
+            if (!currentChannel) {
+                showNotification('Сначала запустите канал!', 'error');
+                return;
+            }
+
+            // Check for Chromecast availability
+            if ('presentation' in navigator) {
+                const presentationRequest = new PresentationRequest([window.location.href]);
+                
+                presentationRequest.start()
+                    .then(connection => {
+                        showNotification('Трансляция на ТВ началась!', 'success');
+                    })
+                    .catch(error => {
+                        showNotification('Не удалось подключиться к ТВ', 'error');
+                    });
+            } else {
+                showNotification('Функция Cast недоступна в этом браузере', 'warning');
+            }
+        }
+
+        function toggleFullscreen() {
+            const videoContainer = document.querySelector('.video-container');
+            
+            if (!document.fullscreenElement) {
+                videoContainer.requestFullscreen().then(() => {
+                    showNotification('Полноэкранный режим включен', 'success');
+                });
+            } else {
+                document.exitFullscreen().then(() => {
+                    showNotification('Полноэкранный режим выключен', 'success');
+                });
+            }
+        }
+
+        // UI updates
+        function updateChannelInfo() {
+            const channelName = document.getElementById('currentChannelName');
+            const statusDot = document.getElementById('statusDot');
+            const statusText = document.getElementById('statusText');
+
+            if (currentChannel) {
+                channelName.textContent = currentChannel.name;
+            } else {
+                channelName.textContent = 'Канал не выбран';
+            }
+        }
+
+        function updateChannelStatus(online) {
+            const statusDot = document.getElementById('statusDot');
+            const statusText = document.getElementById('statusText');
+
+            if (online) {
+                statusDot.classList.remove('offline');
+                statusText.textContent = 'В эфире';
+            } else {
+                statusDot.classList.add('offline');
+                statusText.textContent = 'Офлайн';
+            }
+        }
+
+        function updateViewerCount() {
+            viewerCount = Math.floor(Math.random() * 100) + 1;
+            document.getElementById('viewerCount').textContent = `${viewerCount} зрителей`;
+            
+            // Update every 30 seconds
+            setTimeout(updateViewerCount, 30000);
+        }
+
+        function toggleScheduleFields() {
+            const scheduleGroup = document.getElementById('scheduleGroup');
+            const playbackMode = document.getElementById('playbackMode').value;
+            
+            if (playbackMode === 'scheduled') {
+                scheduleGroup.style.display = 'block';
+            } else {
+                scheduleGroup.style.display = 'none';
+            }
+        }
+
+        // Utility functions
+        function formatDuration(seconds) {
+            if (!seconds || isNaN(seconds) || !isFinite(seconds)) {
+                return '00:00';
+            }
+            
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 B';
+            const k = 1024;
+            const sizes = ['B', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type} show`;
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Data persistence
+        function saveData() {
+            const data = {
+                videos: videos.map(v => ({
+                    id: v.id,
+                    name: v.name,
+                    duration: v.duration,
+                    size: v.size
+                })),
+                channels: channels
+            };
+            // In real app, save to server
+            console.log('Data saved:', data);
+        }
+
+        function loadStoredData() {
+            // In real app, load from server
+            console.log('Loading stored data...');
+        }
+
+        // Handle URL parameters for shared channels
+        function handleURLParams() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const channelId = urlParams.get('channel');
+            
+            if (channelId) {
+                // Wait a bit for channels to load
+                setTimeout(() => {
+                    const channel = channels.find(c => c.id === channelId);
+                    if (channel) {
+                        playChannel(channelId);
+                    } else {
+                        showNotification('Канал не найден по ссылке', 'error');
+                    }
+                }, 1000);
+            }
+        }
+
+        // Initialize URL handling
+        window.addEventListener('load', handleURLParams);
+    </script>
+</body>
+</html>

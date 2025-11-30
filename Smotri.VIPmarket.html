@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100vh;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        .desktop {
+            height: calc(100vh - 48px);
+            position: relative;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080"><rect fill="%23004E7C" width="1920" height="1080"/><circle cx="1600" cy="300" r="200" fill="%23005A8C" opacity="0.3"/><circle cx="300" cy="800" r="150" fill="%23003D66" opacity="0.4"/></svg>') center/cover;
+        }
+
+        .taskbar {
+            height: 48px;
+            background: rgba(32, 32, 32, 0.8);
+            backdrop-filter: blur(20px);
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .start-button {
+            width: 48px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .start-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .start-button::before {
+            content: "⊞";
+            color: white;
+            font-size: 20px;
+        }
+
+        .taskbar-apps {
+            display: flex;
+            margin-left: 16px;
+            gap: 4px;
+        }
+
+        .taskbar-app {
+            width: 40px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+            transition: all 0.2s ease;
+        }
+
+        .taskbar-app:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .system-tray {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            color: white;
+            font-size: 13px;
+        }
+
+        .start-menu {
+            position: fixed;
+            bottom: 60px;
+            left: 16px;
+            width: 600px;
+            height: 700px;
+            background: rgba(32, 32, 32, 0.95);
+            backdrop-filter: blur(30px);
+            border-radius: 8px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            display: none;
+            padding: 32px;
+            color: white;
+            z-index: 1001;
+        }
+
+        .start-menu.show {
+            display: block;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .search-box {
+            width: 100%;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            padding: 0 16px;
+            color: white;
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+
+        .search-box::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .apps-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .app-tile {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .app-tile:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+
+        .app-icon {
+            font-size: 32px;
+            margin-bottom: 4px;
+        }
+
+        .app-name {
+            font-size: 11px;
+            opacity: 0.9;
+        }
+
+        .window {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 8px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            min-width: 400px;
+            min-height: 300px;
+            display: none;
+            z-index: 500;
+        }
+
+        .window.show {
+            display: block;
+            animation: windowOpen 0.3s ease-out;
+        }
+
+        @keyframes windowOpen {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .window-header {
+            height: 32px;
+            background: rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            cursor: move;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .window-title {
+            font-size: 13px;
+            font-weight: 500;
+            flex: 1;
+        }
+
+        .window-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .window-control {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+        }
+
+        .minimize { background: #ffc107; }
+        .maximize { background: #28a745; }
+        .close { background: #dc3545; }
+
+        .window-content {
+            padding: 16px;
+            height: calc(100% - 32px);
+            overflow: auto;
+        }
+
+        .cmd-window {
+            width: 800px;
+            height: 600px;
+            top: 50px;
+            left: 100px;
+            background: #0c0c0c;
+            color: #ffffff;
+            font-family: 'Consolas', 'Courier New', monospace;
+        }
+
+        .cmd-content {
+            padding: 16px;
+            height: calc(100% - 32px);
+            overflow-y: auto;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .cmd-output {
+            white-space: pre-wrap;
+            margin-bottom: 8px;
+        }
+
+        .cmd-input-line {
+            display: flex;
+            align-items: center;
+        }
+
+        .cmd-prompt {
+            color: #ffffff;
+            margin-right: 8px;
+        }
+
+        .cmd-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: #ffffff;
+            font-family: inherit;
+            font-size: inherit;
+            outline: none;
+            caret-color: #ffffff;
+        }
+
+        .cmd-input:focus {
+            outline: none;
+            border: none;
+        }
+
+        .cursor {
+            background: #ffffff;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        .file-explorer {
+            width: 900px;
+            height: 650px;
+            top: 80px;
+            left: 200px;
+        }
+
+        .explorer-toolbar {
+            height: 40px;
+            background: rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            gap: 8px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .explorer-button {
+            padding: 4px 8px;
+            background: rgba(0, 0, 0, 0.1);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .address-bar {
+            flex: 1;
+            height: 24px;
+            padding: 0 8px;
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+            font-size: 12px;
+            margin-left: 16px;
+        }
+
+        .explorer-content {
+            display: flex;
+            height: calc(100% - 72px);
+        }
+
+        .explorer-sidebar {
+            width: 200px;
+            background: rgba(0, 0, 0, 0.02);
+            border-right: 1px solid rgba(0, 0, 0, 0.1);
+            padding: 16px 8px;
+        }
+
+        .sidebar-item {
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 13px;
+            margin-bottom: 2px;
+        }
+
+        .sidebar-item:hover {
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        .explorer-main {
+            flex: 1;
+            padding: 16px;
+        }
+
+        .file-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 16px;
+        }
+
+        .file-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 12px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background 0.2s ease;
+        }
+
+        .file-item:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .file-icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .file-name {
+            font-size: 12px;
+            text-align: center;
+            word-break: break-all;
+        }
+
+        .notepad-window {
+            width: 700px;
+            height: 500px;
+            top: 120px;
+            left: 300px;
+        }
+
+        .notepad-textarea {
+            width: 100%;
+            height: 100%;
+            border: none;
+            outline: none;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 14px;
+            padding: 16px;
+            resize: none;
+            background: white;
+            color: black;
+        }
+
+        .notepad-textarea:focus {
+            outline: none;
+            border: none;
+        }
+
+        .watermark {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 12px;
+            pointer-events: none;
+        }
+
+        .desktop-icon {
+            position: absolute;
+            width: 80px;
+            height: 90px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+        }
+
+        .desktop-icon:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+
+        .desktop-icon-image {
+            font-size: 48px;
+            margin-bottom: 8px;
+        }
+
+        .desktop-icon-text {
+            font-size: 12px;
+            line-height: 1.2;
+        }
+    </style>
+</head>
+<body>
+    <div class="desktop">
+        <!-- Desktop Icons -->
+        <div class="desktop-icon" style="top: 20px; left: 20px;" ondblclick="openFileExplorer()">
+            <div class="desktop-icon-image">📁</div>
+            <div class="desktop-icon-text">Этот компьютер</div>
+        </div>
+
+        <div class="desktop-icon" style="top: 20px; left: 120px;" ondblclick="openNotepad()">
+            <div class="desktop-icon-image">📝</div>
+            <div class="desktop-icon-text">Блокнот</div>
+        </div>
+
+        <div class="desktop-icon" style="top: 20px; left: 220px;" ondblclick="openCmd()">
+            <div class="desktop-icon-image">⚫</div>
+            <div class="desktop-icon-text">Командная строка</div>
+        </div>
+
+        <div class="watermark">Windows 11 Web Edition - Неактивированная версия</div>
+    </div>
+
+    <!-- Start Menu -->
+    <div class="start-menu" id="startMenu">
+        <input type="text" class="search-box" placeholder="Поиск приложений, файлов и веб-содержимого">
+        
+        <div class="apps-grid">
+            <div class="app-tile" onclick="openFileExplorer()">
+                <div class="app-icon">📁</div>
+                <div class="app-name">Проводник</div>
+            </div>
+            <div class="app-tile" onclick="openNotepad()">
+                <div class="app-icon">📝</div>
+                <div class="app-name">Блокнот</div>
+            </div>
+            <div class="app-tile" onclick="openCmd()">
+                <div class="app-icon">⚫</div>
+                <div class="app-name">CMD</div>
+            </div>
+            <div class="app-tile">
+                <div class="app-icon">🌐</div>
+                <div class="app-name">Edge</div>
+            </div>
+            <div class="app-tile">
+                <div class="app-icon">⚙️</div>
+                <div class="app-name">Параметры</div>
+            </div>
+            <div class="app-tile">
+                <div class="app-icon">🎵</div>
+                <div class="app-name">Музыка</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Taskbar -->
+    <div class="taskbar">
+        <button class="start-button" onclick="toggleStartMenu()"></button>
+        
+        <div class="taskbar-apps">
+            <button class="taskbar-app" onclick="openFileExplorer()" title="Проводник">📁</button>
+            <button class="taskbar-app" onclick="openNotepad()" title="Блокнот">📝</button>
+            <button class="taskbar-app" onclick="openCmd()" title="Командная строка">⚫</button>
+        </div>
+
+        <div class="system-tray">
+            <span>🔊</span>
+            <span>📶</span>
+            <span>🔋</span>
+            <span id="clock">00:00</span>
+        </div>
+    </div>
+
+    <!-- CMD Window -->
+    <div class="window cmd-window" id="cmdWindow">
+        <div class="window-header">
+            <span class="window-title">Командная строка</span>
+            <div class="window-controls">
+                <div class="window-control minimize" onclick="minimizeWindow('cmdWindow')">−</div>
+                <div class="window-control maximize" onclick="maximizeWindow('cmdWindow')">□</div>
+                <div class="window-control close" onclick="closeWindow('cmdWindow')">×</div>
+            </div>
+        </div>
+        <div class="cmd-content" id="cmdContent">
+            <div class="cmd-output">Microsoft Windows [Версия 11.0.22000.0]
+(c) Корпорация Майкрософт (Microsoft Corporation). Все права защищены.
+
+</div>
+            <div class="cmd-input-line">
+                <span class="cmd-prompt">C:\Users\User&gt;</span>
+                <input type="text" class="cmd-input" id="cmdInput" autocomplete="off" spellcheck="false">
+                <span class="cursor">_</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- File Explorer Window -->
+    <div class="window file-explorer" id="fileExplorer">
+        <div class="window-header">
+            <span class="window-title">Проводник</span>
+            <div class="window-controls">
+                <div class="window-control minimize" onclick="minimizeWindow('fileExplorer')">−</div>
+                <div class="window-control maximize" onclick="maximizeWindow('fileExplorer')">□</div>
+                <div class="window-control close" onclick="closeWindow('fileExplorer')">×</div>
+            </div>
+        </div>
+        <div class="window-content">
+            <div class="explorer-toolbar">
+                <button class="explorer-button">←</button>
+                <button class="explorer-button">→</button>
+                <button class="explorer-button">↑</button>
+                <input type="text" class="address-bar" value="C:\Users\User" readonly>
+            </div>
+            <div class="explorer-content">
+                <div class="explorer-sidebar">
+                    <div class="sidebar-item">📁 Этот компьютер</div>
+                    <div class="sidebar-item">📁 Рабочий стол</div>
+                    <div class="sidebar-item">📁 Документы</div>
+                    <div class="sidebar-item">📁 Загрузки</div>
+                    <div class="sidebar-item">📁 Изображения</div>
+                    <div class="sidebar-item">📁 Музыка</div>
+                    <div class="sidebar-item">📁 Видео</div>
+                </div>
+                <div class="explorer-main">
+                    <div class="file-grid">
+                        <div class="file-item">
+                            <div class="file-icon">📁</div>
+                            <div class="file-name">Документы</div>
+                        </div>
+                        <div class="file-item">
+                            <div class="file-icon">📁</div>
+                            <div class="file-name">Изображения</div>
+                        </div>
+                        <div class="file-item">
+                            <div class="file-icon">📁</div>
+                            <div class="file-name">Музыка</div>
+                        </div>
+                        <div class="file-item">
+                            <div class="file-icon">📄</div>
+                            <div class="file-name">readme.txt</div>
+                        </div>
+                        <div class="file-item">
+                            <div class="file-icon">🖼️</div>
+                            <div class="file-name">image.jpg</div>
+                        </div>
+                        <div class="file-item">
+                            <div class="file-icon">🎵</div>
+                            <div class="file-name">song.mp3</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notepad Window -->
+    <div class="window notepad-window" id="notepadWindow">
+        <div class="window-header">
+            <span class="window-title">Блокнот - Без названия</span>
+            <div class="window-controls">
+                <div class="window-control minimize" onclick="minimizeWindow('notepadWindow')">−</div>
+                <div class="window-control maximize" onclick="maximizeWindow('notepadWindow')">□</div>
+                <div class="window-control close" onclick="closeWindow('notepadWindow')">×</div>
+            </div>
+        </div>
+        <div class="window-content">
+            <textarea class="notepad-textarea" placeholder="Начните печатать здесь..."></textarea>
+        </div>
+    </div>
+
+    <script>
+        let currentPath = 'C:\\Users\\User';
+        let cmdHistory = [];
+        
+        // File system simulation
+        const fileSystem = {
+            'C:': {
+                'Users': {
+                    'User': {
+                        'Documents': {
+                            'readme.txt': 'Добро пожаловать в Windows 11 Web Edition!'
+                        },
+                        'Desktop': {},
+                        'Downloads': {},
+                        'Pictures': {},
+                        'Music': {},
+                        'Videos': {}
+                    }
+                },
+                'Windows': {
+                    'System32': {}
+                },
+                'Program Files': {}
+            }
+        };
+
+        // Update clock
+        function updateClock() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('ru-RU', { 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            });
+            document.getElementById('clock').textContent = timeString;
+        }
+
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // Start Menu functions
+        function toggleStartMenu() {
+            const startMenu = document.getElementById('startMenu');
+            startMenu.classList.toggle('show');
+        }
+
+        // Close start menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const startMenu = document.getElementById('startMenu');
+            const startButton = document.querySelector('.start-button');
+            
+            if (!startMenu.contains(event.target) && !startButton.contains(event.target)) {
+                startMenu.classList.remove('show');
+            }
+        });
+
+        // Window management
+        function openWindow(windowId) {
+            const window = document.getElementById(windowId);
+            window.classList.add('show');
+            bringToFront(windowId);
+        }
+
+        function closeWindow(windowId) {
+            const window = document.getElementById(windowId);
+            window.classList.remove('show');
+        }
+
+        function minimizeWindow(windowId) {
+            closeWindow(windowId);
+        }
+
+        function maximizeWindow(windowId) {
+            const window = document.getElementById(windowId);
+            // Toggle maximize state
+            if (window.style.width === '100%') {
+                window.style.width = '';
+                window.style.height = '';
+                window.style.top = '';
+                window.style.left = '';
+            } else {
+                window.style.width = '100%';
+                window.style.height = 'calc(100vh - 48px)';
+                window.style.top = '0';
+                window.style.left = '0';
+            }
+        }
+
+        function bringToFront(windowId) {
+            const window = document.getElementById(windowId);
+            window.style.zIndex = '1000';
+            
+            // Reset other windows
+            const allWindows = document.querySelectorAll('.window');
+            allWindows.forEach(w => {
+                if (w.id !== windowId) {
+                    w.style.zIndex = '500';
+                }
+            });
+        }
+
+        // Application functions
+        function openFileExplorer() {
+            openWindow('fileExplorer');
+        }
+
+        function openNotepad() {
+            openWindow('notepadWindow');
+            setTimeout(() => {
+                const textarea = document.querySelector('.notepad-textarea');
+                if (textarea) textarea.focus();
+            }, 100);
+        }
+
+        function openCmd() {
+            openWindow('cmdWindow');
+            setTimeout(() => {
+                const cmdInput = document.getElementById('cmdInput');
+                if (cmdInput) {
+                    cmdInput.focus();
+                    cmdInput.setSelectionRange(cmdInput.value.length, cmdInput.value.length);
+                }
+            }, 100);
+        }
+
+        // CMD functionality
+        function handleCmdInput(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                const input = event.target;
+                const command = input.value.trim();
+                
+                if (command) {
+                    executeCommand(command);
+                    cmdHistory.push(command);
+                }
+                
+                input.value = '';
+                
+                // Keep focus on input
+                setTimeout(() => input.focus(), 10);
+            }
+        }
+
+        function executeCommand(command) {
+            const cmdContent = document.getElementById('cmdContent');
+            const output = document.createElement('div');
+            output.className = 'cmd-output';
+            
+            // Add command to output
+            output.textContent = currentPath + '>' + command + '\n';
+            
+            const parts = command.toLowerCase().split(' ');
+            const cmd = parts[0];
+            
+            let result = '';
+            
+            switch (cmd) {
+                case 'dir':
+                    result = executeDir();
+                    break;
+                case 'cd':
+                    result = executeCd(parts.slice(1).join(' '));
+                    break;
+                case 'cls':
+                    clearCmd();
+                    return;
+                case 'help':
+                    result = executeHelp();
+                    break;
+                case 'echo':
+                    result = parts.slice(1).join(' ');
+                    break;
+                case 'ver':
+                    result = 'Microsoft Windows [Версия 11.0.22000.0]';
+                    break;
+                case 'date':
+                    result = new Date().toLocaleDateString('ru-RU');
+                    break;
+                case 'time':
+                    result = new Date().toLocaleTimeString('ru-RU');
+                    break;
+                case 'ipconfig':
+                    result = 'Настройка протокола IP для Windows\n\nАдаптер Ethernet Подключение по локальной сети:\n   IP-адрес. . . . . . . . . . . . . : 192.168.1.100\n   Маска подсети . . . . . . . . . . : 255.255.255.0\n   Основной шлюз. . . . . . . . . .  : 192.168.1.1';
+                    break;
+                case 'systeminfo':
+                    result = 'Имя узла:                    WIN11-WEB\nИмя ОС:                      Microsoft Windows 11\nВерсия ОС:                   11.0.22000\nПроизводитель ОС:            Microsoft Corporation\nКонфигурация ОС:             Автономная рабочая станция\nТип сборки ОС:               Multiprocessor Free\nВладелец:                    User\nОрганизация:                 \nСерийный номер продукта:     00000-00000-00000-00000';
+                    break;
+                case 'tasklist':
+                    result = 'Имя образа                     PID Имя сессии      № сеанса    Память\n========================= ======== ================ =========== ============\nSystem Idle Process              0 Services                   0          8 КБ\nSystem                           4 Services                   0      7,316 КБ\nsmss.exe                       376 Services                   0      1,048 КБ\ncsrss.exe                      500 Services                   0      4,796 КБ\nwinlogon.exe                   524 Services                   0      3,200 КБ\nexplorer.exe                  1234 Console                    1     25,600 КБ';
+                    break;
+                case 'ping':
+                    if (parts[1]) {
+                        result = `Обмен пакетами с ${parts[1]} [192.168.1.1] с 32 байтами данных:\nОтвет от 192.168.1.1: число байт=32 время=1мс TTL=64\nОтвет от 192.168.1.1: число байт=32 время=1мс TTL=64\nОтвет от 192.168.1.1: число байт=32 время=1мс TTL=64\nОтвет от 192.168.1.1: число байт=32 время=1мс TTL=64\n\nСтатистика Ping для 192.168.1.1:\n    Пакетов: отправлено = 4, получено = 4, потеряно = 0 (0% потерь)`;
+                    } else {
+                        result = 'Использование: ping [-t] [-a] [-n счетчик] [-l размер] [-f] [-i TTL] [-v TOS]\n                    [-r счетчик] [-s счетчик] [[-j список-узлов] | [-k список-узлов]]\n                    [-w интервал] конечное_имя';
+                    }
+                    break;
+                case 'mkdir':
+                case 'md':
+                    if (parts[1]) {
+                        result = `Создана папка "${parts[1]}"`;
+                    } else {
+                        result = 'Синтаксис команды неверен.';
+                    }
+                    break;
+                case 'rmdir':
+                case 'rd':
+                    if (parts[1]) {
+                        result = `Удалена папка "${parts[1]}"`;
+                    } else {
+                        result = 'Синтаксис команды неверен.';
+                    }
+                    break;
+                case 'copy':
+                    result = 'Скопирован 1 файл.';
+                    break;
+                case 'del':
+                    if (parts[1]) {
+                        result = `Удален файл "${parts[1]}"`;
+                    } else {
+                        result = 'Синтаксис команды неверен.';
+                    }
+                    break;
+                case 'whoami':
+                    result = 'WIN11-WEB\\User';
+                    break;
+                case 'hostname':
+                    result = 'WIN11-WEB';
+                    break;
+                case 'getmac':
+                    result = 'Физический адрес    Имя транспорта\n=================== ==========================================================\n00-1B-44-11-3A-B7   \\Device\\Tcpip_{XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX}';
+                    break;
+                case 'driverquery':
+                    result = 'Имя модуля                     Тип отображения   Дата связи\n============================== ================= ======================\n1394ohci                       Kernel            07.07.2021 6:21:03\nACPI                           Kernel            07.07.2021 6:21:03\nAcpiEx                         Kernel            07.07.2021 6:21:03\nAcpiPmi                        Kernel            07.07.2021 6:21:03';
+                    break;
+                case 'sfc':
+                    result = 'Начато сканирование системы. Эта процедура может занять некоторое время.\n\nНачата фаза проверки при сканировании системы.\nПроверка 100% завершена.\n\nПрограмма защиты ресурсов Windows не обнаружила нарушений целостности.';
+                    break;
+                case 'chkdsk':
+                    result = 'Тип файловой системы: NTFS.\nПроверка не может быть выполнена, поскольку том используется другим процессом.\nВы хотите запланировать проверку этого тома при следующем перезапуске системы? (Y/N)';
+                    break;
+                case 'tree':
+                    result = executeTree();
+                    break;
+                case 'attrib':
+                    result = 'A            C:\\Users\\User\\Documents\\readme.txt\n             C:\\Users\\User\\Desktop\n             C:\\Users\\User\\Downloads';
+                    break;
+                case 'fc':
+                    result = 'Сравнение файлов readme.txt и README.TXT\nFC: различий не найдено';
+                    break;
+                case 'find':
+                    if (parts.length > 1) {
+                        result = `Поиск "${parts.slice(1).join(' ')}" в файлах...\n\n---------- README.TXT\nДобро пожаловать в Windows 11 Web Edition!`;
+                    } else {
+                        result = 'FIND: Неверный формат параметра';
+                    }
+                    break;
+                case 'type':
+                    if (parts[1] && parts[1].toLowerCase() === 'readme.txt') {
+                        result = 'Добро пожаловать в Windows 11 Web Edition!\nЭто эмуляция Windows 11 в веб-браузере.\nВы можете использовать командную строку, проводник и другие приложения.';
+                    } else {
+                        result = 'Не удается найти указанный файл.';
+                    }
+                    break;
+                case 'netstat':
+                    result = 'Активные подключения\n\n  Прото  Локальный адрес        Внешний адрес          Состояние\n  TCP    0.0.0.0:135            0.0.0.0:0              LISTENING\n  TCP    0.0.0.0:445            0.0.0.0:0              LISTENING\n  TCP    127.0.0.1:1234         0.0.0.0:0              LISTENING';
+                    break;
+                case 'route':
+                    result = '===========================================================================\nСписок интерфейсов\n  1...........................Loopback Pseudo-Interface 1\n 12...00-1b-44-11-3a-b7 ......Realtek PCIe GBE Family Controller\n===========================================================================\n\nИнтернет-адрес      Маска сети      Адрес шлюза       Интерфейс  Метрика\n          0.0.0.0          0.0.0.0      192.168.1.1    192.168.1.100     25';
+                    break;
+                case 'arp':
+                    result = 'Интерфейс: 192.168.1.100 --- 0xc\n  Адрес в Интернете     Физический адрес      Тип\n  192.168.1.1           00-1b-44-33-55-77     динамический\n  192.168.1.255         ff-ff-ff-ff-ff-ff     статический';
+                    break;
+                case 'nslookup':
+                    result = 'Сервер по умолчанию:  dns.server.com\nAddress:  8.8.8.8\n\n> ';
+                    break;
+                case 'powershell':
+                    result = 'Windows PowerShell\nCopyright (C) Microsoft Corporation. All rights reserved.\n\nИнтерактивная оболочка PowerShell не поддерживается в этой версии.\nИспользуйте команды CMD.';
+                    break;
+                case 'start':
+                    if (parts[1]) {
+                        if (parts[1] === 'notepad') {
+                            openNotepad();
+                            result = 'Запуск Блокнота...';
+                        } else if (parts[1] === 'explorer') {
+                            openFileExplorer();
+                            result = 'Запуск Проводника...';
+                        } else {
+                            result = `Запуск ${parts[1]}...`;
+                        }
+                    } else {
+                        result = 'Синтаксис команды неверен.';
+                    }
+                    break;
+                case 'title':
+                    if (parts.length > 1) {
+                        const newTitle = parts.slice(1).join(' ');
+                        document.querySelector('#cmdWindow .window-title').textContent = newTitle;
+                        result = '';
+                    } else {
+                        result = 'Синтаксис команды неверен.';
+                    }
+                    break;
+                case 'color':
+                    result = 'Изменение цвета консоли не поддерживается в веб-версии.';
+                    break;
+                case 'exit':
+                    closeWindow('cmdWindow');
+                    return;
+                default:
+                    result = `'${command}' не является внутренней или внешней\nкомандой, исполняемой программой или пакетным файлом.`;
+            }
+            
+            output.textContent += result + '\n\n';
+            
+            // Insert before input line
+            const inputLine = cmdContent.querySelector('.cmd-input-line');
+            cmdContent.insertBefore(output, inputLine);
+            
+            // Update prompt
+            cmdContent.querySelector('.cmd-prompt').textContent = currentPath + '>';
+            
+            // Scroll to bottom
+            cmdContent.scrollTop = cmdContent.scrollHeight;
+        }
+
+        function executeDir() {
+            const pathParts = currentPath.split('\\').filter(p => p);
+            let currentDir = fileSystem;
+            
+            // Navigate to current directory
+            for (const part of pathParts) {
+                if (currentDir[part]) {
+                    currentDir = currentDir[part];
+                } else {
+                    return 'Система не может найти указанный путь.';
+                }
+            }
+            
+            let result = ` Содержимое папки ${currentPath}\n\n`;
+            result += new Date().toLocaleDateString('ru-RU') + '  ' + new Date().toLocaleTimeString('ru-RU', {hour: '2-digit', minute: '2-digit'}) + '    <DIR>          .\n';
+            result += new Date().toLocaleDateString('ru-RU') + '  ' + new Date().toLocaleTimeString('ru-RU', {hour: '2-digit', minute: '2-digit'}) + '    <DIR>          ..\n';
+            
+            for (const [name, content] of Object.entries(currentDir)) {
+                const date = new Date().toLocaleDateString('ru-RU');
+                const time = new Date().toLocaleTimeString('ru-RU', {hour: '2-digit', minute: '2-digit'});
+                
+                if (typeof content === 'object') {
+                    result += `${date}  ${time}    <DIR>          ${name}\n`;
+                } else {
+                    const size = content.length.toString().padStart(14);
+                    result += `${date}  ${time}${size} ${name}\n`;
+                }
+            }
+            
+            result += '               2 файлов             1 024 байт\n';
+            result += '               3 папок  125 829 324 800 байт свободно';
+            
+            return result;
+        }
+
+        function executeCd(path) {
+            if (!path || path === '.') {
+                return currentPath;
+            }
+            
+            if (path === '..') {
+                const pathParts = currentPath.split('\\').filter(p => p);
+                if (pathParts.length > 1) {
+                    pathParts.pop();
+                    currentPath = pathParts.join('\\');
+                }
+                return '';
+            }
+            
+            if (path.includes(':')) {
+                // Absolute path
+                const pathParts = path.split('\\').filter(p => p);
+                let testDir = fileSystem;
+                
+                for (const part of pathParts) {
+                    if (testDir[part]) {
+                        testDir = testDir[part];
+                    } else {
+                        return 'Система не может найти указанный путь.';
+                    }
+                }
+                
+                currentPath = path;
+                return '';
+            } else {
+                // Relative path
+                const pathParts = currentPath.split('\\').filter(p => p);
+                const newParts = path.split('\\').filter(p => p);
+                
+                let testDir = fileSystem;
+                for (const part of pathParts) {
+                    if (testDir[part]) {
+                        testDir = testDir[part];
+                    }
+                }
+                
+                for (const part of newParts) {
+                    if (testDir[part] && typeof testDir[part] === 'object') {
+                        testDir = testDir[part];
+                        pathParts.push(part);
+                    } else {
+                        return 'Система не может найти указанный путь.';
+                    }
+                }
+                
+                currentPath = pathParts.join('\\');
+                return '';
+            }
+        }
+
+        function executeHelp() {
+            return `Список доступных команд:
+
+ATTRIB       Отображение и изменение атрибутов файлов
+CD           Вывод имени либо изменение текущей папки
+CHKDSK       Проверка диска и вывод статистики
+CLS          Очистка экрана
+COPY         Копирование одного или нескольких файлов
+DATE         Вывод либо установка текущей даты
+DEL          Удаление одного или нескольких файлов
+DIR          Вывод списка файлов и подпапок из указанной папки
+DRIVERQUERY  Отображение списка установленных драйверов устройств
+ECHO         Вывод сообщений и переключение режима отображения команд
+EXIT         Завершение работы программы CMD.EXE
+FC           Сравнение двух файлов или двух наборов файлов
+FIND         Поиск текстовой строки в одном или нескольких файлах
+GETMAC       Отображение MAC-адресов сетевых адаптеров
+HELP         Вывод справочной информации по команде
+HOSTNAME     Отображение имени компьютера
+IPCONFIG     Отображение и изменение конфигурации IP
+MKDIR        Создание папки
+NETSTAT      Отображение сетевых подключений
+NSLOOKUP     Отображение информации DNS
+PING         Отправка пакетов ICMP
+RMDIR        Удаление папки
+ROUTE        Управление таблицей сетевых маршрутов
+SFC          Проверка целостности системных файлов
+START        Запуск программы или команды в отдельном окне
+SYSTEMINFO   Отображение информации о конфигурации компьютера
+TASKLIST     Отображение запущенных задач
+TIME         Вывод либо установка текущего времени
+TITLE        Присвоение заголовка окну CMD.EXE
+TREE         Графическое отображение структуры папок
+TYPE         Вывод содержимого текстовых файлов
+VER          Вывод сведений о версии Windows
+WHOAMI       Отображение имени текущего пользователя
+
+Для получения справки по конкретной команде введите HELP имя_команды`;
+        }
+
+        function executeTree() {
+            return `Структура папок тома\nСерийный номер тома: XXXX-XXXX
+${currentPath}
+│
+├───Desktop
+├───Documents
+├───Downloads
+├───Pictures
+├───Music
+└───Videos`;
+        }
+
+        function clearCmd() {
+            const cmdContent = document.getElementById('cmdContent');
+            const inputLine = cmdContent.querySelector('.cmd-input-line');
+            cmdContent.innerHTML = '';
+            cmdContent.appendChild(inputLine);
+            cmdContent.querySelector('.cmd-prompt').textContent = currentPath + '>';
+        }
+
+        // Make windows draggable
+        function makeDraggable(element) {
+            let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+            const header = element.querySelector('.window-header');
+            
+            header.onmousedown = dragMouseDown;
+            
+            function dragMouseDown(e) {
+                e = e || window.event;
+                e.preventDefault();
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                document.onmouseup = closeDragElement;
+                document.onmousemove = elementDrag;
+                bringToFront(element.id);
+            }
+            
+            function elementDrag(e) {
+                e = e || window.event;
+                e.preventDefault();
+                pos1 = pos3 - e.clientX;
+                pos2 = pos4 - e.clientY;
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                element.style.top = (element.offsetTop - pos2) + "px";
+                element.style.left = (element.offsetLeft - pos1) + "px";
+            }
+            
+            function closeDragElement() {
+                document.onmouseup = null;
+                document.onmousemove = null;
+            }
+        }
+
+        // Make all windows draggable
+        document.querySelectorAll('.window').forEach(makeDraggable);
+
+        // Click on window to bring to front
+        document.querySelectorAll('.window').forEach(window => {
+            window.addEventListener('mousedown', () => {
+                bringToFront(window.id);
+            });
+        });
+
+        // Focus CMD input when window is clicked
+        document.addEventListener('DOMContentLoaded', function() {
+            const cmdWindow = document.getElementById('cmdWindow');
+            const cmdInput = document.getElementById('cmdInput');
+            const notepadTextarea = document.querySelector('.notepad-textarea');
+            
+            // CMD window click handler
+            cmdWindow.addEventListener('click', () => {
+                setTimeout(() => {
+                    if (cmdInput) cmdInput.focus();
+                }, 10);
+            });
+            
+            // CMD input focus when opened
+            function focusCmdInput() {
+                setTimeout(() => {
+                    if (cmdInput) {
+                        cmdInput.focus();
+                        cmdInput.setSelectionRange(cmdInput.value.length, cmdInput.value.length);
+                    }
+                }, 100);
+            }
+            
+            // Override openCmd function to ensure focus
+            window.openCmd = function() {
+                openWindow('cmdWindow');
+                focusCmdInput();
+            };
+            
+            // Override openNotepad function to ensure focus
+            window.openNotepad = function() {
+                openWindow('notepadWindow');
+                setTimeout(() => {
+                    if (notepadTextarea) notepadTextarea.focus();
+                }, 100);
+            };
+            
+            // Ensure CMD input responds to keyboard
+            if (cmdInput) {
+                cmdInput.addEventListener('keydown', function(event) {
+                    if (event.key === 'Enter') {
+                        event.preventDefault();
+                        handleCmdInput(event);
+                    }
+                });
+                
+                // Keep focus on CMD input
+                cmdInput.addEventListener('blur', function() {
+                    if (cmdWindow.classList.contains('show')) {
+                        setTimeout(() => cmdInput.focus(), 10);
+                    }
+                });
+            }
+        });
+
+        // Initialize
+        updateClock();
+    </script>
+</body>
+</html>
