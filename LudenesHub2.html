@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <p>Ваш персональный гид по телепрограммам будущего!</p>
+        </header>
+
+        <section id="search-bar">
+            <input type="text" id="channel-input" placeholder="Введите название канала (англ.)">
+            <button id="search-button">Найти</button>
+        </section>
+
+        <section id="program-section">
+            <iframe id="program-iframe" src="" frameborder="0" allowfullscreen style="width: 100%; height: 708px;"></iframe>
+        </section>
+
+        <footer>
+            <p>© Cоздано для компании Oink Tech Ltd Co.</p>
+        </footer>
+    </div>
+
+    <script>document.addEventListener('DOMContentLoaded', function() {
+    const channelInput = document.getElementById('channel-input');
+    const searchButton = document.getElementById('search-button');
+    const programIframe = document.getElementById('program-iframe');
+
+    searchButton.addEventListener('click', function() {
+        const channelName = channelInput.value.trim();
+        if (channelName) {
+            const iframeSrc = `https://programma-peredach.com/iframe/kanal_${channelName}/na_segodnya/?i_set_theme=white&i_set_title=empty`;
+            programIframe.src = iframeSrc;
+        } else {
+            alert('Пожалуйста, введите название канала.');
+        }
+    });
+});
+</script>
+</body>
+</html>
+<style>body {
+    font-family: 'Arial', sans-serif;
+    background-color: #222;
+    color: #eee;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.container {
+    width: 80%;
+    max-width: 960px;
+    background-color: #333;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+}
+
+header {
+    background-color: #444;
+    color: #fff;
+    text-align: center;
+    padding: 20px;
+}
+
+#search-bar {
+    padding: 20px;
+    text-align: center;
+}
+
+input[type="text"] {
+    padding: 10px;
+    border-radius: 25px;
+    border: none;
+    width: 60%;
+    margin-right: 10px;
+    background-color: #555;
+    color: #fff;
+}
+
+button {
+    padding: 10px 20px;
+    border-radius: 25px;
+    border: none;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+#program-section {
+    padding: 20px;
+}
+
+iframe {
+    border: none;
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #444;
+    color: #fff;
+}
+</style>

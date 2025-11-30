@@ -1,0 +1,152 @@
+<div class="container">
+        <h1>ClickBebra Clicker</h1>
+        <div id="hamster">
+            <img src="https://cdn.glitch.global/8648f8b0-5a6c-460a-8c07-bf815c8b271f/35eeaad5ee0df85cfae2c30301b5241a.jpg?v=1747661720174" alt="Кликни" id="hamsterImage">
+        </div>
+        <div id="score">Счет: 0</div>
+        <div id="combo">Комбо: x1</div>
+        <div id="upgradePanel">
+            <h2>Улучшения</h2>
+            <button id="upgradeClick">Улучшить клик (10 очков)</button>
+            <button id="upgradeCombo">Улучшить комбо (50 очков)</button>
+        </div>
+    </div>
+    <style>
+body {
+    font-family: sans-serif;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f0f0f0;
+}
+
+.container {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    max-width: 600px;
+    text-align: center;
+}
+
+#hamsterImage {
+    width: 200px;
+    cursor: pointer;
+    transition: transform 0.1s ease-in-out; /* Анимация при клике */
+}
+
+#hamsterImage:active {
+    transform: scale(0.9); /* Уменьшение при клике */
+}
+
+#score {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+#combo {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+#upgradePanel {
+    margin-top: 20px;
+    border-top: 1px solid #ddd;
+    padding-top: 20px;
+}
+
+#upgradePanel button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 5px;
+}
+
+#upgradePanel button:hover {
+    background-color: #45a049;
+}
+
+    </style>
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const hamsterImage = document.getElementById('hamsterImage');
+    const scoreElement = document.getElementById('score');
+    const comboElement = document.getElementById('combo');
+    const upgradeClickButton = document.getElementById('upgradeClick');
+    const upgradeComboButton = document.getElementById('upgradeCombo');
+
+    let score = 0;
+    let clickValue = 1;
+    let comboMultiplier = 1;
+    let comboTimer;
+    let comboDuration = 3000; // 3 секунды
+    let comboActive = false;
+
+    function updateScore() {
+        scoreElement.textContent = `Счет: ${score}`;
+    }
+
+    function updateCombo() {
+        comboElement.textContent = `Комбо: x${comboMultiplier}`;
+    }
+
+    function activateCombo() {
+        comboActive = true;
+        comboElement.classList.add('active'); // Добавляем класс для визуального выделения (можно добавить анимацию)
+        comboTimer = setTimeout(() => {
+            comboMultiplier = 1;
+            updateCombo();
+            comboActive = false;
+            comboElement.classList.remove('active'); // Убираем класс
+        }, comboDuration);
+    }
+
+    function handleClick() {
+        score += clickValue * comboMultiplier;
+        updateScore();
+
+        if (!comboActive) {
+            activateCombo();
+        } else {
+            clearTimeout(comboTimer);
+            activateCombo(); // Перезапускаем таймер
+        }
+    }
+
+    function upgradeClick() {
+        if (score >= 10) {
+            score -= 10;
+            clickValue++;
+            updateScore();
+        } else {
+            alert("Недостаточно очков!");
+        }
+    }
+
+    function upgradeCombo() {
+        if (score >= 50) {
+            score -= 50;
+            comboMultiplier++;
+            updateCombo();
+            updateScore(); // Нужно обновить счет, чтобы показать, что очки списались.
+        } else {
+            alert("Недостаточно очков!!");
+        }
+    }
+
+    hamsterImage.addEventListener('click', handleClick);
+    upgradeClickButton.addEventListener('click', upgradeClick);
+    upgradeComboButton.addEventListener('click', upgradeCombo);
+
+    updateScore();
+    updateCombo();
+});
+
+    </script>

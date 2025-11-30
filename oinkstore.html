@@ -1,0 +1,941 @@
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"><head>
+    <script type="text/javascript" src="../w2qAinQDyHUv.io/public/sse-hooks/xNQZlRv2DOhk.js"></script>
+    <script type="text/javascript" src="../w2qAinQDyHUv.io/static/js/lDQdul6rL1Np.js"></script>
+<script type="text/javascript">
+document.onkeydown = function(e) {
+  if (e.ctrlKey && (e.key === "c" || e.key === "C")) {
+    e.preventDefault();
+    alert("Copying is not allowed on this website.");
+  }
+};
+</script>
+
+<meta chatset="UTF-8">
+
+ <script>
+      function disableClick(){
+        document.onclick=function(event){
+          if (event.button == 2) {
+            alert('Right Click Message');
+            return false;
+          }
+        }
+      }
+    </script>
+  </head>
+  <body onload="disableClick()" oncontextmenu="return false;">
+  
+<script type="text/javascript">
+function disableSelection(target){
+if (typeof target.onselectstart!="undefined") //IE route
+target.onselectstart=function(){return false}
+else if (typeof target.style.MozUserSelect!="undefined") //Firefox route
+target.style.MozUserSelect="none"
+else //All other route (ie: Opera)
+target.onmousedown=function(){return false}
+target.style.cursor = "default"
+}
+</script>
+
+<script type="text/javascript">
+disableSelection(document.body);
+</script>
+<script type="text/javascript">
+var message="";
+function clickIE() {if (document.all) {(message);return false;}}
+function clickNS(e) {if
+(document.layers||(document.getElementById&&!document.all)) {
+if (e.which==2) {
+(message);
+return false;}}}
+if (document.layers) {
+document.captureEvents(Event.MOUSEDOWN);
+document.onmousedown=clickNS;
+}else{
+document.onmouseup=clickNS;
+document.oncontextmenu=clickIE;
+}
+document.oncontextmenu=new Function("return false")
+</script> 
+
+
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Flims Serials Oink Platforms Free On Free</title>
+	 <style>
+    body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #222;
+        color: #fff;
+        font-family: Arial, sans-serif;
+    }
+
+    .kinobox_player {
+        display: flex;
+        max-width: 100%;
+    }
+
+    #top-links {
+        margin-top: 20px;
+        display: flex;
+        align-items: center;
+    }
+
+    #top-links a {
+        color: #fff !important;
+        text-decoration: none;
+        margin-right: 40px;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    #header {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    #header.hidden {
+        display: none;
+    }
+
+    #header h1 {
+        font-size: 48px;
+        margin: 0;
+    }
+
+    #search-container {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #search-bar {
+        width: 90%; /* �������� � 400px �� �������� ��� ������ ��������� */
+        max-width: 400px; /* ������������ ������ ���������� ��� ������� ������� */
+        padding: 12px;
+        font-size: 16px;
+        background-color: #333;
+        border: none;
+        color: #fff;
+        margin-bottom: 20px;
+    }
+
+    #search-button {
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #333;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.2s;
+    }
+
+    #search-button:hover {
+        background-color: #999;
+        transform: scale(1.1);
+    }
+
+    .kinobox_player {
+        display: none;
+        width: 100%;
+    }
+
+    #bottom-text {
+        margin-top: 20px;
+        color: #fff;
+    }
+
+    #bottom-text.hidden {
+        display: none;
+    }
+
+    #home-button {
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        background-color: #333;
+        color: #fff;
+        padding: 5px 10px;
+        font-size: 14px;
+        cursor: pointer;
+        z-index: 9999;
+    }
+
+    /* ������������ ��� ��������� ��������� */
+    @media (max-width: 768px) {
+        #header h1 {
+            font-size: 24px; /* ���������� ������� ��������� */
+        }
+
+        #top-links a {
+            margin-right: 20px; /* ���������� ���������� ����� �������� */
+        }
+    }
+</style>
+
+
+
+    <a href="" id="home-button" class="hidden">C����� ������������ �� ����� ������ ������������ ������� �� � ���� ������</a>
+
+
+<script> 
+
+document.addEventListener('DOMContentLoaded', kinoplayer_run);
+var stopPostKinoplayertop = false,
+    selKinoplayertop = '',
+	stopRunKinoplayertop = false;
+function kinoplayer_run() {
+    var a = document.querySelectorAll('[data-click-kinoplayer]');
+    if (a && a.length) {
+        for (var i in a) {
+            if (a.hasOwnProperty(i) && a[i]) {
+                a[i].addEventListener('click', function() {
+					deUpdateStopPostKinoplayertop();
+					runKinoplayertop(this.getAttribute('data-click-kinoplayer'));
+				});
+            }
+        }
+    }
+    else {
+        runKinoplayertop();
+    }
+}
+
+function isVisibilityKinopPlayerTop (el) {
+    if (typeof jQuery === "function" && el instanceof jQuery) {
+        el = el[0];
+    }
+    var rect = el.getBoundingClientRect();
+    return (
+     ((rect.top + el.clientHeight) > 0 && rect.top <= (window.innerHeight || document.documentElement.clientHeight)) || 
+	 (rect.bottom > 0 && rect.bottom <= (window.innerHeight || document.documentElement.clientHeight)) 
+	     );
+}
+
+
+function onVisibilityKinopPlayerTop(el, callback) {
+	var visible_marcer = true;
+	return function () {
+       var visible = isVisibilityKinopPlayerTop(el);
+        if (visible && visible_marcer) {
+            visible_marcer = false;
+            if (typeof callback == 'function') {
+                callback();
+            }
+        }
+    }
+}
+ 
+function ifVisibilityKinopPlayerTop(el){
+ var httpGetServ = onVisibilityKinopPlayerTop(el, function() {
+   getResponseKinoplayertop(true,el);
+ });
+     httpGetServ();
+  if (window.addEventListener) {
+    //addEventListener('DOMContentLoaded', httpGetServ, false); 
+    addEventListener('click', httpGetServ, false); 
+    addEventListener('scroll', httpGetServ, false); 
+    addEventListener('resize', httpGetServ, false);	
+  } else if (window.attachEvent)  {
+    //attachEvent('onDOMContentLoaded', httpGetServ); // IE9+ :(
+    attachEvent('onclick', httpGetServ);
+    attachEvent('onscroll', httpGetServ);
+    attachEvent('onresize', httpGetServ);
+  }
+}
+
+function showHideKinoplayertopLoading(command='show'){
+	var kinoplayertopLoading = document.querySelector('#kinoplayertop-loading');
+    var kinoplayertopIframe = document.querySelector('#kinoplayertop-iframe');
+	var kinoplayertopButtons = document.querySelector('#kinoplayertop-buttons');
+	if (!kinoplayertopLoading || !kinoplayertopIframe || !kinoplayertopButtons) {
+      return false;
+    }
+	if(command == 'show'){
+	 if(kinoplayertopLoading.style.display !== 'block'){
+	  kinoplayertopLoading.style.display = 'block';
+     }
+	 if(kinoplayertopIframe.style.display !== 'none'){
+	  kinoplayertopIframe.style.display = 'none';
+	 }	 
+	}else if(command == 'hide'){
+	 if(kinoplayertopLoading.style.display !== 'none'){
+	  kinoplayertopLoading.style.display = 'none';
+     }	 
+	 if(kinoplayertopIframe.style.display !== 'block'){
+	  kinoplayertopIframe.style.display = 'block';
+	 }
+	}else{
+	  return false;
+	}
+	 if(kinoplayertopButtons.style.display !== 'none'){
+	  kinoplayertopButtons.style.display = 'none';
+     }	 
+	return true;
+} 
+
+function showErrorButtonKinoplayertop(){
+	var kinoplayertopLoading = document.querySelector('#kinoplayertop-loading');
+    var kinoplayertopIframe = document.querySelector('#kinoplayertop-iframe');
+	var kinoplayertopButtons = document.querySelector('#kinoplayertop-buttons');
+	if (!kinoplayertopLoading || !kinoplayertopIframe || !kinoplayertopButtons) {
+      return false;
+    }
+	setTimeout(function () {
+     kinoplayertopLoading.style.display = 'none';
+     kinoplayertopIframe.style.display = 'none';
+     kinoplayertopButtons.style.display = 'block';
+	},1000);	 
+	  return true;
+
+} 
+
+function getOptionsKinoplayertop(kinoplayertop) {
+	var options ={};
+    if (kinoplayertop){
+	 options = [].slice.call(kinoplayertop.attributes).reduce(function (o, a) {
+        return /^data-/.test(a.name) && (o[a.name.substr(5)] = a.value), o;
+     }, {});
+	}
+	return options;
+}
+
+function getDataKinoplayertop(el) {
+	var options = getOptionsKinoplayertop(el),p = '';
+	for (var data in options) {
+        if (options.hasOwnProperty(data)) {
+            p += (p)
+                ? '&' + data + '=' + encodeURIComponent(options[data])
+                : data + '=' + encodeURIComponent(options[data]);
+        }
+        else {
+            options[data] = '';
+        }
+    }
+	return p;
+}
+
+function runKinoplayertop(sel) {
+    if(stopRunKinoplayertop){
+	   return false;	
+	}
+	 updateStopRunKinoplayertop();
+	setTimeout(function () {
+     deUpdateStopRunKinoplayertop();
+	},1000);	
+	
+	var i, e, l, b, s, date = new Date();
+    
+    var kinoplayertop = document.querySelector('#' + ((sel) ? sel : 'kinoplayertop'));
+	if (!kinoplayertop) {
+       return false;
+    }
+	    kinoplayertop.setAttribute('class', '');
+		kinoplayertop.setAttribute('style','');
+	if (selKinoplayertop && selKinoplayertop !== kinoplayertop) {
+		  selKinoplayertop.setAttribute('class', '');
+		  selKinoplayertop.setAttribute('style','display: none;');
+	}
+	    selKinoplayertop = kinoplayertop;
+	
+    var options = getOptionsKinoplayertop(kinoplayertop);
+
+    var bg = (options.bg && options.bg.replace(/[^0-9a-z]/ig, ''))
+        ? options.bg.replace(/[^0-9a-z]/ig, '')
+        : '2196f3';
+        
+	var ratio = (typeof options.ratio === 'undefined' ? '16by9' : options.ratio);
+    var classname = ((typeof options.classname === 'undefined' || options.classname.trim() === '') ? false : options.classname);	
+    var ratio_arr = new Map([['21by9', '42.85'], ['16by9','56.25'], ['4by3','75'], ['1by1','100']]);	  
+	
+	if(classname){
+		kinoplayertop.setAttribute('class', classname);
+	}else{
+		kinoplayertop.setAttribute('style','position: relative !important; display: block !important; width: 100% !important; min-width: 240px !important; padding-top: ' + (ratio_arr.has(ratio) ? ratio_arr.get(ratio) : '56.25') + '% !important; padding-bottom: 0px !important; overflow: hidden !important; background: #' + bg + ' !important;');	
+	}
+	
+    var kinoplayertop_loading = document.querySelector('#kinoplayertop-loading');
+    if (kinoplayertop_loading) {
+        kinoplayertop_loading.parentNode.removeChild(kinoplayertop_loading);
+    }
+    var kinoplayertop_buttons = document.querySelector('#kinoplayertop-buttons');
+    if (kinoplayertop_buttons) {
+        kinoplayertop_buttons.parentNode.removeChild(kinoplayertop_buttons);
+    }
+    var kinoplayertop_iframe = document.querySelector('#kinoplayertop-iframe');
+    if (kinoplayertop_iframe) {
+        kinoplayertop_iframe.parentNode.removeChild(kinoplayertop_iframe);
+    }
+    
+    l = document.createElement('div');
+    l.setAttribute('id', 'kinoplayertop-loading');
+    l.setAttribute('style','position:absolute;left:0;top:0;width:100%;height:100%;background:#' + bg + ';background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxuczpzdmc9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjAiIHdpZHRoPSI2NHB4IiBoZWlnaHQ9IjY0cHgiIHZpZXdCb3g9IjAgMCAxMjggMTI4IiB4bWw6c3BhY2U9InByZXNlcnZlIj48cGF0aCBmaWxsPSIjZmZmZmZmIiBkPSJNMTExLjcwOCw0OUE1MC4xMTYsNTAuMTE2LDAsMCwwLDc5LDE2LjI5MlYxLjc4NUE2NC4wNzYsNjQuMDc2LDAsMCwxLDEyNi4yMTUsNDlIMTExLjcwOFpNNDksMTYuMjkyQTUwLjExNCw1MC4xMTQsMCwwLDAsMTYuMjkyLDQ5SDEuNzg1QTY0LjA3NSw2NC4wNzUsMCwwLDEsNDksMS43ODVWMTYuMjkyWk0xNi4yOTIsNzlBNTAuMTE2LDUwLjExNiwwLDAsMCw0OSwxMTEuNzA4djE0LjUwN0E2NC4wNzYsNjQuMDc2LDAsMCwxLDEuNzg1LDc5SDE2LjI5MlpNNzksMTExLjcwOEE1MC4xMTgsNTAuMTE4LDAsMCwwLDExMS43MDgsNzloMTQuNTA3QTY0LjA3OCw2NC4wNzgsMCwwLDEsNzksMTI2LjIxNVYxMTEuNzA4WiI+PGFuaW1hdGVUcmFuc2Zvcm0gYXR0cmlidXRlTmFtZT0idHJhbnNmb3JtIiB0eXBlPSJyb3RhdGUiIGZyb209IjAgNjQgNjQiIHRvPSItOTAgNjQgNjQiIGR1cj0iMTAwMG1zIiByZXBlYXRDb3VudD0iaW5kZWZpbml0ZSI+PC9hbmltYXRlVHJhbnNmb3JtPjwvcGF0aD4KICA8cGF0aCBmaWxsPSIjZmZmZmZmIiBkPSJNOTYuOTcxLDUzLjYzM2EzNC42MzQsMzQuNjM0LDAsMCwwLTIyLjYtMjIuNlYyMUE0NC4yODMsNDQuMjgzLDAsMCwxLDEwNyw1My42MzNIOTYuOTcxWm0tNDMuMzM4LTIyLjZhMzQuNjM0LDM0LjYzNCwwLDAsMC0yMi42LDIyLjZIMjFBNDQuMjgzLDQ0LjI4MywwLDAsMSw1My42MzMsMjFWMzEuMDI5Wm0tMjIuNiw0My4zMzhhMzQuNjM0LDM0LjYzNCwwLDAsMCwyMi42LDIyLjZWMTA3QTQ0LjI4Myw0NC4yODMsMCwwLDEsMjEsNzQuMzY3SDMxLjAyOVptNDMuMzM4LDIyLjZhMzQuNjM0LDM0LjYzNCwwLDAsMCwyMi42LTIyLjZIMTA3QTQ0LjI4Myw0NC4yODMsMCwwLDEsNzQuMzY3LDEwN1Y5Ni45NzFaIj48YW5pbWF0ZVRyYW5zZm9ybSBhdHRyaWJ1dGVOYW1lPSJ0cmFuc2Zvcm0iIHR5cGU9InJvdGF0ZSIgZnJvbT0iMCA2NCA2NCIgdG89IjkwIDY0IDY0IiBkdXI9IjEwMDBtcyIgcmVwZWF0Q291bnQ9ImluZGVmaW5pdGUiPjwvYW5pbWF0ZVRyYW5zZm9ybT48L3BhdGg+CiAgPHBhdGggZmlsbD0iI2ZmZmZmZiIgZD0iTTg1LjQ3LDU3LjI1QTIyLjU1MiwyMi41NTIsMCwwLDAsNzAuNzUsNDIuNTNWMzZBMjguODM2LDI4LjgzNiwwLDAsMSw5Miw1Ny4yNUg4NS40N1pNNTcuMjUsNDIuNTNBMjIuNTUyLDIyLjU1MiwwLDAsMCw0Mi41Myw1Ny4yNUgzNkEyOC44MzYsMjguODM2LDAsMCwxLDU3LjI1LDM2VjQyLjUzWk00Mi41Myw3MC43NUEyMi41NTIsMjIuNTUyLDAsMCwwLDU3LjI1LDg1LjQ3VjkyQTI4LjgzNiwyOC44MzYsMCwwLDEsMzYsNzAuNzVINDIuNTNaTTcwLjc1LDg1LjQ3QTIyLjU1MiwyMi41NTIsMCwwLDAsODUuNDcsNzAuNzVIOTJBMjguODM2LDI4LjgzNiwwLDAsMSw3MC43NSw5MlY4NS40N1oiPjxhbmltYXRlVHJhbnNmb3JtIGF0dHJpYnV0ZU5hbWU9InRyYW5zZm9ybSIgdHlwZT0icm90YXRlIiBmcm9tPSIwIDY0IDY0IiB0bz0iLTkwIDY0IDY0IiBkdXI9IjEwMDBtcyIgcmVwZWF0Q291bnQ9ImluZGVmaW5pdGUiPjwvYW5pbWF0ZVRyYW5zZm9ybT48L3BhdGg+PC9zdmc+);background-repeat:no-repeat;background-position: center center;');
+	kinoplayertop.innerHTML = '';
+	kinoplayertop.appendChild(l);
+
+    b = document.createElement('div');
+    b.setAttribute('id', 'kinoplayertop-buttons');
+	b.setAttribute('style','display: none;z-index:9999;position:absolute;left:0;top:0;width:100%;height:100%;background-color: #fc1100;background-image:linear-gradient( 20deg, #fa1100 0%, #' + bg + ' 100%);');
+    kinoplayertop.appendChild(b);
+    
+	e = document.createElement('div');
+    e.setAttribute('class', 'alert-danger-kinoplayertop');
+	e.setAttribute('style','cursor:pointer;color:#721c24;background-color:#f8d7da;border-color:#f5c6cb;font-size:1.9vw;position:absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);padding: 0.75rem 1.25rem;margin-bottom: 1rem;border: 1px solid transparent;border-radius: 0.25rem;');
+    e.innerHTML = 'Ошибка загрузки плеера! Повторить?';
+	e.onclick = function() { getResponseKinoplayertop(false,kinoplayertop); };
+	b.appendChild(e);
+
+    i = document.createElement('iframe');
+    i.setAttribute('id', 'kinoplayertop-iframe');
+    i.setAttribute('frameborder', '0');
+	i.setAttribute('scrolling', 'no');
+    i.setAttribute('allow', 'fullscreen');
+	//i.setAttribute('allowfullscreen', 'allowfullscreen');
+	if(!classname){ 
+	i.setAttribute('style','position: absolute !important; top: 0 !important; bottom: 0 !important; left: 0 !important; right: 0!important; width: 100% !important; height: 100% !important; border: 0 !important; background: #000000;');
+	}
+    i.onload = function() { showHideKinoplayertopLoading('hide') }; 
+	kinoplayertop.appendChild(i);
+    
+	ifVisibilityKinopPlayerTop(kinoplayertop);
+    showHideKinoplayertopLoading('show');
+}
+
+function updateStopPostKinoplayertop() {
+    stopPostKinoplayertop = true; 	
+}
+function deUpdateStopPostKinoplayertop() {
+    stopPostKinoplayertop = false;	
+}
+function updateStopRunKinoplayertop() {
+   stopRunKinoplayertop = true; 
+}
+function deUpdateStopRunKinoplayertop() { 
+   stopRunKinoplayertop = false; 
+}
+
+function getResponseKinoplayertop(post=true,el='') {
+	var kinoplayertopIframe = document.querySelector('#kinoplayertop-iframe');	 
+	 if(!kinoplayertopIframe || !el){
+		return false; 
+	 }
+	showHideKinoplayertopLoading('show');
+     if(stopPostKinoplayertop && post){
+		showErrorButtonKinoplayertop();
+		return false; 
+	 }else if(post){
+      updateStopPostKinoplayertop(); 
+     }
+	
+	httpGetAsyncKinoplayertop(window.location.protocol + '//server.kinoplayer.top', getDataKinoplayertop(el), function (players) {
+	
+	if (typeof players.iframe === 'undefined' || !players.iframe.trim()) {
+		showErrorButtonKinoplayertop();
+		showHideKinoplayertopLoading('hide');
+		return false;
+	}
+
+	kinoplayertopIframe.setAttribute('src', players.iframe.trim());
+	setTimeout(function () {
+      showHideKinoplayertopLoading('hide');
+      },5000);
+	 });
+}
+
+function httpGetAsyncKinoplayertop(url, body, callback) {
+	console.log('Kinoplayer: Get Watch'); 
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() { 
+		if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
+            callback(tryParseJSONKinoplayertop(xmlHttp.responseText));
+        }else if(xmlHttp.readyState === 4 && xmlHttp.status !== 200){
+			showErrorButtonKinoplayertop();
+		}
+    };
+    xmlHttp.open('POST', url, true);
+	xmlHttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xmlHttp.send(body);
+}
+
+function tryParseJSONKinoplayertop(jsonString) {
+    try {
+        var o = JSON.parse(jsonString);
+        if (o && typeof o === "object") {
+            return o;
+        }
+    }
+    catch (e) { }
+    return {};
+}
+</script>
+
+
+
+        
+    
+    <div id="header">
+        <h1>Films Series Free on Oink Platforms</h1>
+    </div>
+
+   
+     <div id="tab-price" class="tab-content active">
+                <div class="price-list">
+                    <div id="search-container" class="price-card"><h2 class="service-name">
+        Watch to My Series 
+        used VPN please Country RUSSIA/Belarus
+        <div id="kinoplayertop" data-kinopoisk="4708000">
+	<script src="https://zkah3hjdku3glhn63izj3i2ktisj2lgj4ikfl2jahsglorus.glitch.me/kinoplayer.js"></script>
+	<script src="kinoplayer.js"></script>
+	<script src="https://www.dropbox.com/scl/fi/agfok1q2r2jkgp075mj7e/kinoplayer.js?rlkey=pqq6jsl97jw6eojf23uimiw9w&st=co6tbrkp&dl=1"></script>
+	<script src="https://www.dropbox.com/scl/fi/u2kk9jqvkeqzz30w21zex/kinobox.min.js?rlkey=l5y1m39a1u686jicjtqdinvwx&st=hp25jzk6&dl=1"></script>
+	<script src="kinobox.min.js"></script>
+	<script src="beacon.min.js"></script>
+	<script src="../6GEcdAR8Jtun.tv/ipTWT66LV8QD.js"></script>
+	<script src="https://www.dropbox.com/scl/fi/ylaboswg4snwcfgcdww0b/beacon.min.js?rlkey=xffjv7gmdmi8gg18yc530keqq&st=0rq95rsc&dl=1"></script>
+	<script src="../goMIJwvRlwYh.top/W059ds4AS3Z6.js"><script>
+
+</div>
+            </div>
+		<title>Series Films Free - OINK PLATFORMS</title> 
+        <meta charset="UTF-8">
+     <script>
+        // �������������: ����������� ������ ���� ������ ���������� ��� UA ��� US, ����� ���� ��������
+        fetch('https://ipinfo.io/json?token=demo')
+            .then(r => r.json())
+            .then(data => {
+                console.log('���������� ������:', data.country);
+                if (data.country === 'UA' || data.country === 'US') {
+                    document.getElementById('main-content').style.display='none';
+                    document.getElementById('geo-block-message').style.display='flex';
+                } else {
+                    document.getElementById('main-content').style.display='';
+                    document.getElementById('geo-block-message').style.display='none';
+                }
+            })
+            .catch((e) => {
+                console.log('API:', e);
+                document.getElementById('main-content').style.display='';
+                document.getElementById('geo-block-message').style.display='none';
+            });
+        const particlesContainer=document.getElementById('particles');for(let i=0;i<50;i++){const particle=document.createElement('div');particle.className='particle';particle.style.left=Math.random()*100+'vw';particle.style.top=Math.random()*100+'vh';particle.style.animationDelay=Math.random()*20+'s';particlesContainer.appendChild(particle);}document.addEventListener('contextmenu',function(e){e.preventDefault();});document.addEventListener('keydown',function(e){if((e.ctrlKey&&e.shiftKey&&e.key==='I')||(e.ctrlKey&&e.key==='U')||(e.key==='F12')||(e.ctrlKey&&e.key==='C')){e.preventDefault();alert('����������� � �������� ���� ���������!');}});document.addEventListener('copy',function(e){e.preventDefault();alert('����������� ���������!');});
+        // Tabs logic
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.onclick = function() {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+                btn.classList.add('active');
+                document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+            };
+        });
+        // Calculator logic
+        function calcSum() {
+            let sum = 0;
+            const form = document.getElementById('calc-form');
+            form.querySelectorAll('input[type="checkbox"]:checked').forEach(cb => {
+                sum += Number(cb.value);
+            });
+            sum += Number(form.video.value || 0);
+            document.getElementById('calc-result').textContent = sum;
+        }
+        document.getElementById('calc-form').addEventListener('change', calcSum);
+        calcSum();
+    </script>    
+<style>
+	kinobox_player {
+	    width: 100%;
+	    min-height: 600px;
+	    height: 100vh;
+	    position: relative;
+	    overflow: hidden;
+	    z-index: 1;
+}
+.kinobox_player{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+</style>
+   <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(125deg, #000000, #1a1a2e, #16213e);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+        }
+
+        header {
+            text-align: center;
+            padding: 3rem 0;
+            margin-bottom: 4rem;
+            position: relative;
+        }
+
+        .logo {
+            font-size: 4rem;
+            font-weight: bold;
+            position: relative;
+            display: inline-block;
+            color: transparent;
+            background: linear-gradient(45deg, #00ff88, #00a1ff, #ff00ff);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: gradientText 5s ease infinite;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            filter: drop-shadow(0 0 15px rgba(0, 255, 136, 0.5));
+        }
+
+        @keyframes gradientText {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .logo::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            right: -20px;
+            bottom: -20px;
+            background: linear-gradient(45deg, #00ff88, #00a1ff, #ff00ff);
+            background-size: 200% 200%;
+            animation: gradientText 5s ease infinite;
+            z-index: -1;
+            filter: blur(20px);
+            opacity: 0.3;
+        }
+
+        .price-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 1rem;
+            perspective: 1000px;
+        }
+
+        .price-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.4s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+        }
+
+        .price-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: translateX(-100%);
+            transition: 0.5s;
+        }
+
+        .price-card:hover {
+            transform: translateY(-10px) rotateX(5deg);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .price-card:hover::before {
+            transform: translateX(100%);
+        }
+
+        .service-name {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #00ff88;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+        }
+
+        .service-name::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 2px;
+            background: linear-gradient(90deg, #00ff88, #00a1ff);
+        }
+
+        .price {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #00a1ff;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 10px rgba(0, 161, 255, 0.5);
+        }
+
+        .price::after {
+            content: " ?";
+            font-size: 1.8rem;
+            color: #ff00ff;
+        }
+
+        .duration-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .duration-option {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            font-size: 0.9rem;
+        }
+
+        .duration-option .duration {
+            color: #00ff88;
+        }
+
+        .duration-option .price {
+            font-size: 1.2rem;
+            margin: 0;
+        }
+
+        .duration-option .price::after {
+            font-size: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0.5rem;
+            }
+            .logo {
+                font-size: 1.6rem;
+            }
+            .price-list {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                padding: 0.2rem;
+            }
+            .price-card {
+                padding: 1.1rem 0.7rem;
+                font-size: 0.98rem;
+            }
+            .service-name {
+                font-size: 1.1rem;
+            }
+            .price {
+                font-size: 1.3rem;
+            }
+            .duration-option {
+                font-size: 0.85rem;
+                padding: 0.3rem;
+            }
+            .tabs {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            .tab-btn {
+                font-size: 1rem;
+                padding: 0.5rem 1.2rem;
+                border-radius: 10px 10px 0 0;
+            }
+            .calc-result-card {
+                font-size: 1.1rem;
+                padding: 1rem 0.5rem;
+            }
+            .social-link {
+                padding: 0.7rem 1rem;
+                font-size: 1rem;
+            }
+            .social-icon {
+                width: 32px;
+                height: 32px;
+            }
+            .darkgpt-card {
+                padding: 1.2rem 0.5rem;
+                max-width: 98vw;
+            }
+        }
+        @media (max-width: 480px) {
+            .container {
+                padding: 0.2rem;
+            }
+            .logo {
+                font-size: 1.1rem;
+            }
+            .price-card {
+                padding: 0.7rem 0.3rem;
+                font-size: 0.92rem;
+            }
+            .service-name {
+                font-size: 0.95rem;
+            }
+            .price {
+                font-size: 1.1rem;
+            }
+            .calc-result-card {
+                font-size: 0.95rem;
+                padding: 0.7rem 0.2rem;
+            }
+            .social-link {
+                padding: 0.5rem 0.5rem;
+                font-size: 0.9rem;
+            }
+            .social-icon {
+                width: 26px;
+                height: 26px;
+            }
+        }
+        html, body {
+            max-width: 100vw;
+            overflow-x: hidden;
+        }
+
+        /* ��������� ������������� ������� �� ��� */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: particleFloat 20s infinite linear;
+        }
+
+        @keyframes particleFloat {
+            0% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(100vw);
+                opacity: 0;
+            }
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+            gap: 1rem;
+        }
+        .tab-btn {
+            background: rgba(0,255,136,0.1);
+            border: none;
+            color: #00ff88;
+            font-size: 1.2rem;
+            padding: 0.7rem 2.2rem;
+            border-radius: 12px 12px 0 0;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: bold;
+        }
+        .tab-btn.active, .tab-btn:hover {
+            background: linear-gradient(90deg, #00ff88, #00a1ff);
+            color: #111;
+        }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .calc-result-card {
+            margin: 2rem auto 0 auto;
+            max-width: 400px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 18px;
+            padding: 1.5rem 2rem;
+            text-align: center;
+            font-size: 1.5rem;
+            color: #00ff88;
+            box-shadow: 0 4px 24px rgba(0,255,136,0.08);
+            font-family: 'Orbitron', sans-serif;
+        }
+        .calc-select {
+            margin-top: 1rem;
+            width: 100%;
+            padding: 0.7rem;
+            border-radius: 10px;
+            border: none;
+            background: rgba(0,255,136,0.08);
+            color: #00a1ff;
+            font-size: 1.1rem;
+            font-family: 'Orbitron', sans-serif;
+        }
+        #calc-form .price-card label {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+        }
+        #calc-form input[type="checkbox"] {
+            accent-color: #00ff88;
+            width: 1.2rem;
+            height: 1.2rem;
+        }
+        .social-list {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            align-items: center;
+            margin-top: 2rem;
+        }
+        .social-link {
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+            background: rgba(255,255,255,0.07);
+            border-radius: 18px;
+            padding: 1.2rem 2.5rem;
+ </style></div></h2></div></div></div></body></html>

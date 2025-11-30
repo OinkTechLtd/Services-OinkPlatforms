@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Агрегатор фильмов</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #00BCD4;
+            --secondary: #4CAF50;
+            --accent: #9C27B0;
+            --dark: #0a0a0a;
+            --dark-light: #1a1a1a;
+            --text: #ffffff;
+            --text-light: rgba(255, 255, 255, 0.7);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--dark);
+            min-height: 100vh;
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px 0;
+        }
+
+        .header h1 {
+            font-size: 52px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+        }
+
+        .header p {
+            font-size: 18px;
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .search-container {
+            background: rgba(30, 30, 30, 0.7);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+
+        .search-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: var(--primary);
+            text-align: center;
+        }
+
+        .search-input-container {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 15px;
+            font-size: 16px;
+            background: rgba(20, 20, 20, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: white;
+        }
+
+        .search-btn {
+            padding: 15px 25px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .search-results {
+            width: 100%;
+            max-height: 350px;
+            overflow-y: auto;
+            background: rgba(20, 20, 20, 0.8);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .film-item {
+            display: flex;
+            gap: 15px;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            cursor: pointer;
+        }
+
+        .film-poster img {
+            width: 70px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .film-info {
+            flex: 1;
+        }
+
+        .film-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--primary);
+        }
+
+        .film-year, .film-rating {
+            font-size: 14px;
+            color: var(--text-light);
+        }
+
+        .selected-film {
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(0, 188, 212, 0.1);
+            border-radius: 10px;
+            border: 1px solid rgba(0, 188, 212, 0.3);
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .top-films {
+            background: rgba(30, 30, 30, 0.7);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+
+        .top-title {
+            font-size: 28px;
+            margin-bottom: 25px;
+            color: var(--primary);
+            text-align: center;
+        }
+
+        .films-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .top-film-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .top-film-poster {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+        }
+
+        .top-film-info {
+            padding: 15px;
+        }
+
+        .top-film-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: white;
+        }
+
+        .top-film-rating {
+            color: var(--secondary);
+            font-weight: 600;
+        }
+
+        .player-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .player-content {
+            background-color: var(--dark-light);
+            width: 95%;
+            max-width: 1200px;
+            height: 85vh;
+            border-radius: 15px;
+            overflow: hidden;
+            display: flex;
+        }
+
+        .sources-sidebar {
+            width: 80px;
+            background: rgba(20, 20, 20, 0.9);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 10px;
+            gap: 15px;
+        }
+
+        .source-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            font-weight: 600;
+            color: var(--text-light);
+        }
+
+        .source-icon.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .player-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .player-header {
+            padding: 20px 30px;
+            background: rgba(30, 30, 30, 0.8);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .player-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .close-player {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .player-iframe-container {
+            flex: 1;
+            padding: 20px;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .player-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .source-error {
+            color: #ff6b6b;
+            text-align: center;
+            padding: 20px;
+            font-size: 16px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 30px 0;
+            color: var(--text-light);
+        }
+
+        @media (max-width: 768px) {
+            .player-content {
+                flex-direction: column;
+                height: 90vh;
+            }
+            
+            .sources-sidebar {
+                width: 100%;
+                height: auto;
+                flex-direction: row;
+                justify-content: center;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>KinoTop</h1>
+            <p>Все фильмы доступные для просмотра онлайн в одном месте</p>
+        </div>
+
+       
+            
+            <div id="searchResults" class="search-results"></div>
+            <div id="selectedFilm" class="selected-film"></div>
+        </div>
+
+        <div class="top-films">
+            <h2 class="top-title">ТОП 10 фильмов</h2>
+            <div class="films-grid" id="topFilmsGrid"></div>
+        </div>
+
+        <div id="playerModal" class="player-modal">
+            <div class="player-content">
+                <div class="sources-sidebar" id="sourcesSidebar"></div>
+                
+                <div class="player-main">
+                    <div class="player-header">
+                        <div class="player-title" id="playerFilmTitle">
+                            <i class="fas fa-play-circle"></i> Смотрим: Название фильма
+                        </div>
+                        <button class="close-player" onclick="closePlayer()">×</button>
+                    </div>
+                    
+                    <div class="player-iframe-container">
+                        <iframe id="playerIframe" class="player-iframe" src="" frameborder="0" allowfullscreen></iframe>
+                        <div id="sourceError" class="source-error" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            KinoPlayer.Top - Агрегатор фильмов © 2024
+        </div>
+    </div>
+
+    <script>
+        // Текущий выбранный фильм
+        let currentFilm = null;
+        let currentSource = 'source1';
+
+        // Актуальные источники (проверенные и рабочие)
+        const sources = [
+            { 
+                id: 'source1', 
+                name: 'Atomic WS 1', 
+                url: 'https://api1690380040.atomics.ws/embed/kp/', 
+                icon: '1',
+                type: 'iframe'
+            },
+            { 
+                id: 'source2', 
+                name: 'Atomic WS 2', 
+                url: 'https://api.atomics.ws/embed/movie/', 
+                icon: '2',
+                type: 'iframe'
+            },
+            { 
+                id: 'source3', 
+                name: 'Marts WS', 
+                url: 'https://api.marts.ws/embed/movie/', 
+                icon: '3',
+                type: 'iframe'
+            },
+            { 
+                id: 'source4', 
+                name: 'Domem WS', 
+                url: 'https://api.domem.ws/embed/movie/', 
+                icon: '4',
+                type: 'iframe'
+            },
+            { 
+                id: 'source5', 
+                name: 'Obrut Show', 
+                url: 'https://5414e3c9.obrut.show/embed/kDN?kinopoisk_id=', 
+                icon: '5',
+                type: 'iframe'
+            },
+            { 
+                id: 'source6', 
+                name: 'Embess WS', 
+                url: 'https://api.embess.ws/embed/kp/', 
+                icon: '6',
+                type: 'iframe'
+            },
+            { 
+                id: 'source7', 
+                name: 'Kinopoisk One', 
+                url: 'https://www.kinopoisk.one/film/', 
+                icon: '7',
+                type: 'iframe'
+            },
+            { 
+                id: 'source8', 
+                name: 'Kinopoisk CFD', 
+                url: 'https://www.kinopoisk.cfd/film/', 
+                icon: '8',
+                type: 'iframe'
+            },
+            { 
+                id: 'source9', 
+                name: 'Kinopoisk VIP', 
+                url: 'https://www.kinopoisk.vip/film/', 
+                icon: '9',
+                type: 'iframe'
+            },
+            { 
+                id: 'source10', 
+                name: 'Namy WS', 
+                url: 'https://api.namy.ws/embed/movie/', 
+                icon: '10',
+                type: 'iframe'
+            },
+            { 
+                id: 'source11', 
+                name: 'VideoHub', 
+                url: 'https://vid1659788755.vb17121coramclean.pw/embed/kp/', 
+                icon: '11',
+                type: 'iframe'
+            }
+        ];
+
+        // Инициализация при загрузке страницы
+        window.onload = function() {
+            loadTopFilms();
+            initSourcesSidebar();
+            
+            // Добавляем обработчик ошибок для iframe
+            document.getElementById('playerIframe').addEventListener('load', function() {
+                // Проверяем, загрузился ли контент в iframe
+                try {
+                    const iframe = document.getElementById('playerIframe');
+                    // Если iframe пустой или содержит ошибку
+                    if (!iframe.contentWindow || !iframe.contentWindow.document.body || 
+                        iframe.contentWindow.document.body.innerHTML === '') {
+                        showSourceError('Источник не загрузился. Попробуйте другой источник.');
+                    } else {
+                        hideSourceError();
+                    }
+                } catch (e) {
+                    // Ошибка CORS - не можем получить доступ к содержимому iframe
+                    // Это нормально для многих источников
+                    hideSourceError();
+                }
+            });
+            
+            document.getElementById('playerIframe').addEventListener('error', function() {
+                showSourceError('Ошибка загрузки источника. Попробуйте другой источник.');
+            });
+        };
+
+        // Инициализация боковой панели с источниками
+        function initSourcesSidebar() {
+            const sidebar = document.getElementById('sourcesSidebar');
+            sources.forEach(source => {
+                const icon = document.createElement('div');
+                icon.className = 'source-icon';
+                if (source.id === currentSource) {
+                    icon.classList.add('active');
+                }
+                icon.innerHTML = source.icon;
+                icon.title = source.name;
+                icon.onclick = () => changeSource(source.id);
+                sidebar.appendChild(icon);
+            });
+        }
+
+        // Загрузка топ-фильмов
+        async function loadTopFilms() {
+            const topFilmsGrid = document.getElementById("topFilmsGrid");
+            
+            try {
+                // Статичный список популярных фильмов
+                const staticFilms = [
+                    { filmId: 447301, nameRu: "Начало", posterUrlPreview: "https://kinopoiskapiunofficial.tech/images/posters/kp/447301.jpg", rating: "8.7" },
+                    { filmId: 435, nameRu: "Зеленая миля", posterUrlPreview: "https://kinopoiskapiunofficial.tech/images/posters/kp/435.jpg", rating: "9.1" },
+                    { filmId: 326, nameRu: "Побег из Шоушенка", posterUrlPreview: "https://kinopoiskapiunofficial.tech/images/posters/kp/326.jpg", rating: "9.1" },
+                    { filmId: 448, nameRu: "Форрест Гамп", posterUrlPreview: "https://kinopoiskapiunofficial.tech/images/posters/kp/448.jpg", rating: "8.9" },
+                    { filmId: 3498, nameRu: "Властелин колец: Братство Кольца", posterUrlPreview: "https://kinopoiskapiunofficial.tech/images/posters/kp/3498.jpg", rating: "8.6" },
+                    { filmId: 328, nameRu: "Список Шиндлера", posterUrlPreview: "https://kinopoiskapiunofficial.tech/images/posters/kp/328.jpg", rating: "8.8" },
+                    { filmId: 258687, nameRu: "Интерстеллар", posterUrlPreview: "https://kinopoiskapiunofficial.tech/images/posters/kp/258687.jpg", rating: "8.6" },
+                    { filmId: 679486, nameRu: "Тайна Коко", posterUrlPreview: "https://kinopoiskapiunofficial.tech/images/posters/kp/679486.jpg", rating: "8.8" },
+                    { filmId: 42664, nameRu: "Иван Васильевич меняет профессию", posterUrlPreview: "https://kinopoiskapiunofficial.tech/images/posters/kp/42664.jpg", rating: "8.8" },
+                    { filmId: 5273, nameRu: "Бриллиантовая рука", posterUrlPreview: "https://kinopoiskapiunofficial.tech/images/posters/kp/5273.jpg", rating: "8.7" }
+                ];
+                displayTopFilms(staticFilms);
+            } catch (error) {
+                console.error('Ошибка:', error);
+            }
+        }
+
+        // Отображение топ-фильмов
+        function displayTopFilms(films) {
+            const topFilmsGrid = document.getElementById("topFilmsGrid");
+            
+            if (!films || films.length === 0) {
+                topFilmsGrid.innerHTML = '<div style="text-align: center; padding: 30px; color: #888;">Не удалось загрузить топ фильмы</div>';
+                return;
+            }
+            
+            let html = '';
+            
+            films.forEach(film => {
+                html += `
+                    <div class="top-film-item" onclick="selectFilm(${film.filmId}, '${film.nameRu}')">
+                        <img class="top-film-poster" src="${film.posterUrlPreview}" alt="${film.nameRu}">
+                        <div class="top-film-info">
+                            <div class="top-film-title">${film.nameRu}</div>
+                            <div class="top-film-rating">★ ${film.rating}</div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            topFilmsGrid.innerHTML = html;
+        }
+
+        // Поиск фильмов
+        async function searchContent() {
+            const searchInput = document.getElementById("searchInput").value.trim();
+            const resultsContainer = document.getElementById("searchResults");
+            
+            if (!searchInput) {
+                alert("Пожалуйста, введите название фильма или сериала");
+                return;
+            }
+            
+            resultsContainer.innerHTML = '<div style="text-align: center; padding: 30px;">Поиск...</div>';
+            
+            try {
+                // Имитация поиска с локальными данными
+                setTimeout(() => {
+                    const mockResults = [
+                        { filmId: 1, nameRu: "Папины дочки", year: "2007-2013", rating: "7.8" },
+                        { filmId: 2, nameRu: "Папины дочки. Новые", year: "2023", rating: "6.9" },
+                        { filmId: 3, nameRu: "Иван Васильевич меняет профессию", year: "1973", rating: "8.8" },
+                        { filmId: 4, nameRu: "Бриллиантовая рука", year: "1968", rating: "8.7" },
+                        { filmId: 5, nameRu: "Операция Ы", year: "1965", rating: "8.7" }
+                    ];
+                    
+                    displayResults(mockResults.filter(film => 
+                        film.nameRu.toLowerCase().includes(searchInput.toLowerCase())
+                    ));
+                }, 800);
+            } catch (error) {
+                console.error('Ошибка:', error);
+                resultsContainer.innerHTML = '<div style="text-align: center; padding: 30px; color: #ff6b6b;">Произошла ошибка при поиске. Попробуйте еще раз.</div>';
+            }
+        }
+
+        // Отображение результатов поиска
+        function displayResults(films) {
+            const resultsContainer = document.getElementById("searchResults");
+            
+            if (!films || films.length === 0) {
+                resultsContainer.innerHTML = '<div style="text-align: center; padding: 30px; color: #888;">Ничего не найдено</div>';
+                return;
+            }
+            
+            let html = '<div style="font-weight: 600; margin-bottom: 15px; color: #4CAF50;">Результаты поиска:</div>';
+            
+            films.forEach(film => {
+                html += `
+                    <div class="film-item" onclick="selectFilm(${film.filmId}, '${film.nameRu}')">
+                        <div class="film-poster">
+                            <img src="https://via.placeholder.com/70x100/333/fff?text=Poster" alt="${film.nameRu}">
+                        </div>
+                        <div class="film-info">
+                            <div class="film-title">${film.nameRu}</div>
+                            <div class="film-year">${film.year}</div>
+                            <div class="film-rating">Рейтинг: ${film.rating}</div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            resultsContainer.innerHTML = html;
+        }
+
+        // Выбор фильма
+        function selectFilm(filmId, filmTitle) {
+            currentFilm = { id: filmId, title: filmTitle };
+            document.getElementById("selectedFilm").innerHTML = `<strong>Выбран:</strong> ${filmTitle} (ID: ${filmId})`;
+            document.getElementById("searchResults").innerHTML = '';
+            document.getElementById("searchInput").value = '';
+            
+            openPlayer();
+        }
+
+        // Открытие плеера
+        function openPlayer() {
+            if (!currentFilm) {
+                alert("Пожалуйста, выберите фильм для просмотра");
+                return;
+            }
+            
+            document.getElementById("playerFilmTitle").innerHTML = `<i class="fas fa-play-circle"></i> Смотрим: ${currentFilm.title}`;
+            document.getElementById("playerModal").style.display = "flex";
+            
+            changeSource(currentSource);
+        }
+
+        // Смена источника
+        function changeSource(sourceId) {
+            currentSource = sourceId;
+            hideSourceError();
+            
+            // Обновляем активную иконку
+            document.querySelectorAll('.source-icon').forEach(icon => {
+                icon.classList.remove('active');
+            });
+            
+            const activeIcon = document.querySelector(`.source-icon:nth-child(${sources.findIndex(s => s.id === sourceId) + 1})`);
+            if (activeIcon) {
+                activeIcon.classList.add('active');
+            }
+            
+            // Загружаем видео
+            if (currentFilm && currentFilm.id) {
+                const source = sources.find(s => s.id === sourceId);
+                if (source && source.type === 'iframe') {
+                    document.getElementById("playerIframe").src = source.url + currentFilm.id;
+                }
+            }
+        }
+
+        // Показать ошибку источника
+        function showSourceError(message) {
+            document.getElementById('sourceError').textContent = message;
+            document.getElementById('sourceError').style.display = 'block';
+        }
+
+        // Скрыть ошибку источника
+        function hideSourceError() {
+            document.getElementById('sourceError').style.display = 'none';
+        }
+
+        // Закрытие плеера
+        function closePlayer() {
+            document.getElementById("playerModal").style.display = "none";
+            document.getElementById("playerIframe").src = "";
+            hideSourceError();
+        }
+
+        // Обработка нажатия Enter в поле поиска
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchContent();
+            }
+        });
+    </script>
+</body>
+</html>

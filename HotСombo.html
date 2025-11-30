@@ -1,0 +1,310 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+ </head>
+ <body bgcolor="#2A3440">
+ 
+
+</body>
+	</center>
+		<center><p><center><font size="70" color=#E6E6FA face="serif">Играй </font><font size="70" color=#FF0000 face="serif"> и Зарабатывай </font><font size="70" color=#E6E6FA face="serif"> HotKombo</font></center></p>
+	
+	Бафы:
+		    <br><input type="button" value="1 уровень|-100TON" onclick="update()">
+    <br><input type="button" value="2 уровня|-150TON" onclick="update1()">
+    <br><input type="button" value="3 уровня|-250TON" onclick="update2()">
+    <br><input type="button" value="10 уровней|-500TON" onclick="update3()">
+	    <br><input type="button" value="Автокликер|-10000TON" onclick="auto()">
+	 <br><input type="button" value="Вывод КРИПТУ НА КАРТЫ РФ |-10000TON" onclick="auto()">
+	 <body>
+	  <h1 id ="score">TON🧸</h1>
+
+    <center><button id="clickbtn" onclick="clickBtn()" width: 100%;">🧸</button></center>
+	   <input type="tel" id="search-bar" name="search-bar" placeholder="Введите ЛЮБЫЕ реквизиты для вывода TON Монет">
+        <button id="search-button">Сохранить и ИГРАТЬ ДАЛЬШЕ</button>
+
+</body>
+		<center><p><center><font size="70" color=#E6E6FA face="serif">Играй </font><font size="70" color=#FF0000 face="serif"> и Зарабатывай </font><font size="70" color=#E6E6FA face="serif"> HotKombo</font></center></p>
+	
+Бафы:
+		    <br><input type="button" value="1 уровень|-100TON" onclick="update()">
+    <br><input type="button" value="2 уровня|-150TON" onclick="update1()">
+    <br><input type="button" value="3 уровня|-250TON" onclick="update2()">
+    <br><input type="button" value="10 уровней|-500TON" onclick="update3()">
+	    <br><input type="button" value="Автокликер|-10000TON" onclick="auto()">
+	 <br><input type="button" value="Вывод КРИПТУ НА КАРТЫ РФ |-10000TON" onclick="auto()">
+	 		<center><p><center><font size="70" color=#E6E6FA face="serif">Мы есть в </font><font size="70" color=#FF0000 face="serif"> Телеграмме </font><font size="70" color=#E6E6FA face="serif"> НЕ ПРИШЛИ ВЫПЛАТЫ? ЖДЕМ ВАС В ТЕЛЕГРАММЕ</font></center></p>
+		<center><p><center><font size="70" color=#E6E6FA face="serif">Выплаты </font><font size="70" color=#FF0000 face="serif"> 40.000 КЛИКОВ = 2000 Денег </font><font size="70" color=#E6E6FA face="serif"> НЕ ПРИШЛИ ВЫПЛАТЫ? ЖДЕМ ВАС В ТЕЛЕГРАММЕ</font></center></p>
+		<center><p><center><font size="70" color=#E6E6FA face="serif">Наша Тапалка есть на Oink Platforms и </font><font size="70" color=#FF0000 face="serif"> Telegram </font><font size="70" color=#E6E6FA face="serif"> HotKombo</font></center></p>
+	Проверьте Вашу карту РФ Вам возможно пришли 
+Советуем привязать Реквизиты с начала игры чтобы получать крипту СРАЗУ ЖЕ
+Вывод проходит КАЖДЫЙ ЧАС
+Если не пришли? Ожидайте Лимит 
+на колво выплат Попробуйте чутка позднее Играйте и зарабатывайте!
+<script>alert("Правила: Копите TON Монетки и выводите их на КАРТЫ РФ")
+var score = 0;
+updating = 1;
+function clickBtn() {
+  score = score + updating;
+  document.getElementsByTagName("h1")[0].firstChild.data = score + "TON Monet(Telegram)";
+}
+function update() {
+  score = score - 100;
+  document.getElementsByTagName("h1")[0].firstChild.data = score + "TON Monet (Telegram)";
+  if1();
+  updating += 1;
+}
+function update1() {
+  score = score - 150;
+  document.getElementsByTagName("h1")[0].firstChild.data = score + "TON Monet(Telegram)";
+  if1();
+  updating += 2;
+}
+function update2() {
+  score = score - 250;
+  document.getElementsByTagName("h1")[0].firstChild.data = score + "TON Monet(Telegram)";
+  if1();
+  updating += 3;
+}
+function update3() {
+  score = score - 500;
+  document.getElementsByTagName("h1")[0].firstChild.data = score + "TON Monet(Telegram)";
+  if1();
+  updating += 10;
+}
+function auto() {
+  score = score - 10000;
+  document.getElementsByTagName("h1")[0].firstChild.data = score + "TON Monet(Telegram)";
+  if1();
+  setTimeout("plusauto()", 1000);
+}
+function if1 () {
+  if (score < -100) {
+    document.write("");
+  }
+}
+function plusauto () {
+  score += updating;
+  document.getElementsByTagName("h1")[0].firstChild.data = score + "TON Monet(Telegram)";
+  setTimeout("auto1()", 1000);
+}
+function auto1 () {
+  score += updating;
+  setTimeout("plusauto()", 1000);
+  document.getElementsByTagName("h1")[0].firstChild.data = score + "TON Monet(Telegram)";
+}
+function pashalka () {
+  score += 10000;
+  document.getElementsByTagName("h1")[0].firstChild.data = score + "TON Monet(Telegram)";
+}
+function reboot () {
+  alert("Ваш уровень прокачки " + updating + ". Ваш баланс " + score + " .");
+}
+ </script>
+
+	    <style>
+		body {
+  background-image: url(https://vsevolodhtml.ru/assets/img/bg-intro-desktop.png);
+  background-attachment: fixed;
+}
+h2 {
+  font-family: 'Pangolin', cursive;
+}
+button {
+  background: linear-gradient(to bottom,rgba(120, 107, 175, .5), rgba(40, 140, 255,.3)), url(https://madeas.ru/wp-content/uploads/2018/08/bg-art_26-300x300.jpg);
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: center;
+  padding: 20px;
+  border-radius:20px;
+  text-decoration: none;	
+  font-family: Titillium, Arial, sans-serif;
+  font-weight: 700;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0,0,0,1);
+  text-transform:uppercase;
+  font-size: .9em;
+  letter-spacing: .1em;
+  margin-right: 5px;
+  margin-left: 20px;
+  cursor: pointer;
+}
+input {
+  margin: 5px;
+  border-radius:20px;
+  cursor: pointer;
+  padding: 10px;
+}
+main {
+  background-color: rgba(77, 117, 247, 0.5);
+  margin: 0 auto;
+  width: 60%;
+}
+.img {
+  float: right;
+  width: 30%;
+  margin-top: -250px;
+  margin-right: 10px;
+}
+h1 img {
+  width: 30px;
+  margin-bottom: -5px;
+}
+h1, h2 {
+  text-align: center;
+}
+
+@media (max-width:1000px) {
+  main {
+    width: 90%;
+    height: 1500px;
+  }
+  .img {
+    width: 37%;
+    margin-top: 0;
+  }
+  h1, h2 {
+    font-size: 100px;
+    margin: 0;
+  }
+  button, input {
+    font-size: 50px;
+  }
+  h1 img {
+    width: 80px;
+  }
+}
+    body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #222;
+        color: #fff;
+        font-family: Arial, sans-serif;
+    }
+
+    .kinobox_player {
+        display: flex;
+        max-width: 100%;
+    }
+
+    #top-links {
+        margin-top: 20px;
+        display: flex;
+        align-items: center;
+    }
+
+    #top-links a {
+        color: #fff !important;
+        text-decoration: none;
+        margin-right: 40px;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    #header {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    #header.hidden {
+        display: none;
+    }
+
+    #header h1 {
+        font-size: 48px;
+        margin: 0;
+    }
+
+    #search-container {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #search-bar {
+        width: 90%; /* Изменено с 400px на проценты для лучшей адаптации */
+        max-width: 400px; /* Максимальная ширина ограничена для больших экранов */
+        padding: 12px;
+        font-size: 16px;
+        background-color: #333;
+        border: none;
+        color: #fff;
+        margin-bottom: 20px;
+    }
+
+    #search-button {
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #333;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.2s;
+    }
+
+    #search-button:hover {
+        background-color: #999;
+        transform: scale(1.1);
+    }
+
+    .kinobox_player {
+        display: none;
+        width: 100%;
+    }
+
+    #bottom-text {
+        margin-top: 20px;
+        color: #fff;
+    }
+
+    #bottom-text.hidden {
+        display: none;
+    }
+
+    #home-button {
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        background-color: #333;
+        color: #fff;
+        padding: 5px 10px;
+        font-size: 14px;
+        cursor: pointer;
+        z-index: 9999;
+    }
+
+    /* Медиазапросы для мобильных устройств */
+    @media (max-width: 768px) {
+        #header h1 {
+            font-size: 24px; /* Уменьшение размера заголовка */
+        }
+
+        #top-links a {
+            margin-right: 20px; /* Уменьшение расстояния между ссылками */
+        }
+    }
+</style>
+<style>	
+.container {
+text-align: center;
+position: absolute;
+    top: 50%;
+    margin-top: 1.25em;
+    margin: auto;
+    margin-left: auto;
+    margin-right: auto;
+
+}
+</style>	
+	
+	</body>
+</html>

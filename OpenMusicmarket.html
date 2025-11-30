@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style> body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.container {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    max-width: 600px;
+    text-align: center;
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+h2 {
+    color: #555;
+    margin-top: 30px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    color: #777;
+}
+
+input[type="number"],
+input[type="text"] {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-sizing: border-box; /* Важно для правильной ширины */
+    font-size: 16px;
+}
+
+.round-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    margin-bottom: 15px;
+}
+
+.round-button:hover {
+    background-color: #0056b3;
+}
+
+#password-result,
+#username-result {
+    margin-top: 10px;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+    </style>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Генератор Паролей</h1>
+
+        <section id="password-generator">
+            <h2>Генератор Паролей</h2>
+            <label for="password-length">Длина пароля:</label>
+            <input type="number" id="password-length" value="12" min="6" max="32">
+            <button id="generate-password" class="round-button">Сгенерировать Пароль</button>
+            <input type="text" id="password-result" readonly>
+            <button id="copy-password" class="round-button">Копировать</button>
+        </section>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+    const passwordLengthInput = document.getElementById('password-length');
+    const generatePasswordButton = document.getElementById('generate-password');
+    const passwordResultInput = document.getElementById('password-result');
+    const copyPasswordButton = document.getElementById('copy-password');
+
+    const usernameOptionsInput = document.getElementById('username-options');
+    const generateUsernameButton = document.getElementById('generate-username');
+    const usernameResultInput = document.getElementById('username-result');
+    const copyUsernameButton = document.getElementById('copy-username');
+
+    // Генератор паролей
+    generatePasswordButton.addEventListener('click', function() {
+        const length = parseInt(passwordLengthInput.value);
+        const password = generatePassword(length);
+        passwordResultInput.value = password;
+    });
+
+    // Генератор имен пользователей
+    generateUsernameButton.addEventListener('click', function() {
+        const options = usernameOptionsInput.value;
+        const username = generateUsername(options);
+        usernameResultInput.value = username;
+    });
+
+    // Копирование пароля
+    copyPasswordButton.addEventListener('click', function() {
+        passwordResultInput.select();
+        document.execCommand('copy');
+        alert('Пароль скопирован!');
+    });
+
+    // Копирование имени пользователя
+    copyUsernameButton.addEventListener('click', function() {
+        usernameResultInput.select();
+        document.execCommand('copy');
+        alert('Имя пользователя скопировано!');
+    });
+
+    // Функция генерации пароля
+    function generatePassword(length) {
+        const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+~`|}{[]\:;<>,.?/';
+        let password = '';
+        for (let i = 0; i < length; i++) {
+            password += characters.charAt(Math.floor(Math.random() * characters.length));
+        }
+        return password;
+    }
+
+    // Функция генерации имени пользователя (простая)
+    function generateUsername(options) {
+        // Здесь можно добавить более сложную логику
+        return 'user_' + Math.random().toString(36).substring(2, 10);
+    }
+});
+
+    </script>
+</body>
+</html>

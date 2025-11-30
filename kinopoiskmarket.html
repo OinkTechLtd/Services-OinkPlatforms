@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .services {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .service-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(31, 38, 135, 0.5);
+        }
+
+        .service-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .service-icon {
+            font-size: 2em;
+            margin-right: 15px;
+        }
+
+        .service-title {
+            font-size: 1.5em;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #555;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+            background: white;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #333;
+            border: 2px solid #e1e5e9;
+        }
+
+        .btn-secondary:hover {
+            background: #e9ecef;
+        }
+
+        .generated-info {
+            background: #f8f9fc;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            border-left: 4px solid #667eea;
+        }
+
+        .copy-btn {
+            background: #28a745;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 10px;
+            font-size: 12px;
+        }
+
+        .copy-btn:hover {
+            background: #218838;
+        }
+
+        .messages-area {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            padding: 15px;
+            background: white;
+        }
+
+        .message {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            background: #f1f3f4;
+            border-left: 3px solid #667eea;
+        }
+
+        .message-time {
+            font-size: 0.8em;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .countries {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .country-btn {
+            padding: 8px 12px;
+            border: 2px solid #e1e5e9;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .country-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .country-btn:hover {
+            border-color: #667eea;
+        }
+
+        .stats {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            color: white;
+            margin-top: 30px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-item h3 {
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            z-index: 1000;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 FreeTemp</h1>
+            <p>Временные номера телефонов и электронная почта для безопасной регистрации</p>
+        </div>
+
+        <div class="services">
+            <!-- Временный номер телефона -->
+            <div class="service-card">
+                <div class="service-header">
+                    <div class="service-icon">📱</div>
+                    <div class="service-title">Временный номер телефона</div>
+                </div>
+                
+                <div class="input-group">
+                    <label class="input-label">Выберите страну:</label>
+                    <div class="countries">
+                        <div class="country-btn active" data-country="RU" data-code="+7">🇷🇺 Россия</div>
+                        <div class="country-btn" data-country="US" data-code="+1">🇺🇸 США</div>
+                        <div class="country-btn" data-country="UA" data-code="+380">🇺🇦 Украина</div>
+                        <div class="country-btn" data-country="BY" data-code="+375">🇧🇾 Беларусь</div>
+                        <div class="country-btn" data-country="KZ" data-code="+7">🇰🇿 Казахстан</div>
+                        <div class="country-btn" data-country="DE" data-code="+49">🇩🇪 Германия</div>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" onclick="generatePhone()">🎲 Получить номер</button>
+                <button class="btn btn-secondary" onclick="refreshPhone()">🔄 Обновить</button>
+
+                <div id="phoneInfo" class="generated-info" style="display: none;">
+                    <strong>Ваш временный номер:</strong>
+                    <div id="phoneNumber" style="font-size: 1.2em; margin: 10px 0;"></div>
+                    <button class="copy-btn" onclick="copyToClipboard('phoneNumber')">Копировать</button>
+                </div>
+
+                <div class="input-group" style="margin-top: 20px;">
+                    <label class="input-label">Входящие SMS:</label>
+                    <div id="smsMessages" class="messages-area">
+                        <p style="text-align: center; color: #666;">Ожидание сообщений...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Временная почта -->
+            <div class="service-card">
+                <div class="service-header">
+                    <div class="service-icon">📧</div>
+                    <div class="service-title">Временная электронная почта</div>
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Имя пользователя:</label>
+                    <input type="text" class="input-field" id="emailUsername" placeholder="Введите желаемое имя или оставьте пустым">
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Домен:</label>
+                    <select class="input-field" id="emailDomain">
+                        <option value="@tempmail.org">@tempmail.org</option>
+                        <option value="@10minutemail.com">@10minutemail.com</option>
+                        <option value="@guerrillamail.com">@guerrillamail.com</option>
+                        <option value="@mailinator.com">@mailinator.com</option>
+                        <option value="@temp-mail.ru">@temp-mail.ru</option>
+                    </select>
+                </div>
+
+                <button class="btn btn-primary" onclick="generateEmail()">✉️ Создать почту</button>
+                <button class="btn btn-secondary" onclick="refreshEmail()">🔄 Обновить</button>
+
+                <div id="emailInfo" class="generated-info" style="display: none;">
+                    <strong>Ваша временная почта:</strong>
+                    <div id="emailAddress" style="font-size: 1.2em; margin: 10px 0;"></div>
+                    <button class="copy-btn" onclick="copyToClipboard('emailAddress')">Копировать</button>
+                </div>
+
+                <div class="input-group" style="margin-top: 20px;">
+                    <label class="input-label">Входящие письма:</label>
+                    <div id="emailMessages" class="messages-area">
+                        <p style="text-align: center; color: #666;">Ожидание писем...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats">
+            <h2 style="margin-bottom: 20px;">📊 Статистика сервиса</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <h3 id="phoneCount">0</h3>
+                    <p>Номеров создано</p>
+                </div>
+                <div class="stat-item">
+                    <h3 id="emailCount">0</h3>
+                    <p>Почт создано</p>
+                </div>
+                <div class="stat-item">
+                    <h3 id="messageCount">0</h3>
+                    <p>Сообщений получено</p>
+                </div>
+                <div class="stat-item">
+                    <h3>24/7</h3>
+                    <p>Работаем всегда</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="notification" class="notification"></div>
+
+    <script>
+        let currentPhone = null;
+        let currentEmail = null;
+        let selectedCountry = 'RU';
+        let selectedCode = '+7';
+        let stats = {
+            phoneCount: 0,
+            emailCount: 0,
+            messageCount: 0
+        };
+
+        // Загружаем статистику из памяти
+        if (window.tempServiceStats) {
+            stats = window.tempServiceStats;
+            updateStats();
+        }
+
+        // Выбор страны
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.country-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.country-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    selectedCountry = this.dataset.country;
+                    selectedCode = this.dataset.code;
+                });
+            });
+        });
+
+        function generatePhone() {
+            const phoneArea = Math.floor(Math.random() * 900) + 100;
+            const phoneNumber = Math.floor(Math.random() * 9000000) + 1000000;
+            currentPhone = `${selectedCode} ${phoneArea} ${phoneNumber.toString().slice(0,3)}-${phoneNumber.toString().slice(3,5)}-${phoneNumber.toString().slice(5,7)}`;
+            
+            document.getElementById('phoneNumber').textContent = currentPhone;
+            document.getElementById('phoneInfo').style.display = 'block';
+            
+            stats.phoneCount++;
+            updateStats();
+            showNotification('✅ Новый номер телефона создан!');
+            
+            // Симулируем получение SMS
+            setTimeout(() => {
+                simulateIncomingSMS();
+            }, Math.random() * 10000 + 5000);
+        }
+
+        function refreshPhone() {
+            if (currentPhone) {
+                document.getElementById('smsMessages').innerHTML = '<p style="text-align: center; color: #666;">Ожидание сообщений...</p>';
+                showNotification('🔄 SMS обновлены');
+                
+                // Симулируем новые сообщения
+                setTimeout(() => {
+                    simulateIncomingSMS();
+                }, Math.random() * 5000 + 2000);
+            } else {
+                showNotification('⚠️ Сначала создайте номер телефона');
+            }
+        }
+
+        function generateEmail() {
+            let username = document.getElementById('emailUsername').value || generateRandomString(8);
+            const domain = document.getElementById('emailDomain').value;
+            currentEmail = username + domain;
+            
+            document.getElementById('emailAddress').textContent = currentEmail;
+            document.getElementById('emailInfo').style.display = 'block';
+            
+            stats.emailCount++;
+            updateStats();
+            showNotification('✅ Новая временная почта создана!');
+            
+            // Симулируем получение email
+            setTimeout(() => {
+                simulateIncomingEmail();
+            }, Math.random() * 15000 + 8000);
+        }
+
+        function refreshEmail() {
+            if (currentEmail) {
+                document.getElementById('emailMessages').innerHTML = '<p style="text-align: center; color: #666;">Ожидание писем...</p>';
+                showNotification('🔄 Почта обновлена');
+                
+                // Симулируем новые письма
+                setTimeout(() => {
+                    simulateIncomingEmail();
+                }, Math.random() * 8000 + 3000);
+            } else {
+                showNotification('⚠️ Сначала создайте временную почту');
+            }
+        }
+
+        function simulateIncomingSMS() {
+            const smsContainer = document.getElementById('smsMessages');
+            const services = ['Google', 'Telegram', 'WhatsApp', 'Facebook', 'Instagram', 'Twitter', 'VK', 'Discord', 'Неопознанный Сервис'];
+            const service = services[Math.floor(Math.random() * services.length)];
+            const code = Math.floor(Math.random() * 900000) + 100000;
+            const time = new Date().toLocaleString('ru-RU');
+            
+            const messageHTML = `
+                <div class="message">
+                    <div class="message-time">${time}</div>
+                    <strong>От: ${service}</strong><br>
+                    Код подтверждения: <strong>${code}</strong><br>
+                    Никому не сообщайте этот код.
+                </div>
+            `;
+            
+            if (smsContainer.innerHTML.includes('Ожидание сообщений')) {
+                smsContainer.innerHTML = messageHTML;
+            } else {
+                smsContainer.innerHTML = messageHTML + smsContainer.innerHTML;
+            }
+            
+            stats.messageCount++;
+            updateStats();
+            showNotification(`📱 Новое SMS от ${service}`);
+        }
+
+        function simulateIncomingEmail() {
+            const emailContainer = document.getElementById('emailMessages');
+            const subjects = [
+                'Подтверждение регистрации',
+                'Код верификации',
+                'Добро пожаловать!',
+                'Активация аккаунта',
+                'Восстановление пароля'
+            ];
+            const senders = ['noreply', 'support', 'admin'];
+            
+            const subject = subjects[Math.floor(Math.random() * subjects.length)];
+            const sender = senders[Math.floor(Math.random() * senders.length)];
+            const time = new Date().toLocaleString('ru-RU');
+            
+            const messageHTML = `
+                <div class="message">
+                    <div class="message-time">${time}</div>
+                    <strong>От:</strong> ${sender}<br>
+                    <strong>Тема:</strong> ${subject}<br>
+                    <div style="margin-top: 10px; padding: 10px; background: #f9f9f9; border-radius: 5px;">
+                        Спасибо за регистрацию! Ваш код подтверждения: <strong>${Math.floor(Math.random() * 900000) + 100000}</strong>
+                    </div>
+                </div>
+            `;
+            
+            if (emailContainer.innerHTML.includes('Ожидание писем')) {
+                emailContainer.innerHTML = messageHTML;
+            } else {
+                emailContainer.innerHTML = messageHTML + emailContainer.innerHTML;
+            }
+            
+            stats.messageCount++;
+            updateStats();
+            showNotification(`📧 Новое письмо: ${subject}`);
+        }
+
+        function generateRandomString(length) {
+            const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+            let result = '';
+            for (let i = 0; i < length; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return result;
+        }
+
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            const text = element.textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                showNotification('📋 Скопировано в буфер обмена!');
+            });
+        }
+
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        function updateStats() {
+            document.getElementById('phoneCount').textContent = stats.phoneCount;
+            document.getElementById('emailCount').textContent = stats.emailCount;
+            document.getElementById('messageCount').textContent = stats.messageCount;
+            
+            // Сохраняем статистику
+            window.tempServiceStats = stats;
+        }
+
+        // Автообновление сообщений каждые 30 секунд
+        setInterval(() => {
+            if (currentPhone && Math.random() < 0.3) {
+                simulateIncomingSMS();
+            }
+            if (currentEmail && Math.random() < 0.2) {
+                simulateIncomingEmail();
+            }
+        }, 30000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* Общие стили */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Более современный шрифт */
+    background-color: #121212; /* Темный фон */
+    color: #fff;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.container {
+    width: 80%;
+    max-width: 900px;
+    background-color: #1e1e1e;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+h1 {
+    font-size: 2.2rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+/* Стили для секции загрузки */
+.upload-section {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.upload-button {
+    background-color: #3498db; /* Яркий синий цвет */
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
+
+.upload-button:hover {
+    background-color: #2980b9;
+}
+
+#fileName {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: #aaa;
+}
+
+/* Стили для секции видео */
+.video-section {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+#videoPlayer {
+    width: 100%;
+    border-radius: 8px;
+    background-color: #000;
+    outline: none; /* Убираем обводку при фокусировке */
+}
+
+.controls {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    display: flex;
+    gap: 8px;
+}
+
+.controls button {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    border: none;
+    padding: 8px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.controls button:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+/* Стили для футера */
+footer {
+    text-align: center;
+    font-size: 0.8rem;
+    color: #777;
+    padding-top: 20px;
+    border-top: 1px solid #333;
+}
+
+    </style>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Oink Video TV</h1>
+        </header>
+
+        <section class="upload-section">
+            <label for="videoInput" class="upload-button">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M4 18v3h16v-3H4zM12 3.5V16.5m-4-4 4 4 4-4"/></svg>
+                Загрузить Видео
+            </label>
+            <input type="file" id="videoInput" accept="video/*" style="display: none;">
+            <p id="fileName"></p>
+        </section>
+
+        <section class="video-section">
+            <video id="videoPlayer" controls playsinline preload="metadata"></video>
+            <div class="controls">
+                <button id="fullscreenButton">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M5 5h5V3H3v7h2V5zM14 3h5v2h-5v5h-2V3h2zm5 14v5h-7v-2h5V14h2zm-2 5h-5v-2h5V19h2zM5 14v2h7v-5H5v2H3z"/></svg>
+                </button>
+            </div>
+        </section>
+
+        <footer>
+            <p>© 2025 Oink Video TV</p>
+        </footer>
+    </div>
+
+    <script>
+        const videoInput = document.getElementById('videoInput');
+const videoPlayer = document.getElementById('videoPlayer');
+const fileNameDisplay = document.getElementById('fileName');
+const fullscreenButton = document.getElementById('fullscreenButton');
+
+videoInput.addEventListener('change', () => {
+    const file = videoInput.files[0];
+
+    if (file) {
+        const videoURL = URL.createObjectURL(file);
+        videoPlayer.src = videoURL;
+        videoPlayer.style.display = 'block';
+        videoPlayer.load();
+        videoPlayer.play();
+
+        fileNameDisplay.textContent = 'Выбранный файл: ' + file.name;
+    } else {
+        alert('Пожалуйста, выберите видеофайл.');
+    }
+});
+
+fullscreenButton.addEventListener('click', () => {
+    if (videoPlayer.requestFullscreen) {
+        videoPlayer.requestFullscreen();
+    } else if (videoPlayer.mozRequestFullScreen) { /* Firefox */
+        videoPlayer.mozRequestFullScreen();
+    } else if (videoPlayer.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+        videoPlayer.webkitRequestFullscreen();
+    } else if (videoPlayer.msRequestFullscreen) { /* IE/Edge */
+        videoPlayer.msRequestFullscreen();
+    }
+});
+
+    </script>
+</body>
+</html>

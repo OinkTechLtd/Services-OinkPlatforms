@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1>Новостной Агрегатор | Oink News | Выпуск:2025 год</h1>
+        <nav>
+            <a href="#" class="round-button">Главная</a>
+            <a href="#" class="round-button">Новости</a>
+            <a href="#" class="round-button">Категории</a>
+            <a href="#" class="round-button">Подписки</a>
+        </nav>
+    </header>
+
+    <main>
+        <section id="news-feed">
+            <h2>Актуальные Новости</h2>
+            <div id="news-container">
+                <!-- Здесь будут отображаться новости -->
+            </div>
+        </section>
+
+        <section id="rss-management">
+            <h3>Управление RSS-каналами</h3>
+            <input type="url" id="rss-url" placeholder="URL RSS-канала">
+            <button class="round-button" onclick="addRssFeed()">Добавить RSS</button>
+            Например: https://morss.it/https://news.google.ru/rss. Можно вводить от любого другого сайта в инете их полно
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2025 Новостной Агрегатор. Все права защищены.</p>
+    </footer>
+
+    <script>async function parseRss(url) {
+    try {
+        const response = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`);
+        const data = await response.json();
+        const xmlDoc = new DOMParser().parseFromString(data.contents, 'text/xml');
+        const items = xmlDoc.querySelectorAll('item');
+        return Array.from(items).map(item => ({
+            title: item.querySelector('title').textContent,
+            link: item.querySelector('link').textContent,
+            description: item.querySelector('description').textContent
+        }));
+    } catch (error) {
+        console.error("Ошибка при парсинге RSS:", error);
+        return [];
+    }
+}
+
+async function displayNews(rssUrl) {
+    const newsContainer = document.getElementById('news-container');
+    newsContainer.innerHTML = 'Загрузка новостей...';
+
+    const newsItems = await parseRss(rssUrl);
+    newsContainer.innerHTML = '';
+
+    if (newsItems.length === 0) {
+        newsContainer.innerHTML = 'Не удалось загрузить новости.';
+        return;
+    }
+
+    newsItems.forEach(news => {
+        const newsDiv = document.createElement('div');
+        newsDiv.classList.add('news-item');
+        newsDiv.innerHTML = `
+            <h3><a href="${news.link}" target="_blank">${news.title}</a></h3>
+            <p>${news.description}</p>
+        `;
+        newsContainer.appendChild(newsDiv);
+    });
+}
+
+async function addRssFeed() {
+    const rssUrlInput = document.getElementById('rss-url');
+    const rssUrl = rssUrlInput.value;
+    if (rssUrl) {
+        await displayNews(rssUrl);
+        rssUrlInput.value = '';
+    } else {
+        alert('Пожалуйста, введите URL RSS-канала.');
+    }
+}
+</script>
+</body>
+</html>
+<style>body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f0f4f8;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #29abe2; /* Яркий голубой */
+    color: white;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2.5em;
+}
+
+nav {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.round-button {
+    background-color: #fff;
+    color: #29abe2;
+    border: none;
+    padding: 10px 20px;
+    margin: 0 10px;
+    border-radius: 25px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.round-button:hover {
+    background-color: #ccebff;
+}
+
+main {
+    padding: 20px;
+}
+
+#news-feed {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#news-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.news-item {
+    width: 300px;
+    margin: 20px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+.news-item h3 {
+    margin-top: 0;
+    color: #337ab7;
+}
+
+.news-item p {
+    color: #666;
+}
+
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+#rss-management {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#rss-url {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+</style>

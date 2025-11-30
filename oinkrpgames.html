@@ -1,0 +1,2879 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #000;
+            color: white;
+            overflow: hidden;
+            user-select: none;
+            touch-action: none;
+        }
+
+        #gameCanvas {
+            display: block;
+            cursor: none;
+            width: 100%;
+            height: 100%;
+        }
+
+        .ui-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        .top-hud {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            pointer-events: all;
+            max-width: 60%;
+        }
+
+        .hud-panel {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.85), rgba(20, 20, 20, 0.9));
+            border: 2px solid rgba(255, 69, 0, 0.8);
+            border-radius: 10px;
+            padding: 8px 12px;
+            color: #fff;
+            font-weight: bold;
+            font-size: 12px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+            white-space: nowrap;
+        }
+
+        .minimap-container {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 120px;
+            height: 90px;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(30, 30, 30, 0.85));
+            border: 2px solid rgba(255, 69, 0, 0.8);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.7);
+            pointer-events: all;
+        }
+
+        .minimap-header {
+            background: linear-gradient(90deg, rgba(255, 69, 0, 0.9), rgba(255, 140, 0, 0.7));
+            padding: 5px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 10px;
+        }
+
+        .minimap-canvas {
+            width: 100%;
+            height: calc(100% - 24px);
+            background: #1a1a1a;
+        }
+
+        .mobile-controls {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            width: 150px;
+            height: 150px;
+            pointer-events: all;
+            z-index: 200;
+        }
+
+        .joystick {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 69, 0, 0.5);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            touch-action: none;
+        }
+
+        .joystick-inner {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .action-buttons {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: all;
+            z-index: 200;
+        }
+
+        .action-btn {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(40, 40, 40, 0.8));
+            border: 3px solid rgba(255, 69, 0, 0.6);
+            border-radius: 50%;
+            color: white;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            user-select: none;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .action-btn:active {
+            background: linear-gradient(135deg, rgba(255, 69, 0, 0.8), rgba(255, 140, 0, 0.6));
+            transform: scale(0.95);
+        }
+
+        .speed-meter {
+            position: absolute;
+            bottom: 180px;
+            left: 20px;
+            width: 120px;
+            height: 60px;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(30, 30, 30, 0.8));
+            border: 2px solid rgba(255, 69, 0, 0.8);
+            border-radius: 10px;
+            padding: 10px;
+            backdrop-filter: blur(10px);
+            pointer-events: all;
+        }
+
+        .speed-text {
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            color: #00ff41;
+            text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+            margin-bottom: 2px;
+        }
+
+        .speed-label {
+            text-align: center;
+            font-size: 10px;
+            color: #ccc;
+        }
+
+        .chat-system {
+            position: absolute;
+            bottom: 250px;
+            left: 10px;
+            width: calc(100% - 20px);
+            max-width: 300px;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(20, 20, 20, 0.85));
+            border: 2px solid rgba(255, 69, 0, 0.6);
+            border-radius: 10px;
+            padding: 8px;
+            max-height: 120px;
+            overflow-y: auto;
+            pointer-events: all;
+            backdrop-filter: blur(8px);
+        }
+
+        .chat-messages {
+            margin-bottom: 8px;
+            font-size: 11px;
+        }
+
+        .chat-message {
+            margin-bottom: 6px;
+            padding: 5px 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 5px;
+            line-height: 1.3;
+        }
+
+        .chat-input {
+            width: 100%;
+            padding: 8px;
+            background: rgba(40, 40, 40, 0.8);
+            border: 2px solid rgba(255, 69, 0, 0.4);
+            border-radius: 6px;
+            color: white;
+            font-size: 12px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .chat-input:focus {
+            border-color: rgba(255, 69, 0, 0.8);
+        }
+
+        .loading-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0f0f0f, #1a1a1a, #2a2a2a);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .loading-logo {
+            font-size: 3rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff4500, #ff6b35, #ff8c42);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 30px rgba(255, 69, 0, 0.3);
+            text-align: center;
+            padding: 0 10px;
+        }
+
+        .loading-subtitle {
+            font-size: 1.2rem;
+            color: #ccc;
+            margin-bottom: 2rem;
+            font-weight: 300;
+            text-align: center;
+            padding: 0 10px;
+        }
+
+        .loading-bar-container {
+            width: 80%;
+            max-width: 300px;
+            height: 10px;
+            background: rgba(60, 60, 60, 0.8);
+            border-radius: 5px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 69, 0, 0.3);
+        }
+
+        .loading-progress {
+            height: 100%;
+            background: linear-gradient(90deg, #ff4500, #ff6b35, #ff8c42);
+            width: 0%;
+            transition: width 0.4s ease;
+            box-shadow: 0 0 10px rgba(255, 69, 0, 0.5);
+        }
+
+        .loading-text {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #999;
+            text-align: center;
+            padding: 0 10px;
+        }
+
+        .action-menu {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.95), rgba(30, 30, 30, 0.9));
+            border: 3px solid rgba(255, 69, 0, 0.8);
+            display: none;
+            pointer-events: all;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+            overflow-y: auto;
+            z-index: 300;
+        }
+
+        .menu-header {
+            position: sticky;
+            top: 0;
+            background: linear-gradient(90deg, rgba(255, 69, 0, 0.9), rgba(255, 140, 0, 0.7));
+            text-align: center;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid rgba(255, 69, 0, 0.3);
+            z-index: 1;
+        }
+
+        .menu-title {
+            font-size: 1.8rem;
+            color: white;
+            font-weight: bold;
+            text-shadow: 0 0 15px rgba(255, 69, 0, 0.4);
+            margin-bottom: 5px;
+        }
+
+        .menu-subtitle {
+            font-size: 1rem;
+            color: #eee;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 0 15px;
+        }
+
+        .menu-item {
+            background: linear-gradient(135deg, rgba(40, 40, 40, 0.9), rgba(60, 60, 60, 0.7));
+            border: 2px solid rgba(255, 69, 0, 0.4);
+            border-radius: 12px;
+            padding: 15px 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .menu-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 69, 0, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .menu-item:hover::before {
+            left: 100%;
+        }
+
+        .menu-item:active {
+            border-color: #ff4500;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(255, 69, 0, 0.3);
+            background: linear-gradient(135deg, rgba(255, 69, 0, 0.2), rgba(60, 60, 60, 0.8));
+        }
+
+        .menu-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            display: block;
+            color: #ff4500;
+        }
+
+        .menu-item-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 5px;
+        }
+
+        .menu-item-desc {
+            font-size: 0.8rem;
+            color: #bbb;
+            line-height: 1.3;
+        }
+
+        .close-menu {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 2.5rem;
+            color: #ff4500;
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 2;
+        }
+
+        .close-menu:active {
+            transform: rotate(180deg);
+            color: #fff;
+        }
+
+        .notification {
+            position: absolute;
+            top: 150px;
+            right: -300px;
+            background: linear-gradient(135deg, rgba(255, 69, 0, 0.95), rgba(255, 140, 0, 0.85));
+            padding: 15px 20px;
+            border-radius: 10px;
+            border-left: 4px solid #ff4500;
+            transition: right 0.4s ease;
+            pointer-events: all;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 6px 25px rgba(255, 69, 0, 0.4);
+            max-width: 80%;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .notification.show {
+            right: 10px;
+        }
+
+        .crosshair {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            pointer-events: none;
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.5), 0 0 0 4px rgba(255, 255, 255, 0.3);
+            z-index: 150;
+        }
+
+        .health-armor-bars {
+            position: absolute;
+            bottom: 180px;
+            right: 10px;
+            width: 150px;
+        }
+
+        .health-bar, .armor-bar {
+            width: 100%;
+            height: 12px;
+            background: rgba(60, 60, 60, 0.8);
+            border-radius: 6px;
+            border: 2px solid rgba(255, 69, 0, 0.3);
+            overflow: hidden;
+            margin-bottom: 6px;
+            position: relative;
+        }
+
+        .health-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #8BC34A);
+            width: 100%;
+            transition: width 0.4s ease;
+        }
+
+        .armor-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #2196F3, #03DAC6);
+            width: 75%;
+            transition: width 0.4s ease;
+        }
+
+        .bar-label {
+            position: absolute;
+            left: 5px;
+            top: -1px;
+            font-size: 9px;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+        }
+
+        .menu-button {
+            position: absolute;
+            top: 10px;
+            left: 150px;
+            background: linear-gradient(135deg, rgba(255, 69, 0, 0.9), rgba(255, 140, 0, 0.7));
+            border: none;
+            border-radius: 10px;
+            padding: 8px 15px;
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+            cursor: pointer;
+            pointer-events: all;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 4px 15px rgba(255, 69, 0, 0.3);
+        }
+
+        .menu-button:active {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 69, 0, 0.5);
+            background: linear-gradient(135deg, rgba(255, 69, 0, 1), rgba(255, 140, 0, 0.9));
+        }
+
+        .car-info {
+            position: absolute;
+            bottom: 250px;
+            right: 10px;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(30, 30, 30, 0.8));
+            border: 2px solid rgba(255, 69, 0, 0.6);
+            border-radius: 10px;
+            padding: 10px;
+            display: none;
+            pointer-events: all;
+            backdrop-filter: blur(8px);
+            max-width: 150px;
+        }
+
+        .car-name {
+            font-size: 14px;
+            font-weight: bold;
+            color: #ff4500;
+            margin-bottom: 5px;
+        }
+
+        .car-specs {
+            font-size: 11px;
+            color: #ccc;
+            line-height: 1.3;
+        }
+
+        .submenu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.95), rgba(30, 30, 30, 0.9));
+            border: 3px solid rgba(255, 69, 0, 0.8);
+            display: none;
+            pointer-events: all;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+            overflow-y: auto;
+            z-index: 400;
+        }
+
+        .submenu-header {
+            position: sticky;
+            top: 0;
+            background: linear-gradient(90deg, rgba(255, 69, 0, 0.9), rgba(255, 140, 0, 0.7));
+            text-align: center;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid rgba(255, 69, 0, 0.3);
+            z-index: 1;
+        }
+
+        .submenu-title {
+            font-size: 1.5rem;
+            color: white;
+            font-weight: bold;
+            text-shadow: 0 0 15px rgba(255, 69, 0, 0.4);
+            margin-bottom: 5px;
+        }
+
+        .submenu-content {
+            padding: 0 15px 20px;
+        }
+
+        .back-button {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 2rem;
+            color: #ff4500;
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 2;
+        }
+
+        .back-button:active {
+            transform: scale(0.9);
+            color: #fff;
+        }
+
+        .inventory-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .inventory-item {
+            background: linear-gradient(135deg, rgba(40, 40, 40, 0.9), rgba(60, 60, 60, 0.7));
+            border: 2px solid rgba(255, 69, 0, 0.4);
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .inventory-item:active {
+            border-color: #ff4500;
+            transform: scale(0.95);
+            box-shadow: 0 5px 15px rgba(255, 69, 0, 0.3);
+        }
+
+        .inventory-icon {
+            font-size: 2rem;
+            margin-bottom: 5px;
+            color: #ff4500;
+        }
+
+        .inventory-name {
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 3px;
+        }
+
+        .inventory-count {
+            font-size: 0.7rem;
+            color: #bbb;
+        }
+
+        .vehicle-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .vehicle-item {
+            background: linear-gradient(135deg, rgba(40, 40, 40, 0.9), rgba(60, 60, 60, 0.7));
+            border: 2px solid rgba(255, 69, 0, 0.4);
+            border-radius: 10px;
+            padding: 12px;
+            transition: all 0.3s;
+        }
+
+        .vehicle-item:active {
+            border-color: #ff4500;
+            transform: scale(0.98);
+            box-shadow: 0 5px 15px rgba(255, 69, 0, 0.3);
+        }
+
+        .vehicle-name {
+            font-size: 1rem;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 5px;
+        }
+
+        .vehicle-info {
+            font-size: 0.8rem;
+            color: #bbb;
+            margin-bottom: 5px;
+        }
+
+        .vehicle-action {
+            display: inline-block;
+            background: rgba(255, 69, 0, 0.5);
+            border-radius: 5px;
+            padding: 5px 10px;
+            font-size: 0.8rem;
+            color: white;
+            margin-top: 5px;
+        }
+
+        .reward-calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .reward-day {
+            background: linear-gradient(135deg, rgba(40, 40, 40, 0.9), rgba(60, 60, 60, 0.7));
+            border: 2px solid rgba(255, 69, 0, 0.4);
+            border-radius: 8px;
+            padding: 10px 5px;
+            text-align: center;
+            min-height: 60px;
+        }
+
+        .reward-day.active {
+            border-color: #ff4500;
+            background: linear-gradient(135deg, rgba(255, 69, 0, 0.2), rgba(60, 60, 60, 0.8));
+        }
+
+        .reward-day.claimed {
+            border-color: #4CAF50;
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.2), rgba(60, 60, 60, 0.8));
+        }
+
+        .day-number {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .reward-icon {
+            font-size: 1.2rem;
+            margin-bottom: 3px;
+            color: #ff4500;
+        }
+
+        .reward-amount {
+            font-size: 0.7rem;
+        }
+
+        .build-menu {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid rgba(255, 69, 0, 0.8);
+            border-radius: 10px;
+            padding: 10px;
+            display: none;
+            z-index: 250;
+            pointer-events: all;
+        }
+
+        .build-option {
+            padding: 8px 12px;
+            margin: 5px 0;
+            background: rgba(255, 69, 0, 0.5);
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .build-option:active {
+            background: rgba(255, 69, 0, 0.8);
+        }
+
+        @media (min-width: 768px) {
+            .minimap-container {
+                width: 180px;
+                height: 135px;
+            }
+            
+            .mobile-controls {
+                width: 180px;
+                height: 180px;
+            }
+            
+            .joystick {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .joystick-inner {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .action-buttons {
+                bottom: 30px;
+                right: 30px;
+            }
+            
+            .action-btn {
+                width: 60px;
+                height: 60px;
+                font-size: 24px;
+            }
+            
+            .speed-meter {
+                width: 150px;
+                height: 75px;
+                bottom: 220px;
+            }
+            
+            .speed-text {
+                font-size: 24px;
+            }
+            
+            .chat-system {
+                max-width: 400px;
+                max-height: 150px;
+            }
+            
+            .menu-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas"></canvas>
+
+    <!-- Загрузочный экран -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-logo">OINK RP GAMES</div>
+        <div class="loading-subtitle">Построй свой Город • 3D</div>
+        <div class="loading-bar-container">
+            <div class="loading-progress" id="loadingProgress"></div>
+        </div>
+        <div class="loading-text">Загрузка реалистичного мира...</div>
+    </div>
+
+    <!-- UI Overlay -->
+    <div class="ui-overlay" id="uiOverlay" style="display: none;">
+        <div class="top-hud">
+            <div class="hud-panel">💰 <span id="money">33,508,778</span>₽</div>
+            <div class="hud-panel">⭐ LVL <span id="level">75</span></div>
+            <div class="hud-panel">👤 <span id="playerName">Oink RP Games</span></div>
+            <div class="hud-panel">🏠 Дом: <span id="house">Элитный (Вокзал)</span></div>
+        </div>
+
+        <button class="menu-button" id="menuButton">≡ Меню</button>
+
+        <div class="minimap-container">
+            <div class="minimap-header">Карта города</div>
+            <canvas class="minimap-canvas" id="minimapCanvas" width="120" height="66"></canvas>
+        </div>
+
+        <div class="mobile-controls" id="joystickArea">
+            <div class="joystick" id="joystick">
+                <div class="joystick-inner"></div>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <div class="action-btn" id="interactBtn">💬</div>
+            <div class="action-btn" id="vehicleBtn">🚗</div>
+            <div class="action-btn" id="runBtn">🏃</div>
+            <div class="action-btn" id="buildBtn">🏗️</div>
+        </div>
+
+        <div class="speed-meter">
+            <div class="speed-text" id="speedText">0</div>
+            <div class="speed-label">км/ч</div>
+        </div>
+
+        <div class="health-armor-bars">
+            <div class="health-bar">
+                <div class="bar-label">HP</div>
+                <div class="health-fill" id="healthFill"></div>
+            </div>
+            <div class="armor-bar">
+                <div class="bar-label">ARMOR</div>
+                <div class="armor-fill" id="armorFill"></div>
+            </div>
+        </div>
+
+        <div class="chat-system">
+            <div class="chat-messages" id="chatMessages">
+                <div class="chat-message" style="color: #4CAF50;">[Admin] Dragoon_Azimov[895]: всем привет!</div>
+                <div class="chat-message" style="color: #2196F3;">[VIP] Игрок за Slasyan_Pringlest[21]</div>
+                <div class="chat-message" style="color: #FFD700;">[Gold VIP] Sergey_Nikulin[193]: куплю майнкрфт трп</div>
+            </div>
+            <input type="text" class="chat-input" placeholder="Напишите сообщение..." id="chatInput">
+        </div>
+
+        <div class="car-info" id="carInfo">
+            <div class="car-name" id="carName">Lamborghini Aventador</div>
+            <div class="car-specs" id="carSpecs">
+                Максимальная скорость: 350 км/ч<br>
+                Ускорение: 2.9 сек до 100 км/ч<br>
+                Топливо: 95/100 л
+            </div>
+        </div>
+
+        <div class="crosshair"></div>
+
+        <div class="build-menu" id="buildMenu">
+            <div class="build-option" data-type="house">Дом</div>
+            <div class="build-option" data-type="shop">Магазин</div>
+            <div class="build-option" data-type="garage">Гараж</div>
+            <div class="build-option" data-type="cancel">Отмена</div>
+        </div>
+    </div>
+
+    <!-- Главное меню -->
+    <div class="action-menu" id="actionMenu">
+        <div class="close-menu" id="closeMenu">×</div>
+        <div class="menu-header">
+            <div class="menu-title">Black Russia</div>
+            <div class="menu-subtitle">Главное меню</div>
+        </div>
+        <div class="menu-grid">
+            <div class="menu-item" id="inventoryBtn">
+                <div class="menu-icon">🎒</div>
+                <div class="menu-item-title">Инвентарь</div>
+                <div class="menu-item-desc">Предметы, оружие, одежда</div>
+            </div>
+            <div class="menu-item" id="vehiclesBtn">
+                <div class="menu-icon">🚗</div>
+                <div class="menu-item-title">Транспорт</div>
+                <div class="menu-item-desc">Ваши автомобили и мотоциклы</div>
+            </div>
+            <div class="menu-item" id="jobsBtn">
+                <div class="menu-icon">💼</div>
+                <div class="menu-item-title">Работа</div>
+                <div class="menu-item-desc">Найти работу и заработать</div>
+            </div>
+            <div class="menu-item" id="housesBtn">
+                <div class="menu-icon">🏠</div>
+                <div class="menu-item-title">Недвижимость</div>
+                <div class="menu-item-desc">Дома, квартиры, бизнесы</div>
+            </div>
+            <div class="menu-item" id="orgsBtn">
+                <div class="menu-icon">👥</div>
+                <div class="menu-item-title">Организации</div>
+                <div class="menu-item-desc">Банды, мафия, государство</div>
+            </div>
+            <div class="menu-item" id="donateBtn">
+                <div class="menu-icon">💎</div>
+                <div class="menu-item-title">Донат</div>
+                <div class="menu-item-desc">VIP статус и привилегии</div>
+            </div>
+            <div class="menu-item" id="calendarBtn">
+                <div class="menu-icon">🎁</div>
+                <div class="menu-item-title">Календарь наград</div>
+                <div class="menu-item-desc">Ежедневные бонусы за игру</div>
+            </div>
+            <div class="menu-item" id="settingsBtn">
+                <div class="menu-icon">⚙️</div>
+                <div class="menu-item-title">Настройки</div>
+                <div class="menu-item-desc">Графика, звук, управление</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Подменю инвентаря -->
+    <div class="submenu" id="inventoryMenu">
+        <div class="submenu-header">
+            <div class="back-button" id="backFromInventory">←</div>
+            <div class="submenu-title">Инвентарь</div>
+        </div>
+        <div class="submenu-content">
+            <div class="inventory-grid" id="inventoryItems">
+                <!-- Сюда будут добавляться предметы динамически -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Подменю транспорта -->
+    <div class="submenu" id="vehiclesMenu">
+        <div class="submenu-header">
+            <div class="back-button" id="backFromVehicles">←</div>
+            <div class="submenu-title">Ваш транспорт</div>
+        </div>
+        <div class="submenu-content">
+            <div class="vehicle-list" id="vehicleList">
+                <!-- Сюда будут добавляться транспортные средства динамически -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Подменю работы -->
+    <div class="submenu" id="jobsMenu">
+        <div class="submenu-header">
+            <div class="back-button" id="backFromJobs">←</div>
+            <div class="submenu-title">Доступные работы</div>
+        </div>
+        <div class="submenu-content">
+            <div class="menu-item" id="taxiJob">
+                <div class="menu-icon">🚕</div>
+                <div class="menu-item-title">Таксист</div>
+                <div class="menu-item-desc">Заработок: 50-150₽ за клиента</div>
+            </div>
+            <div class="menu-item" id="truckerJob">
+                <div class="menu-icon">🚚</div>
+                <div class="menu-item-title">Дальнобойщик</div>
+                <div class="menu-item-desc">Заработок: 500-2000₽ за рейс</div>
+            </div>
+            <div class="menu-item" id="policeJob">
+                <div class="menu-icon">👮</div>
+                <div class="menu-item-title">Полицейский</div>
+                <div class="menu-item-desc">Зарплата: 1000₽/час + штрафы</div>
+            </div>
+            <div class="menu-item" id="medicJob">
+                <div class="menu-icon">🚑</div>
+                <div class="menu-item-title">Врач</div>
+                <div class="menu-item-desc">Зарплата: 800₽/час + лечение</div>
+            </div>
+            <div class="menu-item" id="mechanicJob">
+                <div class="menu-icon">🔧</div>
+                <div class="menu-item-title">Механик</div>
+                <div class="menu-item-desc">Заработок: 300-1000₽ за ремонт</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Подменю недвижимости -->
+    <div class="submenu" id="housesMenu">
+        <div class="submenu-header">
+            <div class="back-button" id="backFromHouses">←</div>
+            <div class="submenu-title">Ваша недвижимость</div>
+        </div>
+        <div class="submenu-content">
+            <div class="menu-item">
+                <div class="menu-icon">🏠</div>
+                <div class="menu-item-title">Элитный дом (Вокзал)</div>
+                <div class="menu-item-desc">Стоимость: 25,000,000₽</div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-icon">🏢</div>
+                <div class="menu-item-title">Квартира в центре</div>
+                <div class="menu-item-desc">Стоимость: 8,500,000₽</div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-icon">🏪</div>
+                <div class="menu-item-title">Автосалон</div>
+                <div class="menu-item-desc">Стоимость: 50,000,000₽</div>
+            </div>
+            <div class="menu-item" id="buyPropertyBtn">
+                <div class="menu-icon">💰</div>
+                <div class="menu-item-title">Купить недвижимость</div>
+                <div class="menu-item-desc">Просмотреть доступные объекты</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Подменю организаций -->
+    <div class="submenu" id="orgsMenu">
+        <div class="submenu-header">
+            <div class="back-button" id="backFromOrgs">←</div>
+            <div class="submenu-title">Организации</div>
+        </div>
+        <div class="submenu-content">
+            <div class="menu-item" id="govOrg">
+                <div class="menu-icon">🏛️</div>
+                <div class="menu-item-title">Правительство</div>
+                <div class="menu-item-desc">Государственные структуры</div>
+            </div>
+            <div class="menu-item" id="mafiaOrg">
+                <div class="menu-icon">👔</div>
+                <div class="menu-item-title">Мафия</div>
+                <div class="menu-item-desc">Криминальные группировки</div>
+            </div>
+            <div class="menu-item" id="gangOrg">
+                <div class="menu-icon">🔫</div>
+                <div class="menu-item-title">Банды</div>
+                <div class="menu-item-desc">Уличные группировки</div>
+            </div>
+            <div class="menu-item" id="policeOrg">
+                <div class="menu-icon">👮</div>
+                <div class="menu-item-title">Полиция</div>
+                <div class="menu-item-desc">Правоохранительные органы</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Подменю доната -->
+    <div class="submenu" id="donateMenu">
+        <div class="submenu-header">
+            <div class="back-button" id="backFromDonate">←</div>
+            <div class="submenu-title">VIP Привилегии</div>
+        </div>
+        <div class="submenu-content">
+            <div class="menu-item">
+                <div class="menu-icon">🥉</div>
+                <div class="menu-item-title">VIP Bronze</div>
+                <div class="menu-item-desc">500₽/мес</div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-icon">🥈</div>
+                <div class="menu-item-title">VIP Silver</div>
+                <div class="menu-item-desc">1000₽/мес</div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-icon">🥇</div>
+                <div class="menu-item-title">VIP Gold</div>
+                <div class="menu-item-desc">2000₽/мес</div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-icon">💎</div>
+                <div class="menu-item-title">VIP Diamond</div>
+                <div class="menu-item-desc">5000₽/мес</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Подменю календаря наград -->
+    <div class="submenu" id="calendarMenu">
+        <div class="submenu-header">
+            <div class="back-button" id="backFromCalendar">←</div>
+            <div class="submenu-title">Календарь наград</div>
+            <div class="menu-subtitle">Играйте каждый день для получения бонусов</div>
+        </div>
+        <div class="submenu-content">
+            <div class="reward-calendar" id="rewardCalendar">
+                <!-- Сюда будут добавляться дни календаря динамически -->
+            </div>
+            <div class="menu-item" id="claimRewardBtn">
+                <div class="menu-icon">🎁</div>
+                <div class="menu-item-title">Получить сегодняшнюю награду</div>
+                <div class="menu-item-desc">Вы играли более 30 минут</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Подменю настроек -->
+    <div class="submenu" id="settingsMenu">
+        <div class="submenu-header">
+            <div class="back-button" id="backFromSettings">←</div>
+            <div class="submenu-title">Настройки</div>
+        </div>
+        <div class="submenu-content">
+            <div class="menu-item" id="graphicsSettings">
+                <div class="menu-icon">🖥️</div>
+                <div class="menu-item-title">Графика</div>
+                <div class="menu-item-desc">Качество, эффекты, разрешение</div>
+            </div>
+            <div class="menu-item" id="soundSettings">
+                <div class="menu-icon">🔊</div>
+                <div class="menu-item-title">Звук</div>
+                <div class="menu-item-desc">Громкость, музыка, эффекты</div>
+            </div>
+            <div class="menu-item" id="controlsSettings">
+                <div class="menu-icon">🎮</div>
+                <div class="menu-item-title">Управление</div>
+                <div class="menu-item-desc">Чувствительность, кнопки</div>
+            </div>
+            <div class="menu-item" id="accountSettings">
+                <div class="menu-icon">👤</div>
+                <div class="menu-item-title">Аккаунт</div>
+                <div class="menu-item-desc">Данные, безопасность</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="notification" id="notification"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // Игровые данные
+        let gameData = {
+            money: 33508778,
+            level: 75,
+            health: 100,
+            armor: 75,
+            playerName: 'Oink RP Games',
+            house: 'Элитный (Вокзал)',
+            currentSpeed: 0,
+            inVehicle: false,
+            currentVehicle: null,
+            inventory: [
+                { id: 1, name: 'AK-47', icon: '🔫', count: 1 },
+                { id: 2, name: 'Glock 17', icon: '🔫', count: 1 },
+                { id: 3, name: 'Нож', icon: '🔪', count: 1 },
+                { id: 4, name: 'Аптечка', icon: '💊', count: 3 },
+                { id: 5, name: 'Бронежилет', icon: '🛡️', count: 2 },
+                { id: 6, name: 'Костюм', icon: '👔', count: 5 },
+                { id: 7, name: 'Телефон', icon: '📱', count: 1 },
+                { id: 8, name: 'Пачка денег', icon: '💰', count: 10 },
+                { id: 9, name: 'Ключи от дома', icon: '🔑', count: 1 },
+                { id: 10, name: 'Ключи от машины', icon: '🔑', count: 3 }
+            ],
+            vehicles: [
+                { id: 1, name: 'Lamborghini Aventador', type: 'supercar', maxSpeed: 350, acceleration: 2.9, fuel: 95, location: 'Гараж' },
+                { id: 2, name: 'BMW M5', type: 'sedan', maxSpeed: 250, acceleration: 4.2, fuel: 65, location: 'У дома' },
+                { id: 3, name: 'Mercedes G-Class', type: 'suv', maxSpeed: 210, acceleration: 5.5, fuel: 85, location: 'Парковка' }
+            ],
+            rewards: [
+                { day: 1, claimed: false, reward: '10,000₽', icon: '💰' },
+                { day: 2, claimed: false, reward: 'Аптечка', icon: '💊' },
+                { day: 3, claimed: false, reward: '15,000₽', icon: '💰' },
+                { day: 4, claimed: false, reward: 'VIP на 1 день', icon: '💎' },
+                { day: 5, claimed: false, reward: '25,000₽', icon: '💰' },
+                { day: 6, claimed: false, reward: 'Бронежилет', icon: '🛡️' },
+                { day: 7, claimed: false, reward: '50,000₽', icon: '💰' }
+            ],
+            currentDay: 1,
+            playTimeToday: 0,
+            buildingMode: false
+        };
+
+        // Three.js переменные
+        let scene, camera, renderer, player, vehicles = [], buildings = [];
+        let moveForwardPressed = false, moveBackwardPressed = false;
+        let turnLeftPressed = false, turnRightPressed = false;
+        let isRunning = false;
+        let currentVehicle = null;
+        let joystickActive = false;
+        let joystickStartX = 0, joystickStartY = 0;
+        let joystickX = 0, joystickY = 0;
+        let joystickRadius = 50;
+
+        // Инициализация игры
+        function initGame() {
+            // Проверка поддержки WebGL
+            try {
+                const canvas = document.createElement('canvas');
+                const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+                if (!gl) {
+                    throw new Error('WebGL not supported');
+                }
+            } catch (e) {
+                document.getElementById('loadingScreen').innerHTML = `
+                    <div style="text-align: center; padding: 20px;">
+                        <div class="loading-logo">ОШИБКА</div>
+                        <div class="loading-subtitle">Ваше устройство не поддерживает WebGL</div>
+                        <div class="loading-text">Попробуйте обновить браузер или использовать другое устройство</div>
+                    </div>
+                `;
+                return;
+            }
+
+            scene = new THREE.Scene();
+            scene.fog = new THREE.Fog(0x87CEEB, 100, 500);
+            
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            
+            renderer = new THREE.WebGLRenderer({ 
+                canvas: document.getElementById('gameCanvas'), 
+                antialias: true,
+                powerPreference: "high-performance"
+            });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            renderer.setClearColor(0x87CEEB);
+            
+            setupLighting();
+            createRealisticCity();
+            createPlayer();
+            spawnRealisticVehicles();
+            
+            camera.position.set(0, 12, 25);
+            camera.lookAt(0, 0, 0);
+            
+            // Инициализация интерфейса
+            initUI();
+            
+            // Запуск анимации
+            animate();
+            
+            // Симуляция загрузки
+            simulateLoading();
+        }
+
+        function simulateLoading() {
+            let loadingProgress = 0;
+            const loadingTexts = [
+                'Загрузка текстур автомобилей...',
+                'Создание реалистичного города...',
+                'Инициализация физики...',
+                'Подключение к серверу...',
+                'Загрузка пользовательских данных...',
+                'Финальная настройка...'
+            ];
+
+            const loadingInterval = setInterval(() => {
+                loadingProgress += Math.random() * 15 + 5;
+                if (loadingProgress >= 100) {
+                    loadingProgress = 100;
+                    clearInterval(loadingInterval);
+                    
+                    // После загрузки
+                    setTimeout(() => {
+                        document.getElementById('loadingScreen').style.display = 'none';
+                        document.getElementById('uiOverlay').style.display = 'block';
+                        showNotification('Добро пожаловать в реалистичную Black Russia!');
+                        startChatSimulation();
+                        
+                        // Проверка награды за сегодня
+                        checkDailyReward();
+                    }, 500);
+                }
+                document.getElementById('loadingProgress').style.width = loadingProgress + '%';
+                
+                const textIndex = Math.floor((loadingProgress / 100) * loadingTexts.length);
+                if (loadingTexts[textIndex]) {
+                    document.querySelector('.loading-text').textContent = loadingTexts[textIndex];
+                }
+            }, 250);
+        }
+
+        function initUI() {
+            // Инициализация элементов управления
+            initControls();
+            
+            // Заполнение инвентаря
+            updateInventory();
+            
+            // Заполнение списка транспорта
+            updateVehicleList();
+            
+            // Заполнение календаря наград
+            updateRewardCalendar();
+            
+            // Обновление статистик
+            updateStats();
+            
+            // Инициализация чата
+            document.getElementById('chatInput').addEventListener('keypress', sendMessage);
+            
+            // Инициализация меню
+            initMenu();
+        }
+
+        function initControls() {
+            const joystick = document.getElementById('joystick');
+            const joystickArea = document.getElementById('joystickArea');
+            
+            // Обработка касаний для джойстика
+            joystickArea.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                const touch = e.touches[0];
+                const rect = joystickArea.getBoundingClientRect();
+                
+                joystickStartX = rect.left + rect.width / 2;
+                joystickStartY = rect.top + rect.height / 2;
+                joystickX = touch.clientX;
+                joystickY = touch.clientY;
+                
+                joystick.style.left = joystickStartX + 'px';
+                joystick.style.top = joystickStartY + 'px';
+                joystickActive = true;
+                
+                updateJoystick(touch.clientX, touch.clientY);
+            });
+            
+            document.addEventListener('touchmove', (e) => {
+                if (joystickActive) {
+                    e.preventDefault();
+                    const touch = e.touches[0];
+                    updateJoystick(touch.clientX, touch.clientY);
+                }
+            });
+            
+            document.addEventListener('touchend', () => {
+                joystickActive = false;
+                joystick.style.left = '50%';
+                joystick.style.top = '50%';
+                joystickX = joystickY = 0;
+                moveForwardPressed = moveBackwardPressed = turnLeftPressed = turnRightPressed = false;
+            });
+            
+            // Кнопки действий
+            document.getElementById('interactBtn').addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                interactAction();
+            });
+            
+            document.getElementById('vehicleBtn').addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                enterVehicle();
+            });
+            
+            document.getElementById('runBtn').addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                runToggle();
+            });
+            
+            document.getElementById('buildBtn').addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                toggleBuildMode();
+            });
+            
+            // Клавиатурное управление для тестирования на ПК
+            document.addEventListener('keydown', (e) => {
+                switch(e.code) {
+                    case 'KeyW': case 'ArrowUp': moveForwardPressed = true; break;
+                    case 'KeyS': case 'ArrowDown': moveBackwardPressed = true; break;
+                    case 'KeyA': case 'ArrowLeft': turnLeftPressed = true; break;
+                    case 'KeyD': case 'ArrowRight': turnRightPressed = true; break;
+                    case 'ShiftLeft': isRunning = true; break;
+                    case 'KeyF': enterVehicle(); break;
+                    case 'KeyE': interactAction(); break;
+                    case 'KeyM': toggleActionMenu(); break;
+                    case 'KeyB': toggleBuildMode(); break;
+                }
+            });
+            
+            document.addEventListener('keyup', (e) => {
+                switch(e.code) {
+                    case 'KeyW': case 'ArrowUp': moveForwardPressed = false; break;
+                    case 'KeyS': case 'ArrowDown': moveBackwardPressed = false; break;
+                    case 'KeyA': case 'ArrowLeft': turnLeftPressed = false; break;
+                    case 'KeyD': case 'ArrowRight': turnRightPressed = false; break;
+                    case 'ShiftLeft': isRunning = false; break;
+                }
+            });
+        }
+
+        function updateJoystick(touchX, touchY) {
+            if (!joystickActive) return;
+            
+            const dx = touchX - joystickStartX;
+            const dy = touchY - joystickStartY;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            const angle = Math.atan2(dy, dx);
+            
+            if (distance < joystickRadius) {
+                joystickX = dx;
+                joystickY = dy;
+            } else {
+                joystickX = Math.cos(angle) * joystickRadius;
+                joystickY = Math.sin(angle) * joystickRadius;
+            }
+            
+            // Обновление позиции джойстика
+            const joystick = document.getElementById('joystick');
+            joystick.style.transform = `translate(calc(-50% + ${joystickX}px), calc(-50% + ${joystickY}px)`;
+            
+            // Определение направления движения
+            const deadZone = 15;
+            const forwardThreshold = -joystickRadius * 0.5;
+            const backwardThreshold = joystickRadius * 0.3;
+            const turnThreshold = joystickRadius * 0.4;
+            
+            // Движение вперед/назад
+            moveForwardPressed = joystickY < forwardThreshold && Math.abs(joystickY) > deadZone;
+            moveBackwardPressed = joystickY > backwardThreshold && Math.abs(joystickY) > deadZone;
+            
+            // Поворот
+            turnLeftPressed = joystickX < -turnThreshold && Math.abs(joystickX) > deadZone;
+            turnRightPressed = joystickX > turnThreshold && Math.abs(joystickX) > deadZone;
+        }
+
+        function initMenu() {
+            // Главное меню
+            document.getElementById('menuButton').addEventListener('click', toggleActionMenu);
+            document.getElementById('closeMenu').addEventListener('click', toggleActionMenu);
+            
+            // Подменю
+            document.getElementById('inventoryBtn').addEventListener('click', () => {
+                document.getElementById('actionMenu').style.display = 'none';
+                document.getElementById('inventoryMenu').style.display = 'block';
+            });
+            
+            document.getElementById('backFromInventory').addEventListener('click', () => {
+                document.getElementById('inventoryMenu').style.display = 'none';
+                document.getElementById('actionMenu').style.display = 'block';
+            });
+            
+            document.getElementById('vehiclesBtn').addEventListener('click', () => {
+                document.getElementById('actionMenu').style.display = 'none';
+                document.getElementById('vehiclesMenu').style.display = 'block';
+            });
+            
+            document.getElementById('backFromVehicles').addEventListener('click', () => {
+                document.getElementById('vehiclesMenu').style.display = 'none';
+                document.getElementById('actionMenu').style.display = 'block';
+            });
+            
+            document.getElementById('jobsBtn').addEventListener('click', () => {
+                document.getElementById('actionMenu').style.display = 'none';
+                document.getElementById('jobsMenu').style.display = 'block';
+            });
+            
+            document.getElementById('backFromJobs').addEventListener('click', () => {
+                document.getElementById('jobsMenu').style.display = 'none';
+                document.getElementById('actionMenu').style.display = 'block';
+            });
+            
+            document.getElementById('housesBtn').addEventListener('click', () => {
+                document.getElementById('actionMenu').style.display = 'none';
+                document.getElementById('housesMenu').style.display = 'block';
+            });
+            
+            document.getElementById('backFromHouses').addEventListener('click', () => {
+                document.getElementById('housesMenu').style.display = 'none';
+                document.getElementById('actionMenu').style.display = 'block';
+            });
+            
+            document.getElementById('orgsBtn').addEventListener('click', () => {
+                document.getElementById('actionMenu').style.display = 'none';
+                document.getElementById('orgsMenu').style.display = 'block';
+            });
+            
+            document.getElementById('backFromOrgs').addEventListener('click', () => {
+                document.getElementById('orgsMenu').style.display = 'none';
+                document.getElementById('actionMenu').style.display = 'block';
+            });
+            
+            document.getElementById('donateBtn').addEventListener('click', () => {
+                document.getElementById('actionMenu').style.display = 'none';
+                document.getElementById('donateMenu').style.display = 'block';
+            });
+            
+            document.getElementById('backFromDonate').addEventListener('click', () => {
+                document.getElementById('donateMenu').style.display = 'none';
+                document.getElementById('actionMenu').style.display = 'block';
+            });
+            
+            document.getElementById('calendarBtn').addEventListener('click', () => {
+                document.getElementById('actionMenu').style.display = 'none';
+                document.getElementById('calendarMenu').style.display = 'block';
+            });
+            
+            document.getElementById('backFromCalendar').addEventListener('click', () => {
+                document.getElementById('calendarMenu').style.display = 'none';
+                document.getElementById('actionMenu').style.display = 'block';
+            });
+            
+            document.getElementById('settingsBtn').addEventListener('click', () => {
+                document.getElementById('actionMenu').style.display = 'none';
+                document.getElementById('settingsMenu').style.display = 'block';
+            });
+            
+            document.getElementById('backFromSettings').addEventListener('click', () => {
+                document.getElementById('settingsMenu').style.display = 'none';
+                document.getElementById('actionMenu').style.display = 'block';
+            });
+            
+            // Кнопка получения награды
+            document.getElementById('claimRewardBtn').addEventListener('click', claimDailyReward);
+            
+            // Кнопки работы
+            document.getElementById('taxiJob').addEventListener('click', () => selectJob('Таксист'));
+            document.getElementById('truckerJob').addEventListener('click', () => selectJob('Дальнобойщик'));
+            document.getElementById('policeJob').addEventListener('click', () => selectJob('Полицейский'));
+            document.getElementById('medicJob').addEventListener('click', () => selectJob('Врач'));
+            document.getElementById('mechanicJob').addEventListener('click', () => selectJob('Механик'));
+            
+            // Кнопки организаций
+            document.getElementById('govOrg').addEventListener('click', () => showNotification('Правительство: доступ к государственным структурам'));
+            document.getElementById('mafiaOrg').addEventListener('click', () => showNotification('Мафия: криминальные группировки'));
+            document.getElementById('gangOrg').addEventListener('click', () => showNotification('Банды: уличные группировки'));
+            document.getElementById('policeOrg').addEventListener('click', () => showNotification('Полиция: правоохранительные органы'));
+            
+            // Кнопка покупки недвижимости
+            document.getElementById('buyPropertyBtn').addEventListener('click', () => showNotification('Просмотр доступной недвижимости...'));
+        }
+
+        function updateInventory() {
+            const inventoryItems = document.getElementById('inventoryItems');
+            inventoryItems.innerHTML = '';
+            
+            gameData.inventory.forEach(item => {
+                const itemElement = document.createElement('div');
+                itemElement.className = 'inventory-item';
+                itemElement.innerHTML = `
+                    <div class="inventory-icon">${item.icon}</div>
+                    <div class="inventory-name">${item.name}</div>
+                    <div class="inventory-count">${item.count > 1 ? item.count + ' шт' : ''}</div>
+                `;
+                itemElement.addEventListener('click', () => useInventoryItem(item));
+                inventoryItems.appendChild(itemElement);
+            });
+        }
+
+        function useInventoryItem(item) {
+            switch(item.name) {
+                case 'Аптечка':
+                    if (gameData.health < 100) {
+                        gameData.health = Math.min(100, gameData.health + 50);
+                        item.count--;
+                        if (item.count <= 0) {
+                            gameData.inventory = gameData.inventory.filter(i => i.id !== item.id);
+                        }
+                        updateStats();
+                        showNotification(`Использована аптечка. Здоровье: ${gameData.health}%`);
+                        updateInventory();
+                    } else {
+                        showNotification('У вас полное здоровье!');
+                    }
+                    break;
+                case 'Бронежилет':
+                    if (gameData.armor < 100) {
+                        gameData.armor = Math.min(100, gameData.armor + 50);
+                        item.count--;
+                        if (item.count <= 0) {
+                            gameData.inventory = gameData.inventory.filter(i => i.id !== item.id);
+                        }
+                        updateStats();
+                        showNotification(`Надет бронежилет. Броня: ${gameData.armor}%`);
+                        updateInventory();
+                    } else {
+                        showNotification('У вас максимальная броня!');
+                    }
+                    break;
+                default:
+                    showNotification(`Использован предмет: ${item.name}`);
+            }
+        }
+
+        function updateVehicleList() {
+            const vehicleList = document.getElementById('vehicleList');
+            vehicleList.innerHTML = '';
+            
+            gameData.vehicles.forEach(vehicle => {
+                const vehicleElement = document.createElement('div');
+                vehicleElement.className = 'vehicle-item';
+                vehicleElement.innerHTML = `
+                    <div class="vehicle-name">${vehicle.name}</div>
+                    <div class="vehicle-info">
+                        Макс. скорость: ${vehicle.maxSpeed} км/ч<br>
+                        Разгон: ${vehicle.acceleration} сек до 100 км/ч<br>
+                        Топливо: ${vehicle.fuel}%
+                    </div>
+                    <div class="vehicle-info">Местонахождение: ${vehicle.location}</div>
+                    <div class="vehicle-action">Вызвать</div>
+                `;
+                vehicleElement.addEventListener('click', () => callVehicle(vehicle));
+                vehicleList.appendChild(vehicleElement);
+            });
+        }
+
+        function callVehicle(vehicle) {
+            showNotification(`Вызван транспорт: ${vehicle.name}. Ожидайте доставки.`);
+            setTimeout(() => {
+                // Телепортация ближайшего аналогичного транспорта к игроку
+                vehicles.forEach(v => {
+                    if (v.userData.name === vehicle.name) {
+                        const offsetX = (Math.random() - 0.5) * 10;
+                        const offsetZ = (Math.random() - 0.5) * 10;
+                        v.position.set(
+                            player.position.x + offsetX,
+                            player.position.y,
+                            player.position.z + offsetZ
+                        );
+                        v.rotation.y = player.rotation.y;
+                        showNotification(`${vehicle.name} доставлен!`);
+                    }
+                });
+            }, 5000);
+        }
+
+        function updateRewardCalendar() {
+            const calendar = document.getElementById('rewardCalendar');
+            calendar.innerHTML = '';
+            
+            gameData.rewards.forEach((reward, index) => {
+                const dayElement = document.createElement('div');
+                dayElement.className = `reward-day ${reward.claimed ? 'claimed' : ''} ${index + 1 === gameData.currentDay ? 'active' : ''}`;
+                dayElement.innerHTML = `
+                    <div class="day-number">${index + 1}</div>
+                    <div class="reward-icon">${reward.icon}</div>
+                    <div class="reward-amount">${reward.reward}</div>
+                `;
+                calendar.appendChild(dayElement);
+            });
+        }
+
+        function checkDailyReward() {
+            // Проверяем, играл ли пользователь сегодня более 30 минут
+            if (gameData.playTimeToday >= 30 * 60 * 1000 && !gameData.rewards[gameData.currentDay - 1].claimed) {
+                showNotification('Вы можете получить сегодняшнюю награду!');
+            }
+            
+            // Запускаем таймер для отслеживания времени игры
+            setInterval(() => {
+                gameData.playTimeToday += 1000;
+            }, 1000);
+        }
+
+        function claimDailyReward() {
+            const todayReward = gameData.rewards[gameData.currentDay - 1];
+            
+            if (todayReward.claimed) {
+                showNotification('Вы уже получили сегодняшнюю награду');
+                return;
+            }
+            
+            if (gameData.playTimeToday < 30 * 60 * 1000) {
+                const remainingTime = Math.ceil((30 * 60 * 1000 - gameData.playTimeToday) / 1000 / 60);
+                showNotification(`Играйте еще ${remainingTime} минут для получения награды`);
+                return;
+            }
+            
+            // Выдача награды
+            todayReward.claimed = true;
+            
+            if (todayReward.reward.includes('₽')) {
+                const amount = parseInt(todayReward.reward.replace(/,/g, '').replace('₽', ''));
+                gameData.money += amount;
+                showNotification(`Получено: ${todayReward.reward}! Баланс: ${gameData.money.toLocaleString()}₽`);
+            } else {
+                showNotification(`Получено: ${todayReward.reward}!`);
+                
+                // Добавляем предмет в инвентарь, если это не деньги
+                if (todayReward.reward === 'Аптечка') {
+                    const medkit = gameData.inventory.find(item => item.name === 'Аптечка');
+                    if (medkit) {
+                        medkit.count++;
+                    } else {
+                        gameData.inventory.push({ id: Date.now(), name: 'Аптечка', icon: '💊', count: 1 });
+                    }
+                } else if (todayReward.reward === 'Бронежилет') {
+                    const armor = gameData.inventory.find(item => item.name === 'Бронежилет');
+                    if (armor) {
+                        armor.count++;
+                    } else {
+                        gameData.inventory.push({ id: Date.now(), name: 'Бронежилет', icon: '🛡️', count: 1 });
+                    }
+                }
+                
+                updateInventory();
+            }
+            
+            updateStats();
+            updateRewardCalendar();
+        }
+
+        function selectJob(job) {
+            showNotification(`Вы выбрали работу: ${job}. Отправляйтесь на рабочее место.`);
+            
+            // Телепортация маркера работы на карту
+            const jobMarkers = [
+                { name: 'Таксист', position: { x: 50, z: -50 } },
+                { name: 'Дальнобойщик', position: { x: -80, z: 70 } },
+                { name: 'Полицейский', position: { x: -120, z: 0 } },
+                { name: 'Врач', position: { x: 100, z: -30 } },
+                { name: 'Механик', position: { x: 60, z: 100 } }
+            ];
+            
+            const marker = jobMarkers.find(m => m.name === job);
+            if (marker) {
+                // В реальной игре здесь можно добавить маркер на карту
+                showNotification(`Рабочее место ${job} отмечено на карте.`);
+            }
+            
+            // Закрываем меню работы
+            document.getElementById('jobsMenu').style.display = 'none';
+            document.getElementById('actionMenu').style.display = 'block';
+        }
+
+        function toggleBuildMode() {
+            gameData.buildingMode = !gameData.buildingMode;
+            
+            if (gameData.buildingMode) {
+                showNotification('Режим строительства активирован. Выберите тип постройки.');
+                document.getElementById('buildMenu').style.display = 'block';
+                
+                // Добавляем обработчики для кнопок строительства
+                const buildOptions = document.querySelectorAll('.build-option');
+                buildOptions.forEach(option => {
+                    option.addEventListener('click', () => {
+                        const type = option.getAttribute('data-type');
+                        if (type === 'cancel') {
+                            toggleBuildMode();
+                            return;
+                        }
+                        
+                        createBuilding(type);
+                    });
+                });
+            } else {
+                showNotification('Режим строительства деактивирован.');
+                document.getElementById('buildMenu').style.display = 'none';
+            }
+        }
+
+        function createBuilding(type) {
+            let buildingName, width, height, depth, color;
+            
+            switch(type) {
+                case 'house':
+                    buildingName = 'Жилой дом';
+                    width = 15;
+                    height = 20;
+                    depth = 12;
+                    color = 0x8B4513;
+                    break;
+                case 'shop':
+                    buildingName = 'Магазин';
+                    width = 20;
+                    height = 10;
+                    depth = 15;
+                    color = 0x4169E1;
+                    break;
+                case 'garage':
+                    buildingName = 'Гараж';
+                    width = 25;
+                    height = 8;
+                    depth = 15;
+                    color = 0x696969;
+                    break;
+            }
+            
+            // Позиция перед игроком
+            const direction = new THREE.Vector3(0, 0, -1);
+            direction.applyQuaternion(player.quaternion);
+            direction.multiplyScalar(10);
+            
+            const building = createDetailedBuilding(
+                player.position.x + direction.x,
+                0,
+                player.position.z + direction.z,
+                width,
+                height,
+                depth,
+                color,
+                buildingName
+            );
+            
+            showNotification(`Построено: ${buildingName}`);
+            toggleBuildMode();
+        }
+
+        function setupLighting() {
+            // Солнце
+            const sun = new THREE.DirectionalLight(0xffffff, 1.2);
+            sun.position.set(100, 100, 50);
+            sun.castShadow = true;
+            sun.shadow.mapSize.width = 1024;
+            sun.shadow.mapSize.height = 1024;
+            sun.shadow.camera.near = 0.5;
+            sun.shadow.camera.far = 500;
+            sun.shadow.camera.left = -200;
+            sun.shadow.camera.right = 200;
+            sun.shadow.camera.top = 200;
+            sun.shadow.camera.bottom = -200;
+            scene.add(sun);
+
+            // Окружающий свет
+            const ambientLight = new THREE.AmbientLight(0x404040, 0.4);
+            scene.add(ambientLight);
+
+            // Дневной свет
+            const skyLight = new THREE.HemisphereLight(0x87CEEB, 0x4682B4, 0.6);
+            scene.add(skyLight);
+        }
+
+        function createRealisticCity() {
+            // Реалистичная земля с текстурой
+            const groundGeometry = new THREE.PlaneGeometry(1000, 1000);
+            const groundMaterial = new THREE.MeshLambertMaterial({ color: 0x228B22 });
+            const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+            ground.rotation.x = -Math.PI / 2;
+            ground.receiveShadow = true;
+            scene.add(ground);
+
+            // Асфальтированные дороги
+            createRealisticRoads();
+            
+            // Современные здания
+            createModernBuildings();
+            
+            // Городская инфраструктура
+            createCityInfrastructure();
+            
+            // Парковки и автосалоны
+            createParkingAreas();
+        }
+
+        function createRealisticRoads() {
+            const asphaltMaterial = new THREE.MeshLambertMaterial({ color: 0x2F2F2F });
+            
+            // Главные магистрали (шире и реалистичнее)
+            const mainRoad1 = new THREE.Mesh(new THREE.PlaneGeometry(800, 20), asphaltMaterial);
+            mainRoad1.rotation.x = -Math.PI / 2;
+            mainRoad1.position.y = 0.02;
+            scene.add(mainRoad1);
+
+            const mainRoad2 = new THREE.Mesh(new THREE.PlaneGeometry(20, 800), asphaltMaterial);
+            mainRoad2.rotation.x = -Math.PI / 2;
+            mainRoad2.position.y = 0.02;
+            scene.add(mainRoad2);
+
+            // Перекрестки
+            const intersection = new THREE.Mesh(new THREE.PlaneGeometry(25, 25), asphaltMaterial);
+            intersection.rotation.x = -Math.PI / 2;
+            intersection.position.y = 0.02;
+            scene.add(intersection);
+
+            // Разметка дорог
+            createRoadMarkings();
+            
+            // Тротуары
+            createSidewalks();
+        }
+
+        function createRoadMarkings() {
+            const markingMaterial = new THREE.MeshBasicMaterial({ color: 0xFFFFFF });
+            
+            // Разделительные полосы
+            for (let i = -350; i <= 350; i += 30) {
+                const marking = new THREE.Mesh(new THREE.PlaneGeometry(15, 1), markingMaterial);
+                marking.rotation.x = -Math.PI / 2;
+                marking.position.set(i, 0.03, 0);
+                scene.add(marking);
+            }
+
+            // Стоп-линии на перекрестке
+            const stopLine1 = new THREE.Mesh(new THREE.PlaneGeometry(20, 2), markingMaterial);
+            stopLine1.rotation.x = -Math.PI / 2;
+            stopLine1.position.set(0, 0.03, 15);
+            scene.add(stopLine1);
+
+            const stopLine2 = new THREE.Mesh(new THREE.PlaneGeometry(2, 20), markingMaterial);
+            stopLine2.rotation.x = -Math.PI / 2;
+            stopLine2.position.set(15, 0.03, 0);
+            scene.add(stopLine2);
+        }
+
+        function createSidewalks() {
+            const sidewalkMaterial = new THREE.MeshLambertMaterial({ color: 0x696969 });
+            
+            // Тротуары вдоль дорог
+            for (let side of [-1, 1]) {
+                const sidewalk1 = new THREE.Mesh(new THREE.PlaneGeometry(800, 6), sidewalkMaterial);
+                sidewalk1.rotation.x = -Math.PI / 2;
+                sidewalk1.position.set(0, 0.01, side * 13);
+                scene.add(sidewalk1);
+
+                const sidewalk2 = new THREE.Mesh(new THREE.PlaneGeometry(6, 800), sidewalkMaterial);
+                sidewalk2.rotation.x = -Math.PI / 2;
+                sidewalk2.position.set(side * 13, 0.01, 0);
+                scene.add(sidewalk2);
+            }
+        }
+
+        function createModernBuildings() {
+            // Небоскребы в центре
+            createSkyscraper(-80, 0, -60, 25, 120, 20, 0x4169E1, 'Бизнес Центр');
+            createSkyscraper(70, 0, -80, 30, 150, 25, 0x2F4F4F, 'Офисная башня');
+            createSkyscraper(-60, 0, 90, 20, 100, 18, 0x8B4513, 'Жилой комплекс');
+            
+            // Правительственные здания
+            createGovernmentBuilding(0, 0, -120, 40, 35, 30, 0x800080, 'Мэрия');
+            createGovernmentBuilding(-120, 0, 0, 35, 25, 25, 0x000080, 'Полицейский участок');
+            
+            // Банки
+            createBank(100, 0, 50, 25, 30, 20, 0xFFD700, 'Центральный Банк');
+            
+            // Торговые центры
+            createMall(-150, 0, -100, 60, 15, 40, 0xFF6347, 'ТРЦ Галерея');
+            
+            // Жилые дома
+            for (let i = 0; i < 20; i++) {
+                const x = (Math.random() - 0.5) * 300;
+                const z = (Math.random() - 0.5) * 300;
+                if (Math.abs(x) > 30 && Math.abs(z) > 30) {
+                    createResidentialBuilding(x, 0, z);
+                }
+            }
+        }
+
+        function createSkyscraper(x, y, z, width, height, depth, color, name) {
+            const building = createDetailedBuilding(x, y, z, width, height, depth, color, name);
+            
+            // Антенна на крыше
+            const antennaGeometry = new THREE.CylinderGeometry(0.2, 0.2, 20);
+            const antennaMaterial = new THREE.MeshLambertMaterial({ color: 0x444444 });
+            const antenna = new THREE.Mesh(antennaGeometry, antennaMaterial);
+            antenna.position.set(x, height + 10, z);
+            scene.add(antenna);
+            
+            // Вертолетная площадка на крыше
+            if (height > 80) {
+                const helipadGeometry = new THREE.CircleGeometry(8);
+                const helipadMaterial = new THREE.MeshLambertMaterial({ color: 0x666666 });
+                const helipad = new THREE.Mesh(helipadGeometry, helipadMaterial);
+                helipad.rotation.x = -Math.PI / 2;
+                helipad.position.set(x, height + 0.5, z);
+                scene.add(helipad);
+            }
+        }
+
+        function createGovernmentBuilding(x, y, z, width, height, depth, color, name) {
+            const building = createDetailedBuilding(x, y, z, width, height, depth, color, name);
+            
+            // Флаг
+            const flagpoleGeometry = new THREE.CylinderGeometry(0.1, 0.1, 15);
+            const flagpoleMaterial = new THREE.MeshLambertMaterial({ color: 0xC0C0C0 });
+            const flagpole = new THREE.Mesh(flagpoleGeometry, flagpoleMaterial);
+            flagpole.position.set(x + width/2 + 5, 7.5, z);
+            scene.add(flagpole);
+            
+            const flagGeometry = new THREE.PlaneGeometry(4, 2.5);
+            const flagMaterial = new THREE.MeshLambertMaterial({ color: 0xFF0000 });
+            const flag = new THREE.Mesh(flagGeometry, flagMaterial);
+            flag.position.set(x + width/2 + 7, 12, z);
+            scene.add(flag);
+        }
+
+        function createBank(x, y, z, width, height, depth, color, name) {
+            const building = createDetailedBuilding(x, y, z, width, height, depth, color, name);
+            
+            // Колонны у входа
+            for (let i = -1; i <= 1; i++) {
+                const columnGeometry = new THREE.CylinderGeometry(1.5, 1.5, height * 0.8);
+                const columnMaterial = new THREE.MeshLambertMaterial({ color: 0xDDDDDD });
+                const column = new THREE.Mesh(columnGeometry, columnMaterial);
+                column.position.set(x + i * 8, height * 0.4, z + depth/2 + 2);
+                scene.add(column);
+            }
+        }
+
+        function createMall(x, y, z, width, height, depth, color, name) {
+            const building = createDetailedBuilding(x, y, z, width, height, depth, color, name);
+            
+            // Парковка перед ТРЦ
+            const parkingGeometry = new THREE.PlaneGeometry(width + 20, 30);
+            const parkingMaterial = new THREE.MeshLambertMaterial({ color: 0x444444 });
+            const parking = new THREE.Mesh(parkingGeometry, parkingMaterial);
+            parking.rotation.x = -Math.PI / 2;
+            parking.position.set(x, 0.01, z + depth/2 + 20);
+            scene.add(parking);
+            
+            // Разметка парковки
+            for (let i = 0; i < 8; i++) {
+                const spotGeometry = new THREE.PlaneGeometry(8, 1);
+                const spotMaterial = new THREE.MeshBasicMaterial({ color: 0xFFFFFF });
+                const spot = new THREE.Mesh(spotGeometry, spotMaterial);
+                spot.rotation.x = -Math.PI / 2;
+                spot.position.set(x - width/2 + 10 + i * 10, 0.02, z + depth/2 + 20);
+                scene.add(spot);
+            }
+        }
+
+        function createResidentialBuilding(x, z) {
+            const heights = [25, 35, 45, 60];
+            const colors = [0x8B4513, 0xA0522D, 0xCD853F, 0xD2691E];
+            const height = heights[Math.floor(Math.random() * heights.length)];
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            
+            createDetailedBuilding(x, 0, z, 12, height, 10, color, 'Жилой дом');
+        }
+
+        function createDetailedBuilding(x, y, z, width, height, depth, color, name) {
+            // Основное здание
+            const geometry = new THREE.BoxGeometry(width, height, depth);
+            const material = new THREE.MeshLambertMaterial({ color: color });
+            const building = new THREE.Mesh(geometry, material);
+            building.position.set(x, height / 2, z);
+            building.castShadow = true;
+            building.receiveShadow = true;
+            building.userData = { name: name, type: 'building' };
+            scene.add(building);
+            buildings.push(building);
+
+            // Крыша
+            const roofGeometry = new THREE.CylinderGeometry(0, Math.sqrt(width*width + depth*depth)/2, 5, 4);
+            const roofMaterial = new THREE.MeshLambertMaterial({ color: 0x8B0000 });
+            const roof = new THREE.Mesh(roofGeometry, roofMaterial);
+            roof.position.set(x, height + 2.5, z);
+            roof.rotation.y = Math.PI / 4;
+            scene.add(roof);
+
+            // Детализированные окна
+            createBuildingWindows(x, y, z, width, height, depth);
+            
+            // Вход
+            const entranceGeometry = new THREE.BoxGeometry(4, 6, 1);
+            const entranceMaterial = new THREE.MeshLambertMaterial({ color: 0x654321 });
+            const entrance = new THREE.Mesh(entranceGeometry, entranceMaterial);
+            entrance.position.set(x, 3, z + depth/2 + 0.5);
+            scene.add(entrance);
+
+            return building;
+        }
+
+        function createBuildingWindows(x, y, z, width, height, depth) {
+            const floors = Math.floor(height / 4);
+            const windowsPerFloor = Math.floor(width / 3);
+            
+            for (let floor = 1; floor <= floors; floor++) {
+                for (let window = 0; window < windowsPerFloor; window++) {
+                    // Передние окна
+                    const isLit = Math.random() > 0.4;
+                    const windowGeometry = new THREE.PlaneGeometry(2, 2.5);
+                    const windowMaterial = new THREE.MeshLambertMaterial({ 
+                        color: isLit ? 0xFFFF88 : 0x003366,
+                        transparent: true,
+                        opacity: 0.8
+                    });
+                    const windowMesh = new THREE.Mesh(windowGeometry, windowMaterial);
+                    
+                    const windowX = x - width/2 + (window + 0.5) * (width / windowsPerFloor);
+                    const windowY = floor * 4;
+                    const windowZ = z + depth/2 + 0.1;
+                    
+                    windowMesh.position.set(windowX, windowY, windowZ);
+                    scene.add(windowMesh);
+                }
+            }
+        }
+
+        function createCityInfrastructure() {
+            // Светофоры
+            createTrafficLights();
+            
+            // Уличные фонари
+            createStreetLights();
+            
+            // Автобусные остановки
+            createBusStops();
+            
+            // Парки и деревья
+            createParksAndTrees();
+        }
+
+        function createParkingAreas() {
+            // Большая парковка возле торгового центра
+            const mainParkingGeometry = new THREE.PlaneGeometry(100, 60);
+            const parkingMaterial = new THREE.MeshLambertMaterial({ color: 0x444444 });
+            const mainParking = new THREE.Mesh(mainParkingGeometry, parkingMaterial);
+            mainParking.rotation.x = -Math.PI / 2;
+            mainParking.position.set(50, 0.01, 150);
+            scene.add(mainParking);
+            
+            // Разметка парковочных мест
+            const markingMaterial = new THREE.MeshBasicMaterial({ color: 0xFFFFFF });
+            for (let row = 0; row < 6; row++) {
+                for (let col = 0; col < 10; col++) {
+                    const spotGeometry = new THREE.PlaneGeometry(8, 1);
+                    const spot = new THREE.Mesh(spotGeometry, markingMaterial);
+                    spot.rotation.x = -Math.PI / 2;
+                    spot.position.set(10 + col * 9, 0.02, 130 + row * 10);
+                    scene.add(spot);
+                }
+            }
+            
+            // Автосалон
+            const showroomGeometry = new THREE.BoxGeometry(40, 8, 30);
+            const showroomMaterial = new THREE.MeshLambertMaterial({ color: 0x4169E1 });
+            const showroom = new THREE.Mesh(showroomGeometry, showroomMaterial);
+            showroom.position.set(-200, 4, -150);
+            showroom.castShadow = true;
+            showroom.userData = { name: 'Автосалон Premium Cars', type: 'building' };
+            scene.add(showroom);
+            buildings.push(showroom);
+        }
+
+        function createTrafficLights() {
+            const positions = [
+                [15, 0, 15], [-15, 0, -15], [15, 0, -15], [-15, 0, 15]
+            ];
+            
+            positions.forEach(pos => {
+                // Столб светофора
+                const poleGeometry = new THREE.CylinderGeometry(0.3, 0.3, 6);
+                const poleMaterial = new THREE.MeshLambertMaterial({ color: 0x444444 });
+                const pole = new THREE.Mesh(poleGeometry, poleMaterial);
+                pole.position.set(pos[0], 3, pos[2]);
+                scene.add(pole);
+                
+                // Светофорные секции
+                const colors = [0xFF0000, 0xFFFF00, 0x00FF00];
+                colors.forEach((color, i) => {
+                    const lightGeometry = new THREE.SphereGeometry(0.3);
+                    const lightMaterial = new THREE.MeshLambertMaterial({ 
+                        color: color,
+                        transparent: true,
+                        opacity: 0.8
+                    });
+                    const light = new THREE.Mesh(lightGeometry, lightMaterial);
+                    light.position.set(pos[0], 5 - i * 0.8, pos[2]);
+                    scene.add(light);
+                });
+            });
+        }
+
+        function createStreetLights() {
+            for (let i = -200; i <= 200; i += 50) {
+                for (let j = -200; j <= 200; j += 50) {
+                    if (Math.abs(i) > 25 || Math.abs(j) > 25) {
+                        // Столб
+                        const poleGeometry = new THREE.CylinderGeometry(0.2, 0.3, 12);
+                        const poleMaterial = new THREE.MeshLambertMaterial({ color: 0x333333 });
+                        const pole = new THREE.Mesh(poleGeometry, poleMaterial);
+                        pole.position.set(i, 6, j);
+                        scene.add(pole);
+                        
+                        // Фонарь
+                        const lampGeometry = new THREE.SphereGeometry(1);
+                        const lampMaterial = new THREE.MeshLambertMaterial({ color: 0xFFFFAA });
+                        const lamp = new THREE.Mesh(lampGeometry, lampMaterial);
+                        lamp.position.set(i, 11, j);
+                        scene.add(lamp);
+                        
+                        // Освещение
+                        const pointLight = new THREE.PointLight(0xFFFFAA, 0.8, 30);
+                        pointLight.position.set(i, 11, j);
+                        scene.add(pointLight);
+                    }
+                }
+            }
+        }
+
+        function createBusStops() {
+            const stops = [
+                [40, 0, 15], [-40, 0, -15], [15, 0, 40], [-15, 0, -40]
+            ];
+            
+            stops.forEach(pos => {
+                // Навес
+                const shelterGeometry = new THREE.BoxGeometry(8, 0.5, 4);
+                const shelterMaterial = new THREE.MeshLambertMaterial({ color: 0x666666 });
+                const shelter = new THREE.Mesh(shelterGeometry, shelterMaterial);
+                shelter.position.set(pos[0], 4, pos[2]);
+                scene.add(shelter);
+                
+                // Стойки
+                for (let i = -1; i <= 1; i += 2) {
+                    const postGeometry = new THREE.CylinderGeometry(0.1, 0.1, 4);
+                    const postMaterial = new THREE.MeshLambertMaterial({ color: 0x444444 });
+                    const post = new THREE.Mesh(postGeometry, postMaterial);
+                    post.position.set(pos[0] + i * 3, 2, pos[2]);
+                    scene.add(post);
+                }
+                
+                // Скамейка
+                const benchGeometry = new THREE.BoxGeometry(6, 0.3, 1.5);
+                const benchMaterial = new THREE.MeshLambertMaterial({ color: 0x8B4513 });
+                const bench = new THREE.Mesh(benchGeometry, benchMaterial);
+                bench.position.set(pos[0], 1, pos[2]);
+                scene.add(bench);
+            });
+        }
+
+        function createParksAndTrees() {
+            // Центральный парк
+            const parkGeometry = new THREE.CircleGeometry(30);
+            const parkMaterial = new THREE.MeshLambertMaterial({ color: 0x228B22 });
+            const park = new THREE.Mesh(parkGeometry, parkMaterial);
+            park.rotation.x = -Math.PI / 2;
+            park.position.set(-100, 0.01, 100);
+            scene.add(park);
+            
+            // Деревья в парке
+            for (let i = 0; i < 25; i++) {
+                const angle = (i / 25) * Math.PI * 2;
+                const radius = 10 + Math.random() * 15;
+                const x = -100 + Math.cos(angle) * radius;
+                const z = 100 + Math.sin(angle) * radius;
+                createDetailedTree(x, z);
+            }
+            
+            // Деревья по городу
+            for (let i = 0; i < 50; i++) {
+                const x = (Math.random() - 0.5) * 400;
+                const z = (Math.random() - 0.5) * 400;
+                if (Math.abs(x) > 25 && Math.abs(z) > 25) {
+                    createDetailedTree(x, z);
+                }
+            }
+        }
+
+        function createDetailedTree(x, z) {
+            // Ствол
+            const trunkGeometry = new THREE.CylinderGeometry(1, 2, 12);
+            const trunkMaterial = new THREE.MeshLambertMaterial({ color: 0x8B4513 });
+            const trunk = new THREE.Mesh(trunkGeometry, trunkMaterial);
+            trunk.position.set(x, 6, z);
+            trunk.castShadow = true;
+            scene.add(trunk);
+            
+            // Крона (несколько сфер для реализма)
+            for (let i = 0; i < 3; i++) {
+                const crownGeometry = new THREE.SphereGeometry(4 + Math.random() * 2);
+                const crownMaterial = new THREE.MeshLambertMaterial({ 
+                    color: 0x228B22 + Math.random() * 0x002200
+                });
+                const crown = new THREE.Mesh(crownGeometry, crownMaterial);
+                crown.position.set(
+                    x + (Math.random() - 0.5) * 3,
+                    12 + i * 2 + Math.random() * 2,
+                    z + (Math.random() - 0.5) * 3
+                );
+                crown.castShadow = true;
+                scene.add(crown);
+            }
+        }
+
+        function spawnRealisticVehicles() {
+            const vehicleModels = [
+                { name: 'Lamborghini Aventador', color: 0x000000, type: 'supercar' },
+                { name: 'BMW M5', color: 0x1E90FF, type: 'sedan' },
+                { name: 'Mercedes G-Class', color: 0x2F4F4F, type: 'suv' },
+                { name: 'Ferrari 488', color: 0xFF0000, type: 'supercar' },
+                { name: 'Audi RS6', color: 0x4B0082, type: 'wagon' },
+                { name: 'Porsche 911', color: 0xFFD700, type: 'sports' },
+                { name: 'Range Rover', color: 0x006400, type: 'suv' },
+                { name: 'McLaren 720S', color: 0xFF4500, type: 'supercar' }
+            ];
+
+            // Спавн машин в разных местах города
+            const spawnPoints = [
+                [50, 0, 50], [-60, 0, 40], [80, 0, -70], [-90, 0, -30],
+                [30, 0, -80], [-40, 0, 90], [120, 0, 20], [-100, 0, -90],
+                [60, 0, 100], [-80, 0, -60], [40, 0, -40], [-30, 0, 70]
+            ];
+
+            spawnPoints.forEach((point, index) => {
+                const model = vehicleModels[index % vehicleModels.length];
+                createRealisticVehicle(point[0], point[1], point[2], model);
+            });
+        }
+
+        function createRealisticVehicle(x, y, z, model) {
+            const vehicle = new THREE.Group();
+            
+            // Корпус автомобиля (более детализированный)
+            let bodyGeometry, bodyDimensions;
+            
+            switch(model.type) {
+                case 'supercar':
+                    bodyGeometry = new THREE.BoxGeometry(5, 1.2, 2.2);
+                    bodyDimensions = { length: 5, height: 1.2, width: 2.2 };
+                    break;
+                case 'suv':
+                    bodyGeometry = new THREE.BoxGeometry(5.5, 2, 2.5);
+                    bodyDimensions = { length: 5.5, height: 2, width: 2.5 };
+                    break;
+                case 'sedan':
+                    bodyGeometry = new THREE.BoxGeometry(5.2, 1.5, 2.3);
+                    bodyDimensions = { length: 5.2, height: 1.5, width: 2.3 };
+                    break;
+                default:
+                    bodyGeometry = new THREE.BoxGeometry(5, 1.4, 2.2);
+                    bodyDimensions = { length: 5, height: 1.4, width: 2.2 };
+            }
+            
+            const bodyMaterial = new THREE.MeshPhongMaterial({ 
+                color: model.color,
+                shininess: 100,
+                transparent: true,
+                opacity: 0.9
+            });
+            const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+            body.position.y = bodyDimensions.height / 2 + 0.3;
+            body.castShadow = true;
+            vehicle.add(body);
+
+            // Колеса
+            const wheelGeometry = new THREE.CylinderGeometry(0.4, 0.4, 0.3);
+            const wheelMaterial = new THREE.MeshLambertMaterial({ color: 0x111111 });
+            
+            const wheelPositions = [
+                [-bodyDimensions.length/2.5, 0.4, -bodyDimensions.width/2.2],
+                [bodyDimensions.length/2.5, 0.4, -bodyDimensions.width/2.2],
+                [-bodyDimensions.length/2.5, 0.4, bodyDimensions.width/2.2],
+                [bodyDimensions.length/2.5, 0.4, bodyDimensions.width/2.2]
+            ];
+            
+            wheelPositions.forEach(pos => {
+                const wheel = new THREE.Mesh(wheelGeometry, wheelMaterial);
+                wheel.position.set(pos[0], pos[1], pos[2]);
+                wheel.rotation.z = Math.PI / 2;
+                wheel.castShadow = true;
+                vehicle.add(wheel);
+                
+                // Диски
+                const rimGeometry = new THREE.CylinderGeometry(0.25, 0.25, 0.1);
+                const rimMaterial = new THREE.MeshPhongMaterial({ color: 0xC0C0C0 });
+                const rim = new THREE.Mesh(rimGeometry, rimMaterial);
+                rim.position.set(pos[0], pos[1], pos[2]);
+                rim.rotation.z = Math.PI / 2;
+                vehicle.add(rim);
+            });
+
+            // Окна
+            const windowMaterial = new THREE.MeshLambertMaterial({ 
+                color: 0x87CEEB,
+                transparent: true,
+                opacity: 0.3
+            });
+            
+            // Лобовое стекло
+            const windshieldGeometry = new THREE.PlaneGeometry(bodyDimensions.width * 0.8, bodyDimensions.height * 0.6);
+            const windshield = new THREE.Mesh(windshieldGeometry, windowMaterial);
+            windshield.position.set(bodyDimensions.length/3, bodyDimensions.height/2 + 0.5, 0);
+            windshield.rotation.x = -0.2;
+            vehicle.add(windshield);
+
+            // Боковые стекла
+            const sideWindowGeometry = new THREE.PlaneGeometry(bodyDimensions.length * 0.4, bodyDimensions.height * 0.5);
+            [-1, 1].forEach(side => {
+                const sideWindow = new THREE.Mesh(sideWindowGeometry, windowMaterial);
+                sideWindow.position.set(0, bodyDimensions.height/2 + 0.4, side * bodyDimensions.width/2.1);
+                sideWindow.rotation.y = side * Math.PI / 2;
+                vehicle.add(sideWindow);
+            });
+
+            // Фары
+            const headlightGeometry = new THREE.SphereGeometry(0.2);
+            const headlightMaterial = new THREE.MeshLambertMaterial({ color: 0xFFFFAA });
+            [-0.8, 0.8].forEach(side => {
+                const headlight = new THREE.Mesh(headlightGeometry, headlightMaterial);
+                headlight.position.set(bodyDimensions.length/2 + 0.1, bodyDimensions.height/2, side);
+                vehicle.add(headlight);
+            });
+
+            // Задние фонари
+            const taillightGeometry = new THREE.SphereGeometry(0.15);
+            const taillightMaterial = new THREE.MeshLambertMaterial({ color: 0xFF0000 });
+            [-0.8, 0.8].forEach(side => {
+                const taillight = new THREE.Mesh(taillightGeometry, taillightMaterial);
+                taillight.position.set(-bodyDimensions.length/2 - 0.1, bodyDimensions.height/2, side);
+                vehicle.add(taillight);
+            });
+
+            vehicle.position.set(x, y, z);
+            vehicle.rotation.y = Math.random() * Math.PI * 2;
+            vehicle.userData = { 
+                name: model.name, 
+                type: 'vehicle',
+                maxSpeed: model.type === 'supercar' ? 350 : model.type === 'sports' ? 280 : 200,
+                acceleration: model.type === 'supercar' ? 2.9 : 4.5
+            };
+            
+            scene.add(vehicle);
+            vehicles.push(vehicle);
+        }
+
+        function createPlayer() {
+            player = new THREE.Group();
+            
+            // Тело (более реалистичное)
+            const bodyGeometry = new THREE.CylinderGeometry(0.6, 0.6, 2.5);
+            const bodyMaterial = new THREE.MeshLambertMaterial({ color: 0x1E90FF });
+            const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+            body.position.y = 1.8;
+            body.castShadow = true;
+            player.add(body);
+            
+            // Голова
+            const headGeometry = new THREE.SphereGeometry(0.5);
+            const headMaterial = new THREE.MeshLambertMaterial({ color: 0xFFDBAE });
+            const head = new THREE.Mesh(headGeometry, headMaterial);
+            head.position.y = 3.5;
+            head.castShadow = true;
+            player.add(head);
+            
+            // Волосы
+            const hairGeometry = new THREE.SphereGeometry(0.52);
+            const hairMaterial = new THREE.MeshLambertMaterial({ color: 0x8B4513 });
+            const hair = new THREE.Mesh(hairGeometry, hairMaterial);
+            hair.position.y = 3.7;
+            hair.scale.y = 0.8;
+            player.add(hair);
+            
+            // Руки
+            const armGeometry = new THREE.CylinderGeometry(0.2, 0.2, 1.5);
+            const armMaterial = new THREE.MeshLambertMaterial({ color: 0xFFDBAE });
+            
+            [-1.2, 1.2].forEach(side => {
+                const arm = new THREE.Mesh(armGeometry, armMaterial);
+                arm.position.set(side, 2.5, 0);
+                arm.rotation.z = side * 0.2;
+                arm.castShadow = true;
+                player.add(arm);
+            });
+            
+            // Ноги
+            const legGeometry = new THREE.CylinderGeometry(0.3, 0.3, 1.8);
+            const legMaterial = new THREE.MeshLambertMaterial({ color: 0x000080 });
+            
+            [-0.4, 0.4].forEach(side => {
+                const leg = new THREE.Mesh(legGeometry, legMaterial);
+                leg.position.set(side, 0.9, 0);
+                leg.castShadow = true;
+                player.add(leg);
+            });
+            
+            // Обувь
+            const shoeGeometry = new THREE.BoxGeometry(0.6, 0.3, 1.2);
+            const shoeMaterial = new THREE.MeshLambertMaterial({ color: 0x000000 });
+            
+            [-0.4, 0.4].forEach(side => {
+                const shoe = new THREE.Mesh(shoeGeometry, shoeMaterial);
+                shoe.position.set(side, 0.15, 0.3);
+                shoe.castShadow = true;
+                player.add(shoe);
+            });
+            
+            player.position.set(0, 0, 0);
+            scene.add(player);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            updatePlayerMovement();
+            updateCamera();
+            updateMinimap();
+            updateSpeedometer();
+            animateVehicles();
+            
+            renderer.render(scene, camera);
+        }
+
+        function updatePlayerMovement() {
+            if (gameData.inVehicle && currentVehicle) {
+                updateVehicleMovement();
+                return;
+            }
+            
+            const speed = isRunning ? 0.8 : 0.4;
+            const rotationSpeed = 0.04;
+            
+            let moved = false;
+            
+            if (moveForwardPressed) {
+                const direction = new THREE.Vector3(0, 0, -speed);
+                direction.applyQuaternion(player.quaternion);
+                player.position.add(direction);
+                moved = true;
+            }
+            if (moveBackwardPressed) {
+                const direction = new THREE.Vector3(0, 0, speed * 0.7);
+                direction.applyQuaternion(player.quaternion);
+                player.position.add(direction);
+                moved = true;
+            }
+            if (turnLeftPressed) {
+                player.rotation.y += rotationSpeed;
+            }
+            if (turnRightPressed) {
+                player.rotation.y -= rotationSpeed;
+            }
+
+            // Обновление скорости для спидометра
+            if (moved) {
+                gameData.currentSpeed = Math.min(gameData.currentSpeed + 2, isRunning ? 25 : 12);
+            } else {
+                gameData.currentSpeed = Math.max(gameData.currentSpeed - 3, 0);
+            }
+
+            // Границы карты
+            player.position.x = Math.max(-400, Math.min(400, player.position.x));
+            player.position.z = Math.max(-400, Math.min(400, player.position.z));
+
+            // Анимация ходьбы
+            if (moved && player.children.length >= 6) {
+                const time = Date.now() * 0.01;
+                if (player.children[4]) player.children[4].rotation.x = Math.sin(time) * 0.5; // Левая нога
+                if (player.children[5]) player.children[5].rotation.x = Math.sin(time + Math.PI) * 0.5; // Правая нога
+                if (player.children[2]) player.children[2].rotation.x = Math.sin(time + Math.PI) * 0.3; // Левая рука
+                if (player.children[3]) player.children[3].rotation.x = Math.sin(time) * 0.3; // Правая рука
+            }
+        }
+
+        function updateVehicleMovement() {
+            if (!currentVehicle) return;
+            
+            const maxSpeed = currentVehicle.userData.maxSpeed / 10;
+            const acceleration = 0.5;
+            const deceleration = 0.8;
+            const turnSpeed = 0.03;
+            
+            let accelerating = false;
+            
+            if (moveForwardPressed) {
+                gameData.currentSpeed = Math.min(gameData.currentSpeed + acceleration, maxSpeed);
+                accelerating = true;
+            } else if (moveBackwardPressed) {
+                gameData.currentSpeed = Math.max(gameData.currentSpeed - acceleration, -maxSpeed * 0.5);
+                accelerating = true;
+            } else {
+                if (gameData.currentSpeed > 0) {
+                    gameData.currentSpeed = Math.max(gameData.currentSpeed - deceleration, 0);
+                } else if (gameData.currentSpeed < 0) {
+                    gameData.currentSpeed = Math.min(gameData.currentSpeed + deceleration, 0);
+                }
+            }
+            
+            if (Math.abs(gameData.currentSpeed) > 0.1) {
+                if (turnLeftPressed) {
+                    currentVehicle.rotation.y += turnSpeed * (gameData.currentSpeed / maxSpeed);
+                }
+                if (turnRightPressed) {
+                    currentVehicle.rotation.y -= turnSpeed * (gameData.currentSpeed / maxSpeed);
+                }
+            }
+            
+            const direction = new THREE.Vector3(0, 0, -gameData.currentSpeed * 0.1);
+            direction.applyQuaternion(currentVehicle.quaternion);
+            currentVehicle.position.add(direction);
+            
+            player.position.copy(currentVehicle.position);
+            player.position.y += 0.5;
+            player.rotation.y = currentVehicle.rotation.y;
+            
+            currentVehicle.position.x = Math.max(-390, Math.min(390, currentVehicle.position.x));
+            currentVehicle.position.z = Math.max(-390, Math.min(390, currentVehicle.position.z));
+        }
+
+        function animateVehicles() {
+            vehicles.forEach(vehicle => {
+                if (vehicle !== currentVehicle && Math.random() > 0.995) {
+                    const direction = new THREE.Vector3(
+                        (Math.random() - 0.5) * 0.2,
+                        0,
+                        (Math.random() - 0.5) * 0.2
+                    );
+                    vehicle.position.add(direction);
+                    
+                    if (direction.length() > 0) {
+                        const angle = Math.atan2(direction.x, direction.z);
+                        vehicle.rotation.y = angle;
+                    }
+                    
+                    vehicle.position.x = Math.max(-380, Math.min(380, vehicle.position.x));
+                    vehicle.position.z = Math.max(-380, Math.min(380, vehicle.position.z));
+                }
+            });
+        }
+
+        function updateCamera() {
+            let target, offset;
+            
+            if (gameData.inVehicle && currentVehicle) {
+                target = currentVehicle.position;
+                offset = new THREE.Vector3(0, 15, 30);
+                offset.applyQuaternion(currentVehicle.quaternion);
+            } else {
+                target = player.position;
+                offset = new THREE.Vector3(0, 12, 25);
+                offset.applyQuaternion(player.quaternion);
+            }
+            
+            camera.position.copy(target);
+            camera.position.add(offset);
+            
+            const lookAt = target.clone();
+            lookAt.y += 3;
+            camera.lookAt(lookAt);
+        }
+
+        function updateMinimap() {
+            const canvas = document.getElementById('minimapCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            ctx.fillStyle = '#2F4F2F';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.strokeStyle = '#444';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(canvas.width/2, 0);
+            ctx.lineTo(canvas.width/2, canvas.height);
+            ctx.moveTo(0, canvas.height/2);
+            ctx.lineTo(canvas.width, canvas.height/2);
+            ctx.stroke();
+            
+            ctx.fillStyle = '#666';
+            buildings.forEach(building => {
+                const x = ((building.position.x + 400) / 800) * canvas.width;
+                const z = ((building.position.z + 400) / 800) * canvas.height;
+                if (x >= 0 && x <= canvas.width && z >= 0 && z <= canvas.height) {
+                    ctx.fillRect(x - 2, z - 2, 4, 4);
+                }
+            });
+            
+            ctx.fillStyle = '#FFD700';
+            vehicles.forEach(vehicle => {
+                const x = ((vehicle.position.x + 400) / 800) * canvas.width;
+                const z = ((vehicle.position.z + 400) / 800) * canvas.height;
+                if (x >= 0 && x <= canvas.width && z >= 0 && z <= canvas.height) {
+                    ctx.fillRect(x - 1, z - 1, 2, 2);
+                }
+            });
+            
+            const playerPos = gameData.inVehicle && currentVehicle ? currentVehicle.position : player.position;
+            const playerX = ((playerPos.x + 400) / 800) * canvas.width;
+            const playerZ = ((playerPos.z + 400) / 800) * canvas.height;
+            
+            ctx.fillStyle = '#00FF00';
+            ctx.strokeStyle = '#FFFFFF';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(playerX, playerZ, 3, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+            
+            const rotation = gameData.inVehicle && currentVehicle ? currentVehicle.rotation.y : player.rotation.y;
+            const dirX = playerX + Math.sin(rotation) * 8;
+            const dirZ = playerZ - Math.cos(rotation) * 8;
+            
+            ctx.strokeStyle = '#00FF00';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(playerX, playerZ);
+            ctx.lineTo(dirX, dirZ);
+            ctx.stroke();
+        }
+
+        function updateSpeedometer() {
+            const speedText = document.getElementById('speedText');
+            const displaySpeed = Math.round(gameData.currentSpeed * (gameData.inVehicle ? 10 : 3.6));
+            speedText.textContent = displaySpeed;
+            
+            if (displaySpeed > 200) {
+                speedText.style.color = '#FF0000';
+            } else if (displaySpeed > 100) {
+                speedText.style.color = '#FF8C00';
+            } else if (displaySpeed > 50) {
+                speedText.style.color = '#FFD700';
+            } else {
+                speedText.style.color = '#00FF41';
+            }
+        }
+
+        function updateStats() {
+            document.getElementById('money').textContent = gameData.money.toLocaleString();
+            document.getElementById('level').textContent = gameData.level;
+            document.getElementById('playerName').textContent = gameData.playerName;
+            document.getElementById('house').textContent = gameData.house;
+            
+            document.getElementById('healthFill').style.width = gameData.health + '%';
+            document.getElementById('armorFill').style.width = gameData.armor + '%';
+        }
+
+        function toggleActionMenu() {
+            const menu = document.getElementById('actionMenu');
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function runToggle() {
+            if (!gameData.inVehicle) {
+                isRunning = !isRunning;
+                showNotification(isRunning ? 'Режим бега включен' : 'Режим ходьбы');
+            }
+        }
+
+        function interactAction() {
+            checkInteractions();
+        }
+
+        function enterVehicle() {
+            if (gameData.inVehicle) {
+                gameData.inVehicle = false;
+                player.visible = true;
+                currentVehicle = null;
+                gameData.currentSpeed = 0;
+                showNotification('Вы вышли из транспорта');
+                document.getElementById('carInfo').style.display = 'none';
+            } else {
+                let nearestVehicle = null;
+                let minDistance = 10;
+                
+                vehicles.forEach(vehicle => {
+                    const distance = player.position.distanceTo(vehicle.position);
+                    if (distance < minDistance) {
+                        nearestVehicle = vehicle;
+                        minDistance = distance;
+                    }
+                });
+                
+                if (nearestVehicle) {
+                    gameData.inVehicle = true;
+                    currentVehicle = nearestVehicle;
+                    player.visible = false;
+                    gameData.currentSpeed = 0;
+                    showNotification(`Вы сели в ${nearestVehicle.userData.name}`);
+                    
+                    document.getElementById('carName').textContent = nearestVehicle.userData.name;
+                    document.getElementById('carSpecs').innerHTML = `
+                        Максимальная скорость: ${nearestVehicle.userData.maxSpeed} км/ч<br>
+                        Ускорение: ${nearestVehicle.userData.acceleration} сек до 100 км/ч<br>
+                        Топливо: ${85 + Math.round(Math.random() * 15)}/100 л
+                    `;
+                    document.getElementById('carInfo').style.display = 'block';
+                } else {
+                    showNotification('Рядом нет транспорта');
+                }
+            }
+        }
+
+        function checkInteractions() {
+            buildings.forEach(building => {
+                const distance = player.position.distanceTo(building.position);
+                if (distance < 15) {
+                    showNotification(`Взаимодействие: ${building.userData.name}`);
+                    handleBuildingInteraction(building.userData.name);
+                }
+            });
+        }
+
+        function handleBuildingInteraction(buildingName) {
+            switch(buildingName) {
+                case 'Центральный Банк':
+                    showNotification('Банковские услуги: депозиты, кредиты, обмен валют');
+                    break;
+                case 'Полицейский участок':
+                    showNotification('Подача заявлений, получение лицензий');
+                    break;
+                case 'Мэрия':
+                    showNotification('Государственные услуги и документы');
+                    break;
+                case 'ТРЦ Галерея':
+                    showNotification('Торговый центр: магазины, кафе, развлечения');
+                    break;
+                case 'Автосалон Premium Cars':
+                    showNotification('Продажа элитных автомобилей и мотоциклов');
+                    break;
+                default:
+                    showNotification(`Вы находитесь рядом с: ${buildingName}`);
+            }
+        }
+
+        function startChatSimulation() {
+            const chatMessages = [
+                { name: '[Admin] Консоль Сервера', message: 'Всем привет приятной вам игры:) на копии BLACK RUSSIA Проект называется Oink RP Games', color: '#4CAF50' },
+                { name: '[Gold VIP] Sergey_Brin[244]', message: 'продаю ламборгини 15кк', color: '#FFD700' },
+                { name: '[VIP] Anna_Smirnova[156]', message: 'ищу работу таксиста', color: '#2196F3' },
+                { name: '[Newbie] Ivan_Petrov[892]', message: 'как заработать деньги?', color: '#9E9E9E' },
+                { name: '[Gold VIP] Alex_Morgan[33]', message: 'покупаю дом в рублевке до 50кк', color: '#FFD700' },
+                { name: '[Admin] Консоль Сервера', message: 'рестарт сервера через 30 минут', color: '#FF5722' },
+                { name: '[Silver VIP] Dmitry_Volkov[567]', message: 'кто хочет в гонки?', color: '#C0C0C0' }
+            ];
+
+            let messageIndex = 0;
+            setInterval(() => {
+                if (messageIndex < chatMessages.length) {
+                    addChatMessage(chatMessages[messageIndex]);
+                    messageIndex++;
+                } else {
+                    const randomNames = ['Viktor_Petrov', 'Maria_Ivanova', 'Alex_Kozlov', 'Yana_Smirnova'];
+                    const randomMessages = ['продаю машину', 'ищу работу', 'кто в гонки?', 'куплю дом', 'где банк?'];
+                    const randomVips = ['[Gold VIP]', '[Silver VIP]', '[VIP]', '[Игрок]'];
+                    
+                    const randomMessage = {
+                        name: `${randomVips[Math.floor(Math.random() * randomVips.length)]} ${randomNames[Math.floor(Math.random() * randomNames.length)]}[${Math.floor(Math.random() * 1000)}]`,
+                        message: randomMessages[Math.floor(Math.random() * randomMessages.length)],
+                        color: '#9E9E9E'
+                    };
+                    addChatMessage(randomMessage);
+                }
+            }, 3000 + Math.random() * 2000);
+        }
+
+        function addChatMessage(msgData) {
+            const chatMessages = document.getElementById('chatMessages');
+            const msgElement = document.createElement('div');
+            msgElement.className = 'chat-message';
+            msgElement.style.color = msgData.color;
+            msgElement.textContent = `${msgData.name}: ${msgData.message}`;
+            
+            chatMessages.appendChild(msgElement);
+            
+            while (chatMessages.children.length > 10) {
+                chatMessages.removeChild(chatMessages.firstChild);
+            }
+            
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function sendMessage(event) {
+            if (event.key === 'Enter') {
+                const message = event.target.value.trim();
+                if (message) {
+                    addChatMessage({
+                        name: `[Gold VIP] ${gameData.playerName}[${gameData.level}]`,
+                        message: message,
+                        color: '#FFD700'
+                    });
+                    event.target.value = '';
+                }
+            }
+        }
+
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.classList.add('show');
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 4000);
+        }
+
+        // Обработка изменения размера окна
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            
+            // Обновляем размер мини-карты
+            const minimapCanvas = document.getElementById('minimapCanvas');
+            const minimapContainer = document.querySelector('.minimap-container');
+            minimapCanvas.width = minimapContainer.clientWidth;
+            minimapCanvas.height = minimapContainer.clientHeight - 24; // Вычитаем высоту заголовка
+        });
+
+        // Запуск игры
+        initGame();
+    </script>
+</body>
+</html>

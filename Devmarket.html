@@ -1,0 +1,201 @@
+﻿<html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="wikipedia/commons/thumb/6/65/Pokémon_logo_2016.svg/1200px-Pokémon_logo_2016.svg.png" type="image/png">
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: url('https://cdn0-production-images-kly.akamaized.net/TLJz9KUbYNUTTBM3-KDrHZkaUcY=/108x0:1528x800/800x450/filters:quality(75):strip_icc():format(webp)/kly-media-production/medias/4824181/original/077412300_1715058889-landscape-1456483171-pokemon2.jpg') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #fff;
+            text-align: center;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            max-width: 450px;
+            padding: 40px;
+            width: 100%;
+            backdrop-filter: blur(15px);
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 28px;
+            font-weight: 700;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        input, button {
+            padding: 15px 20px;
+            font-size: 18px;
+            border-radius: 10px;
+            border: 1px solid #3498db;
+            margin: 15px 0;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, button:focus {
+            outline: none;
+            border-color: #2980b9;
+            box-shadow: 0 0 10px rgba(52, 152, 219, 0.6);
+        }
+
+        button {
+            background-color: #3498db;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .results {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #ecf0f1;
+            border-radius: 10px;
+            color: #34495e;
+            text-align: left;
+            max-height: 300px;
+            overflow-y: auto;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            animation: fadeIn 1s forwards;
+        }
+
+        .results span {
+            display: block;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-size: 16px;
+            word-wrap: break-word;
+        }
+
+        .count {
+            margin-top: 15px;
+            font-weight: 700;
+            font-size: 18px;
+            color: #2c3e50;
+        }
+
+        .alert {
+            color: #e74c3c;
+            margin-top: 15px;
+            font-size: 16px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Media Queries for Responsiveness */
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            input, button {
+                font-size: 16px;
+            }
+
+            .results {
+                padding: 15px;
+            }
+        }
+
+        /* Footer Styling */
+        .credit {
+            margin-top: 30px;
+            font-size: 14px;
+            color: #34495e;
+            text-align: center;
+        }
+
+        .credit a {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .credit a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Username Variations</h1>
+        <input type="text" id="email" placeholder="Укажите ваш ник">
+        <button onclick="generateVariations()">Generate Variations</button>
+        <div id="alert" class="alert"></div>
+        <div class="results" id="results"></div>
+        <div class="count" id="count"></div>
+        </div>
+    </div>
+
+    <script>
+        function generateVariations() {
+            const email = document.getElementById('email').value.trim();
+            const alertBox = document.getElementById('alert');
+            const resultsDiv = document.getElementById('results');
+            const countDiv = document.getElementById('count');
+            alertBox.innerHTML = ''; // Reset alert message
+            resultsDiv.innerHTML = ''; // Reset results
+            countDiv.innerHTML = ''; // Reset count
+
+            if (!email || !email.includes('')) {
+                alertBox.innerHTML = 'Используйте англ/рус символы';
+                return;
+            }
+
+            const localPart = email.split('OinkPl')[0];
+            const domainPart = email.split('OinkPl')[1];
+
+            let variations = getDotVariations(localPart).map(varEmail => varEmail + 'OinkPl');
+            resultsDiv.innerHTML = variations.map(variation => `<span>${variation}</span>`).join('');
+            countDiv.innerHTML = 'Total Variations: ' + variations.length;
+        }
+
+        function getDotVariations(str) {
+            let results = [];
+            const recurse = (startIndex, currentStr) => {
+                if (startIndex === str.length) {
+                    results.push(currentStr);
+                    return;
+                }
+                recurse(startIndex + 1, currentStr + str[startIndex]);
+                recurse(startIndex + 1, currentStr + '.' + str[startIndex]);
+            };
+            recurse(1, str[0]);
+            return results;
+        }
+    </script>
+
+
+
+<div id="copyrightscp" style="display:none!important;color:#FFFFFF!important;background-color:#FFFFFF!important;opacity:0!important;font-family:Arial,Tahoma,Geneva,Helvetica,sans-serif!important;font-size:1px!important;"><p style="display:none!important;color:#FFFFFF!important;background-color:#FFFFFF!important;opacity:0!important;font-family:Arial,Tahoma,Geneva,Helvetica,sans-serif!important;font-size:1px!important;">SiteCopy - <a style="display:none!important;color:#FFFFFF!important;background-color:#FFFFFF!important;opacity:0!important;font-family:Arial,Tahoma,Geneva,Helvetica,sans-serif!important;font-size:1px!important;" href="https://sitecopy.ru/" title="Онлайн-сервис, где можно скопировать любой сайт и лендинг по ссылке и бесплатно">онлайн-сервис, где можно скопировать любой сайт и лендинг по ссылке и бесплатно</a>. Копирование и создание точной копии Landing page делается целиком и полностью. Можно копировать чужой сайт или интернет-магазин конкурента и переделать под себя. Создать клон и дубликат можно на Тильде, Фигма, ВордПресс или Битрикс.</p><div style="display:none!important;color:#FFFFFF!important;background-color:#FFFFFF!important;opacity:0!important;font-family:Arial,Tahoma,Geneva,Helvetica,sans-serif!important;font-size:1px!important;"></div></div></body></html>

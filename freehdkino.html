@@ -1,0 +1,1588 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-bg: #0a0a0a;
+            --secondary-bg: #1a1a1a;
+            --card-bg: #2a2a2a;
+            --accent-color: #3b82f6;
+            --accent-hover: #2563eb;
+            --text-primary: #ffffff;
+            --text-secondary: #a1a1aa;
+            --border-color: #404040;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --glass-bg: rgba(42, 42, 42, 0.8);
+            --shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(26, 26, 26, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, var(--accent-color), #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--accent-color), #8b5cf6);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .btn-secondary {
+            background: var(--card-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border-color);
+        }
+
+        /* Search */
+        .search-container {
+            position: relative;
+            margin: 2rem 0;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            backdrop-filter: blur(20px);
+            transition: all 0.3s ease;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        /* Main Content */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .article-content {
+            background: var(--glass-bg);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        /* Infobox */
+        .infobox {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            position: sticky;
+            top: 100px;
+        }
+
+        .infobox h3 {
+            margin-bottom: 1rem;
+            color: var(--accent-color);
+            font-size: 1.2rem;
+        }
+
+        .infobox-item {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .infobox-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .infobox-label {
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .infobox-value {
+            color: var(--text-primary);
+        }
+
+        /* Article List */
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .article-card {
+            background: var(--glass-bg);
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(20px);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .article-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+            border-color: var(--accent-color);
+        }
+
+        .article-card h3 {
+            color: var(--accent-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .article-card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Editor */
+        .editor {
+            display: none;
+            background: var(--glass-bg);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            margin: 2rem 0;
+        }
+
+        .editor.active {
+            display: block;
+        }
+
+        .editor-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
+        .form-textarea {
+            min-height: 200px;
+            resize: vertical;
+        }
+
+        .infobox-editor {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .infobox-field {
+            display: grid;
+            grid-template-columns: 1fr 1fr auto;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            align-items: center;
+        }
+
+        .btn-remove {
+            background: #dc2626;
+            color: white;
+            padding: 0.5rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .btn-add {
+            background: var(--success-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        /* Voice Panel */
+        .voice-panel {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            margin-bottom: 1.5rem;
+            position: sticky;
+            top: 100px;
+        }
+
+        .voice-panel h4 {
+            margin-bottom: 1rem;
+            color: var(--accent-color);
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .voice-controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-voice {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            padding: 0.75rem 1rem;
+            font-size: 0.9rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            min-height: 44px; /* Минимальная высота для мобильных */
+        }
+
+        .btn-voice:hover:not(:disabled) {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+            transform: translateY(-1px);
+        }
+
+        .btn-voice:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-voice.active {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+        }
+
+        .voice-settings {
+            margin-bottom: 1.5rem;
+        }
+
+        .setting-group {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            min-height: 40px;
+        }
+
+        .setting-group label {
+            min-width: 100px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .setting-group input[type="range"] {
+            flex: 1;
+            height: 6px;
+            background: var(--border-color);
+            border-radius: 3px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .setting-group input[type="range"]::-webkit-slider-thumb {
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .setting-group input[type="range"]::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+        }
+
+        .setting-group select {
+            flex: 1;
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 0.75rem;
+            color: var(--text-primary);
+            min-height: 44px;
+        }
+
+        .setting-group span {
+            min-width: 50px;
+            text-align: right;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .progress-container {
+            margin-top: 1rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--border-color);
+            border-radius: 4px;
+            margin-bottom: 0.5rem;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(45deg, var(--accent-color), #8b5cf6);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .speaking-highlight {
+            background: rgba(59, 130, 246, 0.2);
+            border-radius: 4px;
+            padding: 2px 4px;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav-buttons {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            .ip-status {
+                margin-left: 0;
+                margin-top: 1rem;
+                order: 3;
+            }
+            
+            .articles-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <div class="logo">ModernWiki</div>
+                <div class="nav-buttons">
+                    <button class="btn btn-secondary" onclick="showHome()">
+                        🏠 Главная
+                    </button>
+                    <button class="btn btn-primary" onclick="showEditor()">
+                        ✨ Создать статью
+                    </button>
+                    
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Search -->
+        <div class="search-container">
+            <input type="text" class="search-box" placeholder="🔍 Поиск статей..." onkeyup="searchArticles(this.value)">
+        </div>
+
+        <!-- Home View -->
+        <div id="homeView">
+            <div class="articles-grid" id="articlesGrid">
+                <!-- Статьи будут добавлены динамически -->
+            </div>
+        </div>
+
+        <!-- Article View -->
+        <div id="articleView" style="display: none;">
+            <div class="main-content">
+                <div class="article-content">
+                    <div id="articleTitle"></div>
+                    <div id="articleContent"></div>
+                </div>
+                <div class="sidebar">
+                    <div class="infobox">
+                        <h3>Информация</h3>
+                        <div id="articleInfobox"></div>
+                    </div>
+                    <!-- Панель озвучки -->
+                    <div class="voice-panel" id="voicePanel">
+                        <h4>🔊 Озвучка статьи</h4>
+                        <div class="voice-controls">
+                            <button class="btn btn-voice" id="playBtn" onclick="toggleSpeech()">
+                                <span id="playIcon">▶️</span> Воспроизвести
+                            </button>
+                            <button class="btn btn-voice" onclick="pauseSpeech()" id="pauseBtn" disabled>
+                                ⏸️ Пауза
+                            </button>
+                            <button class="btn btn-voice" onclick="stopSpeech()" id="stopBtn" disabled>
+                                ⏹️ Стоп
+                            </button>
+                        </div>
+                        
+                        <div class="voice-settings">
+                            <div class="setting-group">
+                                <label>Скорость:</label>
+                                <input type="range" id="rateSlider" min="0.5" max="2" step="0.1" value="1" onchange="updateSpeechRate()">
+                                <span id="rateValue">1.0x</span>
+                            </div>
+                            
+                            <div class="setting-group">
+                                <label>Высота тона:</label>
+                                <input type="range" id="pitchSlider" min="0.5" max="2" step="0.1" value="1" onchange="updateSpeechPitch()">
+                                <span id="pitchValue">1.0</span>
+                            </div>
+                            
+                            <div class="setting-group">
+                                <label>Голос:</label>
+                                <select id="voiceSelect" onchange="updateVoice()"></select>
+                            </div>
+                        </div>
+                        
+                        <div class="progress-container">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="progressFill"></div>
+                            </div>
+                            <div class="progress-text">
+                                <span id="currentTime">0:00</span> / <span id="totalTime">0:00</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-secondary" onclick="editArticle()">
+                        ✏️ Редактировать
+                    </button>
+                    <button class="btn btn-secondary" onclick="showHome()">
+                        ← Назад к списку
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Editor -->
+        <div class="editor" id="editor">
+            <div class="editor-header">
+                <h2 id="editorTitle">Создание новой статьи</h2>
+                <button class="btn btn-secondary" onclick="hideEditor()">✕ Закрыть</button>
+            </div>
+
+            <form id="articleForm">
+                <div class="form-group">
+                    <label for="title">Название статьи</label>
+                    <input type="text" id="title" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="content">Содержание статьи</label>
+                    <textarea id="content" class="form-input form-textarea" required></textarea>
+                </div>
+
+                <div class="infobox-editor">
+                    <h3>Инфобокс</h3>
+                    <div id="infoboxFields">
+                        <div class="infobox-field">
+                            <input type="text" placeholder="Название поля" class="form-input">
+                            <input type="text" placeholder="Значение" class="form-input">
+                            <button type="button" class="btn-remove" onclick="removeInfoboxField(this)">✕</button>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-add" onclick="addInfoboxField()">+ Добавить поле</button>
+                </div>
+
+                <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                    <button type="submit" class="btn btn-primary" onclick="return saveArticle()">💾 Сохранить статью</button>
+                    <button type="button" class="btn btn-secondary" onclick="hideEditor()">Отмена</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Данные статей и IP система
+        let articles = [];
+        let currentUserIP = null;
+        let ipArticles = {}; // Структура: { "192.168.1.1": [статьи], "10.0.0.1": [статьи] }
+        let currentArticle = null;
+        let editingArticle = null;
+        let speechSynthesis = window.speechSynthesis;
+        let currentUtterance = null;
+        let isPlaying = false;
+        let isPaused = false;
+        let speechProgress = 0;
+        let speechTimer = null;
+        let availableVoices = [];
+
+        // Инициализация
+        document.addEventListener('DOMContentLoaded', function() {
+            // Инициализация IP системы
+            initIPSystem();
+            
+            showHome();
+            
+            // Обработка формы
+            document.getElementById('articleForm').addEventListener('submit', function(e) {
+                e.preventDefault(); // Предотвращаем стандартную отправку формы
+                console.log('Форма отправлена'); // Для отладки
+                saveArticle();
+                return false;
+            });
+
+            // Инициализация голосов
+            initVoices();
+            if (speechSynthesis.onvoiceschanged !== undefined) {
+                speechSynthesis.onvoiceschanged = initVoices;
+            }
+        });
+
+        // === IP СИСТЕМА ===
+
+        // Инициализация IP системы
+        async function initIPSystem() {
+            console.log('🌐 Инициализация IP системы...');
+            
+            try {
+                // Получаем IP адрес пользователя
+                currentUserIP = await getUserIP();
+                console.log('👤 IP пользователя:', currentUserIP);
+                
+                // Загружаем сохраненные данные
+                loadIPData();
+                
+                // Загружаем статьи для текущего IP
+                loadArticlesForCurrentIP();
+                
+                // Очищаем статьи от других IP
+                cleanupOtherIPArticles();
+                
+                // Показываем информацию о IP в интерфейсе
+                showIPInfo();
+                
+            } catch (error) {
+                console.error('❌ Ошибка инициализации IP системы:', error);
+                // Используем фейковый IP для тестирования
+                currentUserIP = generateFakeIP();
+                console.log('🔧 Используем тестовый IP:', currentUserIP);
+                loadArticlesForCurrentIP();
+                showIPInfo();
+            }
+        }
+
+        // Получение IP адреса пользователя
+        async function getUserIP() {
+            try {
+                // Пробуем несколько сервисов для получения IP
+                const services = [
+                    'https://api.ipify.org?format=json',
+                    'https://httpbin.org/ip',
+                    'https://jsonip.com'
+                ];
+                
+                for (let service of services) {
+                    try {
+                        const response = await fetch(service);
+                        const data = await response.json();
+                        
+                        // Разные сервисы возвращают IP в разных форматах
+                        return data.ip || data.origin || data.ip;
+                    } catch (e) {
+                        console.log('Сервис недоступен:', service);
+                        continue;
+                    }
+                }
+                
+                throw new Error('Все сервисы IP недоступны');
+                
+            } catch (error) {
+                console.log('Не удалось получить реальный IP, генерируем фейковый');
+                return generateFakeIP();
+            }
+        }
+
+        // Генерация фейкового IP для тестирования
+        function generateFakeIP() {
+            return `192.168.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}`;
+        }
+
+        // Загрузка данных IP из localStorage
+        function loadIPData() {
+            try {
+                const savedData = localStorage.getItem('modernwiki_ip_data');
+                if (savedData) {
+                    ipArticles = JSON.parse(savedData);
+                    console.log('📂 Загружены данные IP:', Object.keys(ipArticles).length, 'IP адресов');
+                } else {
+                    ipArticles = {};
+                    console.log('📂 Создана новая база данных IP');
+                }
+            } catch (error) {
+                console.error('❌ Ошибка загрузки IP данных:', error);
+                ipArticles = {};
+            }
+        }
+
+        // Сохранение данных IP в localStorage
+        function saveIPData() {
+            try {
+                localStorage.setItem('modernwiki_ip_data', JSON.stringify(ipArticles));
+                console.log('💾 IP данные сохранены');
+            } catch (error) {
+                console.error('❌ Ошибка сохранения IP данных:', error);
+            }
+        }
+
+        // Загрузка статей для текущего IP
+        function loadArticlesForCurrentIP() {
+            if (ipArticles[currentUserIP]) {
+                articles = [...ipArticles[currentUserIP]];
+                console.log(`📖 Загружено ${articles.length} статей для IP ${currentUserIP}`);
+            } else {
+                // Создаем демо-статьи для нового IP
+                articles = createDemoArticles();
+                ipArticles[currentUserIP] = [...articles];
+                saveIPData();
+                console.log(`✨ Созданы демо-статьи для нового IP ${currentUserIP}`);
+            }
+        }
+
+        // Создание демо-статей для нового пользователя
+        function createDemoArticles() {
+            return [
+                {
+                    id: 1,
+                    title: "JavaScript",
+                    content: "JavaScript — это высокоуровневый язык программирования, который широко используется для разработки веб-приложений. Он был создан в 1995 году Бренданом Эйхом в компании Netscape.\n\nJavaScript является интерпретируемым языком программирования с динамической типизацией. Он поддерживает объектно-ориентированное, императивное и функциональное программирование.",
+                    infobox: {
+                        "Тип": "Язык программирования",
+                        "Создатель": "Брендан Эйх",
+                        "Год создания": "1995",
+                        "Парадигма": "Мультипарадигменный",
+                        "Типизация": "Динамическая"
+                    },
+                    authorIP: currentUserIP,
+                    createdAt: new Date().toISOString()
+                },
+                {
+                    id: 2,
+                    title: "Искусственный интеллект",
+                    content: "Искусственный интеллект (ИИ) — это область компьютерных наук, которая занимается созданием интеллектуальных машин, способных работать и реагировать как люди.\n\nИИ включает в себя машинное обучение, нейронные сети, обработку естественного языка и компьютерное зрение. Современные системы ИИ используются в медицине, транспорте, финансах и многих других областях.",
+                    infobox: {
+                        "Область": "Компьютерные науки",
+                        "Основан": "1956",
+                        "Ключевые технологии": "ML, DL, NLP",
+                        "Применение": "Автоматизация, анализ"
+                    },
+                    authorIP: currentUserIP,
+                    createdAt: new Date().toISOString()
+                }
+            ];
+        }
+
+        // Очистка статей от других IP
+        function cleanupOtherIPArticles() {
+            const otherIPs = Object.keys(ipArticles).filter(ip => ip !== currentUserIP);
+            
+            if (otherIPs.length > 0) {
+                console.log(`🗑️ Очистка статей от ${otherIPs.length} других IP адресов:`, otherIPs);
+                
+                otherIPs.forEach(ip => {
+                    delete ipArticles[ip];
+                });
+                
+                saveIPData();
+                console.log('✅ Очистка завершена, остались только статьи текущего IP');
+            }
+        }
+
+        // Показать информацию об IP в интерфейсе
+        function showIPInfo() {
+            // Обновляем заголовок с информацией об IP
+            const logo = document.querySelector('.logo');
+            if (logo) {
+                logo.title = `Ваш IP: ${currentUserIP}\nСтатей: ${articles.length}`;
+            }
+            
+            // Добавляем статус в навигацию
+            const nav = document.querySelector('.nav');
+            if (nav && !document.querySelector('.ip-status')) {
+                const ipStatus = document.createElement('div');
+                ipStatus.className = 'ip-status';
+                ipStatus.innerHTML = `
+                    <div style="font-size: 0.8rem; color: var(--text-secondary); text-align: center;">
+                        🌐 IP: ${currentUserIP.substring(0, 12)}...
+                        <br>📚 Статей: ${articles.length}
+                    </div>
+                `;
+                nav.appendChild(ipStatus);
+            }
+        }
+
+        // Сохранение статьи с IP привязкой
+        function saveArticleForIP(articleData) {
+            // Добавляем метаданные
+            articleData.authorIP = currentUserIP;
+            articleData.createdAt = new Date().toISOString();
+            articleData.updatedAt = new Date().toISOString();
+            
+            if (editingArticle) {
+                // Обновление существующей статьи
+                Object.assign(editingArticle, articleData);
+                console.log('📝 Статья обновлена для IP:', currentUserIP);
+            } else {
+                // Создание новой статьи
+                const newId = Math.max(...articles.map(a => a.id), 0) + 1;
+                const newArticle = { id: newId, ...articleData };
+                articles.push(newArticle);
+                console.log('✨ Новая статья создана для IP:', currentUserIP);
+            }
+            
+            // Сохраняем статьи для текущего IP
+            ipArticles[currentUserIP] = [...articles];
+            saveIPData();
+            
+            // Обновляем счетчик в интерфейсе
+            updateIPInfo();
+        }
+
+        // Обновление информации об IP в интерфейсе
+        function updateIPInfo() {
+            const ipStatus = document.querySelector('.ip-status');
+            if (ipStatus) {
+                ipStatus.innerHTML = `
+                    <div style="font-size: 0.8rem; color: var(--text-secondary); text-align: center;">
+                        🌐 IP: ${currentUserIP.substring(0, 12)}...
+                        <br>📚 Статей: ${articles.length}
+                    </div>
+                `;
+            }
+            
+            const logo = document.querySelector('.logo');
+            if (logo) {
+                logo.title = `Ваш IP: ${currentUserIP}\nСтатей: ${articles.length}`;
+            }
+        }
+
+        // Функция для тестирования смены IP (для демонстрации)
+        function simulateIPChange() {
+            const newIP = generateFakeIP();
+            console.log('🔄 Симуляция смены IP с', currentUserIP, 'на', newIP);
+            
+            currentUserIP = newIP;
+            loadArticlesForCurrentIP();
+            cleanupOtherIPArticles();
+            showHome();
+            updateIPInfo();
+            
+            alert(`IP изменен на ${newIP}\nВаши статьи: ${articles.length}`);
+        }
+
+        // === КОНЕЦ IP СИСТЕМЫ ===
+
+        // Показать главную страницу
+        function showHome() {
+            document.getElementById('homeView').style.display = 'block';
+            document.getElementById('articleView').style.display = 'none';
+            document.getElementById('editor').classList.remove('active');
+            
+            displayArticles();
+        }
+
+        // Отображение статей
+        function displayArticles(filteredArticles = null) {
+            const grid = document.getElementById('articlesGrid');
+            const articlesToShow = filteredArticles || articles;
+            
+            grid.innerHTML = '';
+            
+            articlesToShow.forEach(article => {
+                const card = document.createElement('div');
+                card.className = 'article-card fade-in';
+                card.onclick = () => showArticle(article.id);
+                
+                const preview = article.content.substring(0, 150) + '...';
+                
+                card.innerHTML = `
+                    <h3>${article.title}</h3>
+                    <p>${preview}</p>
+                `;
+                
+                grid.appendChild(card);
+            });
+        }
+
+        // Показать статью
+        function showArticle(id) {
+            const article = articles.find(a => a.id === id);
+            if (!article) return;
+            
+            currentArticle = article;
+            
+            document.getElementById('homeView').style.display = 'none';
+            document.getElementById('articleView').style.display = 'block';
+            document.getElementById('editor').classList.remove('active');
+            
+            // Заполнение содержимого
+            document.getElementById('articleTitle').innerHTML = `<h1>${article.title}</h1>`;
+            document.getElementById('articleContent').innerHTML = `<div style="white-space: pre-line;">${article.content}</div>`;
+            
+            // Заполнение инфобокса
+            const infoboxHtml = Object.entries(article.infobox)
+                .map(([key, value]) => `
+                    <div class="infobox-item">
+                        <div class="infobox-label">${key}</div>
+                        <div class="infobox-value">${value}</div>
+                    </div>
+                `).join('');
+            
+            document.getElementById('articleInfobox').innerHTML = infoboxHtml;
+        }
+
+        // Показать редактор
+        function showEditor() {
+            document.getElementById('homeView').style.display = 'none';
+            document.getElementById('articleView').style.display = 'none';
+            document.getElementById('editor').classList.add('active');
+            
+            // Сброс формы
+            document.getElementById('articleForm').reset();
+            document.getElementById('editorTitle').textContent = 'Создание новой статьи';
+            editingArticle = null;
+            
+            // Сброс инфобокса
+            resetInfoboxFields();
+        }
+
+        // Скрыть редактор
+        function hideEditor() {
+            document.getElementById('editor').classList.remove('active');
+            if (currentArticle) {
+                showArticle(currentArticle.id);
+            } else {
+                showHome();
+            }
+        }
+
+        // Редактировать статью
+        function editArticle() {
+            if (!currentArticle) return;
+            
+            editingArticle = currentArticle;
+            
+            document.getElementById('articleView').style.display = 'none';
+            document.getElementById('editor').classList.add('active');
+            document.getElementById('editorTitle').textContent = 'Редактирование статьи';
+            
+            // Заполнение формы
+            document.getElementById('title').value = currentArticle.title;
+            document.getElementById('content').value = currentArticle.content;
+            
+            // Заполнение инфобокса
+            resetInfoboxFields();
+            Object.entries(currentArticle.infobox).forEach(([key, value], index) => {
+                if (index === 0) {
+                    const firstField = document.querySelector('.infobox-field');
+                    firstField.children[0].value = key;
+                    firstField.children[1].value = value;
+                } else {
+                    addInfoboxField(key, value);
+                }
+            });
+        }
+
+        // Сохранить статью
+        function saveArticle() {
+            console.log('Функция saveArticle вызвана с IP системой'); // Для отладки
+            
+            const title = document.getElementById('title').value.trim();
+            const content = document.getElementById('content').value.trim();
+            
+            console.log('Title:', title, 'Content:', content); // Для отладки
+            
+            if (!title || !content) {
+                alert('Пожалуйста, заполните все обязательные поля');
+                return false;
+            }
+            
+            // Собрать инфобокс
+            const infobox = {};
+            const infoboxFields = document.querySelectorAll('.infobox-field');
+            
+            infoboxFields.forEach(field => {
+                const keyInput = field.children[0];
+                const valueInput = field.children[1];
+                if (keyInput && valueInput) {
+                    const key = keyInput.value.trim();
+                    const value = valueInput.value.trim();
+                    if (key && value) {
+                        infobox[key] = value;
+                    }
+                }
+            });
+            
+            const articleData = {
+                title,
+                content,
+                infobox
+            };
+            
+            // Используем новую функцию сохранения с IP
+            saveArticleForIP(articleData);
+            
+            // Показываем результат
+            if (editingArticle) {
+                showArticle(editingArticle.id);
+            } else {
+                const newArticle = articles[articles.length - 1];
+                showArticle(newArticle.id);
+            }
+            
+            // Анимация успеха
+            const submitBtn = document.querySelector('button[type="submit"]');
+            if (submitBtn) {
+                const originalText = submitBtn.textContent;
+                submitBtn.textContent = '✅ Сохранено для вашего IP!';
+                submitBtn.style.background = 'var(--success-color)';
+                
+                setTimeout(() => {
+                    submitBtn.textContent = originalText;
+                    submitBtn.style.background = '';
+                }, 3000);
+            }
+            
+            return false; // Предотвращаем отправку формы
+        }
+
+        // Поиск статей
+        function searchArticles(query) {
+            if (!query.trim()) {
+                displayArticles();
+                return;
+            }
+            
+            const filtered = articles.filter(article => 
+                article.title.toLowerCase().includes(query.toLowerCase()) ||
+                article.content.toLowerCase().includes(query.toLowerCase())
+            );
+            
+            displayArticles(filtered);
+        }
+
+        // Управление полями инфобокса
+        function addInfoboxField(key = '', value = '') {
+            const fieldsContainer = document.getElementById('infoboxFields');
+            const fieldDiv = document.createElement('div');
+            fieldDiv.className = 'infobox-field';
+            
+            fieldDiv.innerHTML = `
+                <input type="text" placeholder="Название поля" class="form-input" value="${key}">
+                <input type="text" placeholder="Значение" class="form-input" value="${value}">
+                <button type="button" class="btn-remove" onclick="removeInfoboxField(this)">✕</button>
+            `;
+            
+            fieldsContainer.appendChild(fieldDiv);
+        }
+
+        function removeInfoboxField(button) {
+            const fieldsContainer = document.getElementById('infoboxFields');
+            if (fieldsContainer.children.length > 1) {
+                button.parentElement.remove();
+            } else {
+                // Оставить одно пустое поле
+                const field = button.parentElement;
+                field.children[0].value = '';
+                field.children[1].value = '';
+            }
+        }
+
+        function resetInfoboxFields() {
+            const fieldsContainer = document.getElementById('infoboxFields');
+            fieldsContainer.innerHTML = `
+                <div class="infobox-field">
+                    <input type="text" placeholder="Название поля" class="form-input">
+                    <input type="text" placeholder="Значение" class="form-input">
+                    <button type="button" class="btn-remove" onclick="removeInfoboxField(this)">✕</button>
+                </div>
+            `;
+        }
+
+        // === ФУНКЦИИ ОЗВУЧКИ ===
+
+        // Инициализация голосов
+        function initVoices() {
+            console.log('Инициализация голосов...');
+            availableVoices = speechSynthesis.getVoices();
+            console.log('Найдено голосов:', availableVoices.length);
+            
+            const voiceSelect = document.getElementById('voiceSelect');
+            
+            if (voiceSelect && availableVoices.length > 0) {
+                voiceSelect.innerHTML = '';
+                
+                // Фильтруем русские голоса в первую очередь
+                const russianVoices = availableVoices.filter(voice => 
+                    voice.lang.startsWith('ru') || 
+                    voice.name.toLowerCase().includes('russian') ||
+                    voice.name.toLowerCase().includes('анна') ||
+                    voice.name.toLowerCase().includes('катя')
+                );
+                
+                const otherVoices = availableVoices.filter(voice => 
+                    !voice.lang.startsWith('ru') && 
+                    !voice.name.toLowerCase().includes('russian') &&
+                    !voice.name.toLowerCase().includes('анна') &&
+                    !voice.name.toLowerCase().includes('катя')
+                );
+                
+                console.log('Русских голосов:', russianVoices.length);
+                console.log('Других голосов:', otherVoices.length);
+                
+                // Добавляем русские голоса
+                if (russianVoices.length > 0) {
+                    const russianGroup = document.createElement('optgroup');
+                    russianGroup.label = 'Русские голоса';
+                    russianVoices.forEach((voice, index) => {
+                        const option = document.createElement('option');
+                        option.value = availableVoices.indexOf(voice);
+                        option.textContent = `${voice.name} (${voice.lang})`;
+                        russianGroup.appendChild(option);
+                        console.log('Добавлен русский голос:', voice.name, voice.lang);
+                    });
+                    voiceSelect.appendChild(russianGroup);
+                }
+                
+                // Добавляем другие голоса (только основные языки)
+                const mainLanguages = ['en-US', 'en-GB', 'de-DE', 'fr-FR', 'es-ES', 'it-IT', 'ja-JP', 'ko-KR', 'zh-CN'];
+                const filteredOtherVoices = otherVoices.filter(voice => 
+                    mainLanguages.some(lang => voice.lang.startsWith(lang.substring(0, 2)))
+                );
+                
+                if (filteredOtherVoices.length > 0) {
+                    const otherGroup = document.createElement('optgroup');
+                    otherGroup.label = 'Другие языки';
+                    filteredOtherVoices.forEach((voice) => {
+                        const option = document.createElement('option');
+                        option.value = availableVoices.indexOf(voice);
+                        option.textContent = `${voice.name} (${voice.lang})`;
+                        otherGroup.appendChild(option);
+                    });
+                    voiceSelect.appendChild(otherGroup);
+                }
+                
+                // Автоматически выбираем первый русский голос
+                if (russianVoices.length > 0) {
+                    voiceSelect.value = availableVoices.indexOf(russianVoices[0]);
+                    console.log('Автоматически выбран голос:', russianVoices[0].name);
+                }
+            } else if (availableVoices.length === 0) {
+                console.log('⚠️ Голоса еще не загружены, ждем события onvoiceschanged');
+            }
+        }
+
+        // Переключение воспроизведения
+        function toggleSpeech() {
+            if (!currentArticle) {
+                alert('Сначала выберите статью для озвучивания');
+                return;
+            }
+            
+            // Проверка поддержки Speech Synthesis
+            if (!('speechSynthesis' in window)) {
+                alert('Ваш браузер не поддерживает озвучивание текста');
+                return;
+            }
+            
+            if (isPlaying && !isPaused) {
+                pauseSpeech();
+            } else if (isPaused) {
+                resumeSpeech();
+            } else {
+                startSpeech();
+            }
+        }
+
+        // Начать озвучку
+        function startSpeech() {
+            if (!currentArticle) return;
+            
+            console.log('Попытка запуска озвучки...');
+            
+            // Принудительная остановка предыдущей озвучки
+            if (speechSynthesis.speaking || speechSynthesis.pending) {
+                console.log('Останавливаем предыдущую озвучку...');
+                speechSynthesis.cancel();
+                
+                // Ждем завершения остановки
+                setTimeout(() => {
+                    console.log('Запускаем новую озвучку...');
+                    initiateSpeech();
+                }, 200);
+            } else {
+                initiateSpeech();
+            }
+        }
+
+        function initiateSpeech() {
+            // Проверяем доступность голосов
+            if (availableVoices.length === 0) {
+                console.log('Нет доступных голосов, пытаемся обновить...');
+                initVoices();
+                
+                if (availableVoices.length === 0) {
+                    alert('Голоса для озвучивания недоступны. Попробуйте обновить страницу.');
+                    return;
+                }
+            }
+            
+            const text = currentArticle.title + '. ' + currentArticle.content;
+            console.log('Текст для озвучивания:', text.substring(0, 100) + '...');
+            
+            currentUtterance = new SpeechSynthesisUtterance(text);
+            
+            // Настройки голоса
+            const voiceSelect = document.getElementById('voiceSelect');
+            const rateSlider = document.getElementById('rateSlider');
+            const pitchSlider = document.getElementById('pitchSlider');
+            
+            // Выбор голоса
+            let selectedVoice = null;
+            if (voiceSelect && voiceSelect.value !== '' && availableVoices[parseInt(voiceSelect.value)]) {
+                selectedVoice = availableVoices[parseInt(voiceSelect.value)];
+            } else {
+                // Автоматический выбор русского голоса
+                selectedVoice = availableVoices.find(voice => 
+                    voice.lang.startsWith('ru') || voice.name.toLowerCase().includes('russian')
+                ) || availableVoices[0];
+            }
+            
+            if (selectedVoice) {
+                currentUtterance.voice = selectedVoice;
+                console.log('Выбран голос:', selectedVoice.name, selectedVoice.lang);
+            }
+            
+            // Настройки параметров
+            currentUtterance.rate = rateSlider ? Math.max(0.5, Math.min(2, parseFloat(rateSlider.value))) : 1;
+            currentUtterance.pitch = pitchSlider ? Math.max(0.5, Math.min(2, parseFloat(pitchSlider.value))) : 1;
+            currentUtterance.volume = 1;
+            currentUtterance.lang = 'ru-RU';
+            
+            console.log('Параметры озвучки:', {
+                rate: currentUtterance.rate,
+                pitch: currentUtterance.pitch,
+                volume: currentUtterance.volume,
+                lang: currentUtterance.lang
+            });
+            
+            // События
+            currentUtterance.onstart = function(event) {
+                console.log('✅ Озвучка успешно началась');
+                isPlaying = true;
+                isPaused = false;
+                speechProgress = 0;
+                updateSpeechUI();
+                startProgressTimer();
+            };
+            
+            currentUtterance.onend = function(event) {
+                console.log('✅ Озвучка завершена естественным образом');
+                resetSpeechState();
+            };
+            
+            currentUtterance.onerror = function(event) {
+                console.log('❌ Событие ошибки озвучки:', event.error);
+                console.log('Полное событие ошибки:', event);
+                
+                // Обработка разных типов ошибок
+                switch(event.error) {
+                    case 'interrupted':
+                        console.log('Озвучка была прервана (это нормально при смене настроек)');
+                        break;
+                    case 'canceled':
+                        console.log('Озвучка была отменена пользователем');
+                        break;
+                    case 'not-allowed':
+                        alert('Озвучивание заблокировано браузером. Убедитесь, что вы взаимодействовали со страницей.');
+                        break;
+                    case 'network':
+                        alert('Ошибка сети при озвучивании');
+                        break;
+                    case 'synthesis-failed':
+                        alert('Не удалось синтезировать речь. Попробуйте выбрать другой голос.');
+                        break;
+                    case 'synthesis-unavailable':
+                        alert('Синтез речи недоступен');
+                        break;
+                    default:
+                        console.error('Неизвестная ошибка озвучки:', event.error);
+                        alert('Произошла ошибка при озвучивании: ' + event.error);
+                }
+                
+                resetSpeechState();
+            };
+
+            currentUtterance.onpause = function(event) {
+                console.log('⏸️ Озвучка приостановлена');
+                isPaused = true;
+                updateSpeechUI();
+            };
+
+            currentUtterance.onresume = function(event) {
+                console.log('▶️ Озвучка возобновлена');
+                isPaused = false;
+                updateSpeechUI();
+            };
+            
+            // Запуск озвучки
+            try {
+                console.log('Запускаем speechSynthesis.speak...');
+                speechSynthesis.speak(currentUtterance);
+                
+                // Проверяем, что озвучка действительно началась
+                setTimeout(() => {
+                    if (!isPlaying && !speechSynthesis.speaking) {
+                        console.log('❌ Озвучка не запустилась, пробуем альтернативный метод');
+                        tryAlternativeSpeech();
+                    }
+                }, 500);
+                
+            } catch (error) {
+                console.error('❌ Критическая ошибка запуска озвучки:', error);
+                alert('Не удалось запустить озвучку: ' + error.message);
+                resetSpeechState();
+            }
+        }
+
+        // Альтернативный метод запуска озвучки
+        function tryAlternativeSpeech() {
+            console.log('Пробуем альтернативный метод запуска...');
+            
+            // Создаем простую озвучку для тестирования
+            const testUtterance = new SpeechSynthesisUtterance('Тест');
+            testUtterance.volume = 0.1; // Тихо
+            
+            testUtterance.onstart = function() {
+                console.log('Тестовая озвучка работает, запускаем основную...');
+                speechSynthesis.cancel();
+                
+                setTimeout(() => {
+                    speechSynthesis.speak(currentUtterance);
+                }, 100);
+            };
+            
+            testUtterance.onerror = function(event) {
+                console.log('Тестовая озвучка не работает:', event.error);
+                alert('Озвучивание недоступно в вашем браузере или заблокировано настройками');
+                resetSpeechState();
+            };
+            
+            speechSynthesis.speak(testUtterance);
+        }
+
+        // Сброс состояния озвучки
+        function resetSpeechState() {
+            isPlaying = false;
+            isPaused = false;
+            speechProgress = 0;
+            clearInterval(speechTimer);
+            updateSpeechUI();
+            updateProgress();
+            console.log('🔄 Состояние озвучки сброшено');
+        }
+
+        // Пауза
+        function pauseSpeech() {
+            if (isPlaying && !isPaused && speechSynthesis.speaking) {
+                try {
+                    console.log('Ставим озвучку на паузу...');
+                    speechSynthesis.pause();
+                    isPaused = true;
+                    clearInterval(speechTimer);
+                    updateSpeechUI();
+                    console.log('✅ Озвучка поставлена на паузу');
+                } catch (error) {
+                    console.error('❌ Ошибка паузы:', error);
+                }
+            }
+        }
+
+        // Возобновить
+        function resumeSpeech() {
+            if (isPaused) {
+                try {
+                    console.log('Возобновляем озвучку...');
+                    
+                    if (speechSynthesis.paused) {
+                        speechSynthesis.resume();
+                        isPaused = false;
+                        startProgressTimer();
+                        updateSpeechUI();
+                        console.log('✅ Озвучка возобновлена');
+                    } else {
+                        // Если пауза не работает, перезапускаем
+                        console.log('Пауза не работает, перезапускаем озвучку...');
+                        resetSpeechState();
+                        startSpeech();
+                    }
+                } catch (error) {
+                    console.error('❌ Ошибка возобновления:', error);
+                    // Если не удается возобновить, перезапускаем
+                    resetSpeechState();
+                    startSpeech();
+                }
+            }
+        }
+
+        // Остановить
+        function stopSpeech() {
+            console.log('Останавливаем озвучку...');
+            try {
+                speechSynthesis.cancel();
+            } catch (error) {
+                console.error('❌ Ошибка остановки:', error);
+            }
+            
+            resetSpeechState();
+            console.log('✅ Озвучка остановлена');
+        }
+
+        // Обновить интерфейс
+        function updateSpeechUI() {
+            const playBtn = document.getElementById('playBtn');
+            const pauseBtn = document.getElementById('pauseBtn');
+            const stopBtn = document.getElementById('stopBtn');
+            const playIcon = document.getElementById('playIcon');
+            
+            if (playBtn && playIcon) {
+                if (isPlaying && !isPaused) {
+                    playBtn.textContent = '⏸️ Пауза';
+                    playBtn.classList.add('active');
+                } else {
+                    playBtn.innerHTML = '<span id="playIcon">▶️</span> Воспроизвести';
+                    playBtn.classList.remove('active');
+                }
+            }
+            
+            if (pauseBtn) {
+                pauseBtn.disabled = !isPlaying;
+            }
+            
+            if (stopBtn) {
+                stopBtn.disabled = !isPlaying && !isPaused;
+            }
+        }
+
+        // Таймер прогресса
+        function startProgressTimer() {
+            if (speechTimer) clearInterval(speechTimer);
+            
+            speechTimer = setInterval(() => {
+                if (isPlaying && !isPaused) {
+                    speechProgress += 100;
+                    updateProgress();
+                }
+            }, 100);
+        }
+
+        // Обновить прогресс
+        function updateProgress() {
+            const progressFill = document.getElementById('progressFill');
+            const currentTime = document.getElementById('currentTime');
+            
+            if (progressFill) {
+                const progress = Math.min(speechProgress / 100, 100);
+                progressFill.style.width = progress + '%';
+            }
+            
+            if (currentTime) {
+                const minutes = Math.floor(speechProgress / 6000);
+                const seconds = Math.floor((speechProgress % 6000) / 100);
+                currentTime.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            }
+        }
+
+        // Обновить скорость
+        function updateSpeechRate() {
+            const rateSlider = document.getElementById('rateSlider');
+            const rateValue = document.getElementById('rateValue');
+            
+            if (rateSlider && rateValue) {
+                rateValue.textContent = rateSlider.value + 'x';
+                
+                // Не перезапускаем озвучку при изменении настроек
+                // Изменения применятся при следующем запуске
+                console.log('Скорость изменена на:', rateSlider.value);
+            }
+        }
+
+        // Обновить высоту тона
+        function updateSpeechPitch() {
+            const pitchSlider = document.getElementById('pitchSlider');
+            const pitchValue = document.getElementById('pitchValue');
+            
+            if (pitchSlider && pitchValue) {
+                pitchValue.textContent = pitchSlider.value;
+                console.log('Высота тона изменена на:', pitchSlider.value);
+            }
+        }
+
+        // Обновить голос
+        function updateVoice() {
+            const voiceSelect = document.getElementById('voiceSelect');
+            if (voiceSelect) {
+                console.log('Голос изменен на:', voiceSelect.value);
+            }
+        }
+
+        // === КОНЕЦ ФУНКЦИЙ ОЗВУЧКИ ===
+    </script>
+</body>
+</html>

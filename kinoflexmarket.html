@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f0f0f0;
+}
+
+h1 {
+    margin-bottom: 20px;
+}
+
+#game-board {
+    display: grid;
+    grid-template-columns: repeat(5, 50px); /* Измените для размера поля */
+    grid-gap: 2px;
+    border: 2px solid #333;
+    background-color: #ddd;
+}
+
+.cell {
+    width: 50px;
+    height: 50px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+}
+
+.start {
+    background-color: lightgreen;
+}
+
+.finish {
+    background-color: lightcoral;
+}
+
+.path {
+    background-color: lightblue;
+}
+
+.wrong {
+    background-color: red;
+}
+
+#restart-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+#restart-button:hover {
+    background-color: #3e8e41;
+}
+</style>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Найди правильный путь</h1>
+    <div id="game-board"></div>
+    <button id="restart-button">Начать заново</button>
+
+    <script>document.addEventListener('DOMContentLoaded', () => {
+    const gameBoard = document.getElementById('game-board');
+    const restartButton = document.getElementById('restart-button');
+    const gridSize = 5; // Размер игрового поля (5x5)
+    let board = []; // Массив, представляющий игровое поле
+    let path = []; // Правильный путь
+    let currentPosition = null; // Текущая позиция игрока
+
+    // Функция для создания игрового поля
+    function createBoard() {
+        board = [];
+        gameBoard.innerHTML = '';
+
+        // Создаем двумерный массив, представляющий игровое поле
+        for (let i = 0; i < gridSize; i++) {
+            board[i] = [];
+            for (let j = 0; j < gridSize; j++) {
+                board[i][j] = 0; // 0 - пустая клетка
+            }
+        }
+
+        // Генерируем случайный путь
+        path = generatePath();
+
+        // Отрисовываем игровое поле
+        for (let i = 0; i < gridSize; i++) {
+            for (let j = 0; j < gridSize; j++) {
+                const cell = document.createElement('div');
+                cell.classList.add('cell');
+                cell.dataset.row = i;
+                cell.dataset.col = j;
+
+                // Определяем, является ли клетка частью пути
+                if (path.some(coord => coord.row === i && coord.col === j)) {
+                    cell.dataset.path = 'true';
+                } else {
+                    cell.dataset.path = 'false';
+                }
+
+                // Обработчик клика по клетке
+                cell.addEventListener('click', handleCellClick);
+
+                gameBoard.appendChild(cell);
+            }
+        }
+
+        // Помечаем старт и финиш
+        const startCell = document.querySelector(`.cell[data-row="0"][data-col="0"]`);
+        startCell.classList.add('start');
+        const finishCell = document.querySelector(`.cell[data-row="${gridSize - 1}"][data-col="${gridSize - 1}"]`);
+        finishCell.classList.add('finish');
+
+        currentPosition = { row: 0, col: 0 }; // Начинаем с позиции старта
+    }
+
+    // Функция для генерации случайного пути
+    function generatePath() {
+        let current = { row: 0, col: 0 };
+        const generatedPath = [current];
+
+        while (current.row !== gridSize - 1 || current.col !== gridSize - 1) {
+            const possibleMoves = [];
+
+            // Проверяем возможные ходы (вправо и вниз)
+            if (current.row + 1 < gridSize) {
+                possibleMoves.push({ row: current.row + 1, col: current.col });
+            }
+            if (current.col + 1 < gridSize) {
+                possibleMoves.push({ row: current.row, col: current.col + 1 });
+            }
+
+            // Выбираем случайный ход из возможных
+            if (possibleMoves.length > 0) {
+                const nextMove = possibleMoves[Math.floor(Math.random() * possibleMoves.length)];
+                generatedPath.push(nextMove);
+                current = nextMove;
+            } else {
+                // Если нет возможных ходов, возвращаемся на шаг назад (если это возможно)
+                if (generatedPath.length > 1) {
+                    generatedPath.pop();
+                    current = generatedPath[generatedPath.length - 1];
+                } else {
+                    // Если это первый шаг, начинаем заново
+                    return generatePath();
+                }
+            }
+        }
+
+        return generatedPath;
+    }
+
+    // Функция для обработки клика по клетке
+    function handleCellClick(event) {
+        const cell = event.target;
+        const row = parseInt(cell.dataset.row);
+        const col = parseInt(cell.dataset.col);
+
+        // Проверяем, является ли ход допустимым (соседним с текущей позицией)
+        if (Math.abs(row - currentPosition.row) <= 1 && Math.abs(col - currentPosition.col) <= 1 &&
+            (Math.abs(row - currentPosition.row) + Math.abs(col - currentPosition.col) <= 1)) {
+
+            if (cell.dataset.path === 'true') {
+                // Правильный ход
+                cell.classList.add('path');
+                currentPosition = { row: row, col: col };
+
+                // Проверяем, достигнут ли финиш
+                if (row === gridSize - 1 && col === gridSize - 1) {
+                    alert('Вы победили!');
+                }
+            } else {
+                // Неправильный ход
+                cell.classList.add('wrong');
+                setTimeout(() => {
+                    cell.classList.remove('wrong');
+                }, 500); // Удаляем класс 'wrong' через 500 мс
+            }
+        } else {
+            alert('Недопустимый ход!');
+        }
+    }
+
+    // Обработчик для кнопки перезапуска
+    restartButton.addEventListener('click', createBoard);
+
+    // Создаем игровое поле при загрузке страницы
+    createBoard();
+});
+</script>
+</body>
+</html>

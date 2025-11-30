@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #0f0f0f;
+            color: #fff;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            height: 56px;
+            background: #0f0f0f;
+            border-bottom: 1px solid #333;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(45deg, #ff0000, #ff4444);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .search-container {
+            flex: 1;
+            max-width: 640px;
+            margin: 0 40px;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-input {
+            flex: 1;
+            height: 40px;
+            padding: 0 16px;
+            background: #121212;
+            border: 1px solid #333;
+            border-radius: 20px 0 0 20px;
+            color: #fff;
+            font-size: 16px;
+        }
+
+        .search-button {
+            height: 40px;
+            width: 64px;
+            background: #222;
+            border: 1px solid #333;
+            border-left: none;
+            border-radius: 0 20px 20px 0;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+        }
+
+        .main-content {
+            margin-top: 56px;
+            padding: 24px;
+            max-width: 1280px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .video-input-section {
+            background: #1a1a1a;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 32px;
+            border: 1px solid #333;
+        }
+
+        .input-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #fff;
+        }
+
+        .video-input-container {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .video-url-input {
+            flex: 1;
+            height: 44px;
+            padding: 0 16px;
+            background: #0f0f0f;
+            border: 2px solid #333;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 16px;
+            transition: border-color 0.2s ease;
+        }
+
+        .video-url-input:focus {
+            outline: none;
+            border-color: #065fd4;
+        }
+
+        .load-video-btn {
+            height: 44px;
+            padding: 0 24px;
+            background: #065fd4;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .load-video-btn:hover {
+            background: #0c5bc2;
+        }
+
+        .video-container {
+            background: #000;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 24px;
+            position: relative;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+        }
+
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #000;
+        }
+
+        .main-video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .video-controls {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            padding: 16px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .video-container:hover .video-controls {
+            opacity: 1;
+        }
+
+        .controls-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .play-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            transition: background-color 0.2s;
+        }
+
+        .play-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .time-display {
+            color: white;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .progress-container {
+            flex: 1;
+            margin: 0 16px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 2px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #ff0000;
+            border-radius: 2px;
+            width: 0%;
+            transition: width 0.1s ease;
+        }
+
+        .volume-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .volume-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            transition: background-color 0.2s;
+        }
+
+        .volume-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .volume-slider {
+            width: 60px;
+            height: 4px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 2px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .volume-fill {
+            height: 100%;
+            background: white;
+            border-radius: 2px;
+            width: 100%;
+        }
+
+        .fullscreen-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            transition: background-color 0.2s;
+        }
+
+        .fullscreen-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .video-info {
+            padding: 20px 0;
+        }
+
+        .video-title {
+            font-size: 20px;
+            font-weight: 600;
+            line-height: 1.3;
+            margin-bottom: 12px;
+            color: #fff;
+        }
+
+        .video-meta {
+            color: #aaa;
+            font-size: 14px;
+        }
+
+        .placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            height: 400px;
+            background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+            border-radius: 12px;
+            color: #aaa;
+            text-align: center;
+        }
+
+        .placeholder-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .suggestions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 16px;
+            margin-top: 32px;
+        }
+
+        .suggestion-card {
+            background: #1a1a1a;
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.2s ease, background-color 0.2s ease;
+            border: 1px solid transparent;
+        }
+
+        .suggestion-card:hover {
+            transform: translateY(-2px);
+            background: #222;
+            border-color: #333;
+        }
+
+        .suggestion-thumbnail {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: linear-gradient(135deg, #333, #555);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #aaa;
+            font-size: 48px;
+        }
+
+        .suggestion-info {
+            padding: 16px;
+        }
+
+        .suggestion-title {
+            font-size: 14px;
+            font-weight: 600;
+            line-height: 1.3;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+
+        .suggestion-meta {
+            font-size: 12px;
+            color: #aaa;
+        }
+
+        @media (max-width: 768px) {
+            .search-container {
+                margin: 0 16px;
+            }
+
+            .main-content {
+                padding: 16px;
+            }
+
+            .video-input-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .suggestions {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="#" class="logo">
+            <div class="logo-icon">VT</div>
+            VideoTube
+        </a>
+    </header>
+
+    <main class="main-content">
+        <section class="video-input-section">
+            <h2 class="input-title">Загрузить видео по ссылке</h2>
+            <div class="video-input-container">
+                <input type="url" class="video-url-input" id="videoUrlInput" 
+                       placeholder="Вставьте ссылку на видео (MP4, WebM, OGV)">
+                <button class="load-video-btn" onclick="loadVideo()">Загрузить</button>
+            </div>
+        </section>
+
+        <div class="video-container">
+            <div class="video-wrapper">
+                <video class="main-video" id="mainVideo" preload="metadata">
+                    Ваш браузер не поддерживает воспроизведение видео.
+                </video>
+                
+                <div class="placeholder" id="placeholder">
+                    <div class="placeholder-icon">🎥</div>
+                    <h3>Вставьте ссылку на видео выше</h3>
+                    <p>Поддерживаются форматы MP4, WebM, OGV</p>
+                </div>
+
+                <div class="video-controls" id="videoControls">
+                    <div class="controls-row">
+                        <button class="play-btn" id="playBtn" onclick="togglePlay()">▶️</button>
+                        <span class="time-display">
+                            <span id="currentTime">0:00</span> / <span id="duration">0:00</span>
+                        </span>
+                        
+                        <div class="progress-container">
+                            <div class="progress-bar" id="progressBar" onclick="seek(event)">
+                                <div class="progress-fill" id="progressFill"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="volume-container">
+                            <button class="volume-btn" id="volumeBtn" onclick="toggleMute()">🔊</button>
+                            <div class="volume-slider" onclick="setVolume(event)">
+                                <div class="volume-fill" id="volumeFill"></div>
+                            </div>
+                        </div>
+                        
+                        <button class="fullscreen-btn" onclick="toggleFullscreen()">⛶</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="video-info">
+            <h1 class="video-title" id="videoTitle">Название видео</h1>
+            <div class="video-meta">
+                <span id="videoViews">1 просмотров</span> • 
+                <span id="videoDate">Сегодня</span>
+            </div>
+        </div>
+        </div>
+    </main>
+
+    <script>
+        const video = document.getElementById('mainVideo');
+        const placeholder = document.getElementById('placeholder');
+        const controls = document.getElementById('videoControls');
+        const playBtn = document.getElementById('playBtn');
+        const currentTime = document.getElementById('currentTime');
+        const duration = document.getElementById('duration');
+        const progressFill = document.getElementById('progressFill');
+        const volumeBtn = document.getElementById('volumeBtn');
+        const volumeFill = document.getElementById('volumeFill');
+        const videoTitle = document.getElementById('videoTitle');
+
+        let isPlaying = false;
+        let isMuted = false;
+
+        function loadVideo() {
+            const urlInput = document.getElementById('videoUrlInput');
+            const url = urlInput.value.trim();
+            
+            if (!url) {
+                alert('Пожалуйста, введите ссылку на видео');
+                return;
+            }
+
+            // Проверяем, является ли URL валидным
+            try {
+                new URL(url);
+            } catch {
+                alert('Пожалуйста, введите корректную ссылку');
+                return;
+            }
+
+            video.src = url;
+            placeholder.style.display = 'none';
+            video.style.display = 'block';
+            
+            // Обновляем заголовок
+            const fileName = url.split('/').pop().split('?')[0];
+            videoTitle.textContent = fileName || 'Загруженное видео';
+            
+            video.addEventListener('loadedmetadata', () => {
+                duration.textContent = formatTime(video.duration);
+            });
+
+            video.addEventListener('error', () => {
+                alert('Ошибка загрузки видео. Проверьте ссылку и формат файла.');
+                placeholder.style.display = 'flex';
+                video.style.display = 'none';
+            });
+        }
+
+        function togglePlay() {
+            if (video.paused) {
+                video.play();
+                playBtn.textContent = '⏸️';
+                isPlaying = true;
+            } else {
+                video.pause();
+                playBtn.textContent = '▶️';
+                isPlaying = false;
+            }
+        }
+
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${minutes}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function updateProgress() {
+            if (video.duration) {
+                const progress = (video.currentTime / video.duration) * 100;
+                progressFill.style.width = progress + '%';
+                currentTime.textContent = formatTime(video.currentTime);
+            }
+        }
+
+        function seek(event) {
+            const progressBar = event.currentTarget;
+            const rect = progressBar.getBoundingClientRect();
+            const clickX = event.clientX - rect.left;
+            const newTime = (clickX / rect.width) * video.duration;
+            video.currentTime = newTime;
+        }
+
+        function toggleMute() {
+            if (video.muted) {
+                video.muted = false;
+                volumeBtn.textContent = '🔊';
+                volumeFill.style.width = (video.volume * 100) + '%';
+            } else {
+                video.muted = true;
+                volumeBtn.textContent = '🔇';
+                volumeFill.style.width = '0%';
+            }
+        }
+
+        function setVolume(event) {
+            const volumeSlider = event.currentTarget;
+            const rect = volumeSlider.getBoundingClientRect();
+            const clickX = event.clientX - rect.left;
+            const newVolume = clickX / rect.width;
+            
+            video.volume = Math.max(0, Math.min(1, newVolume));
+            volumeFill.style.width = (video.volume * 100) + '%';
+            
+            if (video.volume === 0) {
+                volumeBtn.textContent = '🔇';
+                video.muted = true;
+            } else {
+                volumeBtn.textContent = '🔊';
+                video.muted = false;
+            }
+        }
+
+        function toggleFullscreen() {
+            const videoContainer = document.querySelector('.video-container');
+            if (!document.fullscreenElement) {
+                videoContainer.requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        // Обновление прогресса
+        video.addEventListener('timeupdate', updateProgress);
+
+        // Обработка окончания видео
+        video.addEventListener('ended', () => {
+            playBtn.textContent = '▶️';
+            isPlaying = false;
+        });
+
+        // Загрузка видео при нажатии Enter
+        document.getElementById('videoUrlInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                loadVideo();
+            }
+        });
+
+        // Клавиатурные сокращения
+        document.addEventListener('keydown', (e) => {
+            if (video.src && video.style.display !== 'none') {
+                switch(e.code) {
+                    case 'Space':
+                        e.preventDefault();
+                        togglePlay();
+                        break;
+                    case 'ArrowLeft':
+                        video.currentTime -= 10;
+                        break;
+                    case 'ArrowRight':
+                        video.currentTime += 10;
+                        break;
+                    case 'ArrowUp':
+                        e.preventDefault();
+                        video.volume = Math.min(1, video.volume + 0.1);
+                        volumeFill.style.width = (video.volume * 100) + '%';
+                        break;
+                    case 'ArrowDown':
+                        e.preventDefault();
+                        video.volume = Math.max(0, video.volume - 0.1);
+                        volumeFill.style.width = (video.volume * 100) + '%';
+                        break;
+                    case 'KeyM':
+                        toggleMute();
+                        break;
+                    case 'KeyF':
+                        toggleFullscreen();
+                        break;
+                }
+            }
+        });
+
+        // Примеры видео для тестирования
+        const sampleVideos = [
+            'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4',
+            'https://www.w3schools.com/html/movie.mp4'
+        ];
+    </script>
+</body>
+</html>

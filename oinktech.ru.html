@@ -1,0 +1,1412 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oink Site Builder - Создайте и опубликуйте свой сайт</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Fira+Code:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #0a0a0a;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+            color: #fff;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(circle at 25% 25%, #ff0080 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, #00d4ff 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, #8000ff 0%, transparent 50%);
+            filter: blur(100px);
+            opacity: 0.3;
+            animation: backgroundShift 10s ease-in-out infinite alternate;
+        }
+
+        @keyframes backgroundShift {
+            0% { transform: scale(1) rotate(0deg); }
+            100% { transform: scale(1.1) rotate(5deg); }
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            animation: float 15s linear infinite;
+        }
+
+        .particle:nth-child(1) { left: 10%; animation-delay: 0s; }
+        .particle:nth-child(2) { left: 20%; animation-delay: 2s; }
+        .particle:nth-child(3) { left: 30%; animation-delay: 4s; }
+        .particle:nth-child(4) { left: 40%; animation-delay: 6s; }
+        .particle:nth-child(5) { left: 50%; animation-delay: 8s; }
+        .particle:nth-child(6) { left: 60%; animation-delay: 10s; }
+        .particle:nth-child(7) { left: 70%; animation-delay: 12s; }
+        .particle:nth-child(8) { left: 80%; animation-delay: 14s; }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            z-index: 10;
+            width: 100%;
+            max-width: 1400px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        .header h1 {
+            font-size: 36px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ff0080, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+            text-shadow: 0 0 30px rgba(255, 0, 128, 0.5);
+        }
+
+        .header p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 16px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .main-content {
+            display: flex;
+            width: 100%;
+            gap: 20px;
+        }
+
+        .editor-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .preview-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .panel {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #ff0080, #8000ff);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 0, 128, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 0, 128, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #00d4ff, #00ff88);
+            color: #0a0a0a;
+            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #ff9500, #ffcc00);
+            color: #0a0a0a;
+            box-shadow: 0 4px 15px rgba(255, 149, 0, 0.3);
+        }
+
+        .btn-warning:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 149, 0, 0.4);
+        }
+
+        .editor-tabs {
+            display: flex;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 4px;
+            margin-bottom: 10px;
+        }
+
+        .editor-tab {
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .editor-tab.active {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .editor-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            width: 100%;
+            padding: 20px;
+            position: relative;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            flex: 1;
+        }
+
+        .editor-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #ff0080, #00d4ff, #8000ff, #ff0080);
+            background-size: 300% 100%;
+            animation: gradientMove 3s linear infinite;
+            border-radius: 16px 16px 0 0;
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 300% 50%; }
+        }
+
+        .editor-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            height: 100%;
+        }
+
+        .code-wrapper {
+            display: flex;
+            width: 100%;
+            position: relative;
+            height: 300px;
+            overflow: auto;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .line-numbers {
+            width: 50px;
+            padding: 15px 5px;
+            background: rgba(0, 0, 0, 0.4);
+            color: rgba(255, 255, 255, 0.5);
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            text-align: right;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        .code-editor {
+            flex: 1;
+            padding: 15px;
+            background: transparent;
+            color: #f8f8f2;
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            resize: none;
+            border: none;
+            outline: none;
+            tab-size: 4;
+            -moz-tab-size: 4;
+            white-space: pre;
+            overflow-wrap: normal;
+            overflow: auto;
+        }
+
+        .editor-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .editor-info {
+            display: flex;
+            gap: 15px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .preview-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            width: 100%;
+            padding: 20px;
+            position: relative;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .preview-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #00d4ff, #ff0080, #8000ff, #00d4ff);
+            background-size: 300% 100%;
+            animation: gradientMove 3s linear infinite;
+            border-radius: 16px 16px 0 0;
+        }
+
+        .preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .preview-title {
+            font-size: 22px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00d4ff, #ff0080);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .preview-content {
+            flex: 1;
+            overflow: auto;
+            background: white;
+            border-radius: 8px;
+            position: relative;
+        }
+
+        #preview-frame {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 8px;
+            background: white;
+        }
+
+        .publish-section {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            width: 100%;
+            padding: 20px;
+            position: relative;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .publish-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #00ff88, #8000ff, #ff0080, #00ff88);
+            background-size: 300% 100%;
+            animation: gradientMove 3s linear infinite;
+            border-radius: 16px 16px 0 0;
+        }
+
+        .publish-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .publish-title {
+            font-size: 22px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00ff88, #8000ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .publish-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .form-group input {
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.3);
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: #8000ff;
+        }
+
+        .url-display {
+            display: flex;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 5px;
+            margin-top: 10px;
+        }
+
+        .url-display span {
+            padding: 10px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+        }
+
+        .url-display a {
+            flex: 1;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            color: #00d4ff;
+            text-decoration: none;
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .url-display a:hover {
+            text-decoration: underline;
+        }
+
+        .view-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 14px;
+            width: 100%;
+        }
+
+        /* Стили для подсветки синтаксиса */
+        .keyword {
+            color: #ff79c6;
+            font-weight: bold;
+        }
+
+        .comment {
+            color: #6272a4;
+        }
+
+        .string {
+            color: #f1fa8c;
+        }
+
+        .function {
+            color: #50fa7b;
+        }
+
+        .number {
+            color: #bd93f9;
+        }
+
+        .operator {
+            color: #ff79c6;
+        }
+
+        .preprocessor {
+            color: #ffb86c;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 968px) {
+            .main-content {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .panel {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+
+            .header h1 {
+                font-size: 28px;
+            }
+
+            .editor-info {
+                flex-wrap: wrap;
+            }
+            
+            .controls {
+                flex-wrap: wrap;
+            }
+            
+            .view-buttons {
+                flex-direction: column;
+            }
+        }
+
+        /* Светлая тема */
+        body.light-theme {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        body.light-theme::before {
+            opacity: 0.1;
+        }
+
+        body.light-theme .editor-container,
+        body.light-theme .preview-container,
+        body.light-theme .publish-section {
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            color: #333;
+        }
+
+        body.light-theme .btn-secondary {
+            background: rgba(0, 0, 0, 0.05);
+            color: #333;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        body.light-theme .editor-info,
+        body.light-theme .form-group label,
+        body.light-theme .url-display span {
+            color: rgba(0, 0, 0, 0.7);
+        }
+
+        body.light-theme .form-group input {
+            background: rgba(255, 255, 255, 0.5);
+            color: #333;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        body.light-theme .code-wrapper {
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        body.light-theme .line-numbers {
+            background: rgba(0, 0, 0, 0.1);
+            color: rgba(0, 0, 0, 0.5);
+        }
+
+        body.light-theme .code-editor {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+
+    <div class="container">
+        <div class="header">
+            <h1>Oink Site Builder</h1>
+            <p>Создайте, просмотрите и опубликуйте свой сайт для Oink Platforms</p>
+        </div>
+
+        <div class="main-content">
+            <div class="editor-section">
+                <div class="panel">
+                    <div class="controls">
+                        <button class="btn btn-primary" id="run-btn">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                                <path d="M2.5 2.5v11l9-5.5-9-5.5z"/>
+                            </svg>
+                            Запустить
+                        </button>
+                        <button class="btn btn-secondary" id="clear-btn">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                                <path d="M2 2v12h12V2H2zm3 1h1v1H5V3zm2 0h1v1H7V3zm2 0h1v1H9V3zm2 0h1v1h-1V3zm-8 2h10v8H3V5z"/>
+                            </svg>
+                            Очистить
+                        </button>
+                    </div>
+                    <div class="editor-tabs">
+                        <div class="editor-tab active" data-tab="html">HTML</div>
+                        <div class="editor-tab" data-tab="css">CSS</div>
+                        <div class="editor-tab" data-tab="js">JavaScript</div>
+                    </div>
+                </div>
+
+                <div class="editor-container">
+                    <div class="editor-wrapper">
+                        <div class="code-wrapper">
+                            <div class="line-numbers" id="line-numbers">1</div>
+                            <pre id="html-editor" class="code-editor" contenteditable="true" spellcheck="false">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Мой сайт Oink&lt;/title&gt;
+    &lt;style&gt;
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #6a40bf, #ff6b6b);
+            color: white;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 36px;
+        }
+        p {
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .btn {
+            background: #ff6b6b;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        .btn:hover {
+            background: #ff4f4f;
+            transform: translateY(-2px);
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class="container"&gt;
+        &lt;h1&gt;Добро пожаловать на мой сайт!&lt;/h1&gt;
+        &lt;p&gt;Этот сайт был создан в Oink Site Builder и опубликован в Oink Platforms.&lt;/p&gt;
+        &lt;p&gt;Редактируйте этот код чтобы создать свой уникальный сайт.&lt;/p&gt;
+        &lt;button class="btn" onclick="showMessage()"&gt;Нажми меня&lt;/button&gt;
+    &lt;/div&gt;
+
+    &lt;script&gt;
+        function showMessage() {
+            alert('Привет от Oink Site Builder!');
+        }
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+                        </div>
+                    </div>
+                    <div class="editor-footer">
+                        <div class="editor-info">
+                            <div class="info-item">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                                    <path d="M8 1a7 7 0 100 14A7 7 0 008 1zm0 13A6 6 0 118 2a6 6 0 010 12z"/>
+                                    <path d="M9 11H7V7h2v4zM8 6a1 1 0 100-2 1 1 0 000 2z"/>
+                                </svg>
+                                <span id="lines-count">1 строка</span>
+                            </div>
+                            <div class="info-item">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                                    <path d="M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm0 14c-3.3 0-6-2.7-6-6s2.7-6 6-6 6 2.7 6 6-2.7 6-6 6z"/>
+                                    <path d="M9 5H7v6h2V5zM9 11H7v2h2v-2z"/>
+                                </svg>
+                                <span id="errors-count">0 ошибок</span>
+                            </div>
+                        </div>
+                        <button class="btn btn-secondary" id="theme-btn">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                                <path d="M8 13a1 1 0 011 1v1a1 1 0 01-2 0v-1a1 1 0 011-1zM8 3a1 1 0 01-1-1V1a1 1 0 012 0v1a1 1 0 01-1 1zM3 8a1 1 0 01-1 1H1a1 1 0 010-2h1a1 1 0 011 1zM15 8a1 1 0 011 1h1a1 1 0 010-2h-1a1 1 0 011 1zM3.5 12.5a1 1 0 011-1h1a1 1 0 010 2h-1a1 1 0 01-1-1zM11.5 3.5a1 1 0 011-1h1a1 1 0 010 2h-1a1 1 0 01-1-1zM3.5 3.5a1 1 0 011-1h1a1 1 0 010 2h-1a1 1 0 01-1-1zM11.5 12.5a1 1 0 011-1h1a1 1 0 010 2h-1a1 1 0 01-1-1z"/>
+                            </svg>
+                            Сменить тему
+                        </button>
+                    </div>
+                </div>
+
+                <div class="editor-container">
+                    <div class="editor-wrapper">
+                        <div class="code-wrapper">
+                            <div class="line-numbers" id="css-line-numbers">1</div>
+                            <pre id="css-editor" class="code-editor" contenteditable="true" spellcheck="false">/* Добавьте свои CSS стили здесь */
+.header {
+    background: linear-gradient(45deg, #6a40bf, #ff6b6b);
+    color: white;
+    padding: 2rem;
+    text-align: center;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.button {
+    background-color: #6a40bf;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.button:hover {
+    background-color: #5a30af;
+    transform: translateY(-2px);
+}</pre>
+                        </div>
+                    </div>
+                    <div class="editor-footer">
+                        <div class="editor-info">
+                            <div class="info-item">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                                    <path d="M8 1a7 7 0 100 14A7 7 0 008 1zm0 13A6 6 0 118 2a6 6 0 010 12z"/>
+                                    <path d="M9 11H7V7h2v4zM8 6a1 1 0 100-2 1 1 0 000 2z"/>
+                                </svg>
+                                <span id="css-lines-count">1 строка</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="editor-container">
+                    <div class="editor-wrapper">
+                        <div class="code-wrapper">
+                            <div class="line-numbers" id="js-line-numbers">1</div>
+                            <pre id="js-editor" class="code-editor" contenteditable="true" spellcheck="false">// Добавьте свою JavaScript логику здесь
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Сайт загружен!');
+    
+    // Пример интерактивности
+    const buttons = document.querySelectorAll('.button');
+    buttons.forEach(button => {
+        button.addEventListener('click', function() {
+            alert('Кнопка нажата!');
+        });
+    });
+});
+
+function showNotification() {
+    // Создаем уведомление
+    const notification = document.createElement('div');
+    notification.textContent = 'Добро пожаловать на сайт!';
+    notification.style.position = 'fixed';
+    notification.style.top = '20px';
+    notification.style.right = '20px';
+    notification.style.padding = '10px 20px';
+    notification.style.background = '#6a40bf';
+    notification.style.color = 'white';
+    notification.style.borderRadius = '4px';
+    notification.style.zIndex = '1000';
+    
+    document.body.appendChild(notification);
+    
+    // Удаляем уведомление через 3 секунды
+    setTimeout(() => {
+        notification.remove();
+    }, 3000);
+}
+
+// Показать уведомление при загрузке
+window.onload = showNotification;</pre>
+                        </div>
+                    </div>
+                    <div class="editor-footer">
+                        <div class="editor-info">
+                            <div class="info-item">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                                    <path d="M8 1a7 7 0 100 14A7 7 0 008 1zm0 13A6 6 0 118 2a6 6 0 010 12z"/>
+                                    <path d="M9 11H7V7h2v4zM8 6a1 1 0 100-2 1 1 0 000 2z"/>
+                                </svg>
+                                <span id="js-lines-count">1 строка</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="preview-section">
+                <div class="panel">
+                    <h2 class="preview-title">Предпросмотр сайта</h2>
+                    <button class="btn btn-success" id="refresh-btn">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                            <path d="M13.5 8c0-1.933-1.567-3.5-3.5-3.5-1.933 0-3.5 1.567-3.5 3.5s1.567 3.5 3.5 3.5c1.933 0 3.5-1.567 3.5-3.5zM2 8a6 6 0 016-6v2a4 4 0 00-4 4H2z"/>
+                            <path d="M14 8a6 6 0 01-6 6v-2a4 4 0 004-4h2z"/>
+                        </svg>
+                        Обновить
+                    </button>
+                </div>
+
+                <div class="preview-container">
+                    <div class="preview-content">
+                        <iframe id="preview-frame"></iframe>
+                    </div>
+                </div>
+
+                <div class="publish-section">
+                    <div class="publish-header">
+                        <h2 class="publish-title">Публикация сайта</h2>
+                        <button class="btn btn-success" id="publish-btn">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                                <path d="M0 4v9h16V4H0zm15 8H1V5h14v7zM8 7l4 3H4l4-3z"/>
+                                <path d="M4.5 2.5h7v1h-7zM5.5 0h5v1h-5z"/>
+                            </svg>
+                            Опубликовать
+                        </button>
+                    </div>
+                    <div class="publish-form">
+                        <div class="form-group">
+                            <label for="project-name">Название сайта</label>
+                            <input type="text" id="project-name" placeholder="Введите название сайта" value="Мой сайт Oink">
+                        </div>
+                        <div class="form-group">
+                            <label for="project-description">Описание сайта</label>
+                            <input type="text" id="project-description" placeholder="Введите описание сайта" value="Создано в Oink Site Builder">
+                        </div>
+                        <div class="form-group">
+                            <label>URL вашего сайта:</label>
+                            <div class="url-display">
+                                <span>oinktech.ru/</span>
+                                <a id="site-url" href="#" target="_blank">mysite.html</a>
+                            </div>
+                        </div>
+                        <div class="view-buttons">
+                            <button class="btn btn-warning" id="view-btn">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                                    <path d="M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm0 14c-3.3 0-6-2.7-6-6s2.7-6 6-6 6 2.7 6 6-2.7 6-6 6z"/>
+                                    <path d="M8 3c-2.8 0-5 2.2-5 5s2.2 5 5 5 5-2.2 5-5-2.2-5-5-5zm0 8c-1.7 0-3-1.3-3-3s1.3-3 3-3 3 1.3 3 3-1.3 3-3 3z"/>
+                                </svg>
+                                Просмотреть сайт
+                            </button>
+                            <button class="btn btn-primary" id="new-tab-btn">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                                    <path d="M14 0H2C0.9 0 0 0.9 0 2v12c0 1.1 0.9 2 2 2h12c1.1 0 2-0.9 2-2V2c0-1.1-0.9-2-2-2zm0 14H2V2h12v12zM3 3h10v1H3V3zm0 2h10v1H3V5zm0 2h10v1H3V7zm0 2h10v1H3V9zm0 2h5v1H3v-1z"/>
+                                </svg>
+                                Открыть в новой вкладке
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Oink Site Builder &copy; 2023 | Создавайте и публикуйте сайты для Oink Platforms</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Элементы редактора
+            const htmlEditor = document.getElementById('html-editor');
+            const cssEditor = document.getElementById('css-editor');
+            const jsEditor = document.getElementById('js-editor');
+            const lineNumbers = document.getElementById('line-numbers');
+            const cssLineNumbers = document.getElementById('css-line-numbers');
+            const jsLineNumbers = document.getElementById('js-line-numbers');
+            const tabs = document.querySelectorAll('.editor-tab');
+            
+            // Элементы предпросмотра
+            const previewFrame = document.getElementById('preview-frame');
+            const refreshBtn = document.getElementById('refresh-btn');
+            const runBtn = document.getElementById('run-btn');
+            
+            // Элементы публикации
+            const publishBtn = document.getElementById('publish-btn');
+            const viewBtn = document.getElementById('view-btn');
+            const newTabBtn = document.getElementById('new-tab-btn');
+            const projectNameInput = document.getElementById('project-name');
+            const projectDescInput = document.getElementById('project-description');
+            const siteUrlElement = document.getElementById('site-url');
+            
+            // Кнопки управления
+            const clearBtn = document.getElementById('clear-btn');
+            const themeBtn = document.getElementById('theme-btn');
+            
+            // Счетчики строк
+            const linesCount = document.getElementById('lines-count');
+            const cssLinesCount = document.getElementById('css-lines-count');
+            const jsLinesCount = document.getElementById('js-lines-count');
+            const errorsCount = document.getElementById('errors-count');
+            
+            // Текущий проект
+            let currentProject = {
+                html: '',
+                css: '',
+                js: '',
+                name: 'Мой сайт Oink',
+                description: 'Создано в Oink Site Builder'
+            };
+            
+            // Случайные слова для генерации URL
+            const words = {
+                adjectives: ['быстрый', 'красивый', 'инновационный', 'удивительный', 'крутой', 
+                           'современный', 'яркий', 'стильный', 'удобный', 'функциональный'],
+                nouns: ['сайт', 'блог', 'портал', 'магазин', 'проект', 
+                       'ресурс', 'гид', 'каталог', 'журнал', 'галерея']
+            };
+            
+            // Инициализация редактора
+            function initEditor() {
+                // Загрузка сохраненного проекта
+                loadProject();
+                
+                // Установка обработчиков событий
+                setupEventListeners();
+                
+                // Первоначальное обновление предпросмотра
+                updatePreview();
+                
+                // Обновление счетчиков строк
+                updateLineCounters();
+                
+                // Генерация URL
+                updateSiteUrl();
+            }
+            
+            // Настройка обработчиков событий
+            function setupEventListeners() {
+                // Обработчики для редакторов
+                htmlEditor.addEventListener('input', function() {
+                    currentProject.html = htmlEditor.textContent;
+                    updateLineNumbers(lineNumbers, htmlEditor);
+                    updateLineCounters();
+                    saveProject();
+                });
+                
+                cssEditor.addEventListener('input', function() {
+                    currentProject.css = cssEditor.textContent;
+                    updateLineNumbers(cssLineNumbers, cssEditor);
+                    updateLineCounters();
+                    saveProject();
+                });
+                
+                jsEditor.addEventListener('input', function() {
+                    currentProject.js = jsEditor.textContent;
+                    updateLineNumbers(jsLineNumbers, jsEditor);
+                    updateLineCounters();
+                    saveProject();
+                });
+                
+                // Прокрутка номеров строк вместе с редактором
+                htmlEditor.addEventListener('scroll', function() {
+                    lineNumbers.scrollTop = htmlEditor.scrollTop;
+                });
+                
+                cssEditor.addEventListener('scroll', function() {
+                    cssLineNumbers.scrollTop = cssEditor.scrollTop;
+                });
+                
+                jsEditor.addEventListener('scroll', function() {
+                    jsLineNumbers.scrollTop = jsEditor.scrollTop;
+                });
+                
+                // Обработчики для вкладок
+                tabs.forEach(tab => {
+                    tab.addEventListener('click', function() {
+                        const tabName = this.getAttribute('data-tab');
+                        
+                        // Убираем активный класс у всех табов
+                        tabs.forEach(t => t.classList.remove('active'));
+                        // Добавляем активный класс текущему табу
+                        this.classList.add('active');
+                        
+                        // Показываем соответствующий редактор
+                        document.querySelectorAll('.code-wrapper').forEach(wrapper => {
+                            wrapper.style.display = 'none';
+                        });
+                        document.getElementById(`${tabName}-editor`).parentElement.style.display = 'flex';
+                    });
+                });
+                
+                // Кнопка запуска
+                runBtn.addEventListener('click', updatePreview);
+                
+                // Кнопка обновления предпросмотра
+                refreshBtn.addEventListener('click', updatePreview);
+                
+                // Кнопка очистки
+                clearBtn.addEventListener('click', function() {
+                    if (confirm('Вы уверены? Весь несохраненный прогресс будет потерян.')) {
+                        htmlEditor.textContent = '';
+                        cssEditor.textContent = '';
+                        jsEditor.textContent = '';
+                        currentProject.html = '';
+                        currentProject.css = '';
+                        currentProject.js = '';
+                        updatePreview();
+                        updateLineNumbers(lineNumbers, htmlEditor);
+                        updateLineNumbers(cssLineNumbers, cssEditor);
+                        updateLineNumbers(jsLineNumbers, jsEditor);
+                        updateLineCounters();
+                        saveProject();
+                    }
+                });
+                
+                // Кнопка смены темы
+                themeBtn.addEventListener('click', toggleTheme);
+                
+                // Публикация проекта
+                publishBtn.addEventListener('click', publishProject);
+                
+                // Просмотр сайта
+                viewBtn.addEventListener('click', viewProject);
+                
+                // Открытие в новой вкладке
+                newTabBtn.addEventListener('click', openInNewTab);
+                
+                // Изменение названия проекта
+                projectNameInput.addEventListener('input', function() {
+                    currentProject.name = projectNameInput.value;
+                    updateSiteUrl();
+                    saveProject();
+                });
+                
+                projectDescInput.addEventListener('input', function() {
+                    currentProject.description = projectDescInput.value;
+                    saveProject();
+                });
+            }
+            
+            // Обновление предпросмотра
+            function updatePreview() {
+                const htmlCode = htmlEditor.textContent;
+                const cssCode = cssEditor.textContent;
+                const jsCode = jsEditor.textContent;
+                
+                // Создаем полный HTML документ
+                const fullHtml = `
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <title>${currentProject.name}</title>
+                        <style>${cssCode}</style>
+                    </head>
+                    <body>
+                        ${htmlCode}
+                        <script>${jsCode}<\/script>
+                    </body>
+                    </html>
+                `;
+                
+                // Открываем в iframe
+                const previewDoc = previewFrame.contentDocument || previewFrame.contentWindow.document;
+                previewDoc.open();
+                previewDoc.write(fullHtml);
+                previewDoc.close();
+            }
+            
+            // Просмотр сайта в модальном окне
+            function viewProject() {
+                const htmlCode = htmlEditor.textContent;
+                const cssCode = cssEditor.textContent;
+                const jsCode = jsEditor.textContent;
+                
+                const fullHtml = `
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <title>${currentProject.name}</title>
+                        <style>${cssCode}</style>
+                    </head>
+                    <body>
+                        ${htmlCode}
+                        <script>${jsCode}<\/script>
+                    </body>
+                    </html>
+                `;
+                
+                // Создаем модальное окно для просмотра
+                const modal = document.createElement('div');
+                modal.style.position = 'fixed';
+                modal.style.top = '0';
+                modal.style.left = '0';
+                modal.style.width = '100%';
+                modal.style.height = '100%';
+                modal.style.backgroundColor = 'rgba(0,0,0,0.9)';
+                modal.style.zIndex = '1000';
+                modal.style.display = 'flex';
+                modal.style.flexDirection = 'column';
+                
+                // Заголовок модального окна
+                const header = document.createElement('div');
+                header.style.padding = '15px';
+                header.style.backgroundColor = '#1a1a1a';
+                header.style.color = 'white';
+                header.style.display = 'flex';
+                header.style.justifyContent = 'space-between';
+                header.style.alignItems = 'center';
+                
+                const title = document.createElement('h3');
+                title.textContent = `Просмотр: ${currentProject.name}`;
+                title.style.margin = '0';
+                
+                const closeBtn = document.createElement('button');
+                closeBtn.textContent = 'Закрыть';
+                closeBtn.style.padding = '8px 16px';
+                closeBtn.style.backgroundColor = '#ff6b6b';
+                closeBtn.style.color = 'white';
+                closeBtn.style.border = 'none';
+                closeBtn.style.borderRadius = '4px';
+                closeBtn.style.cursor = 'pointer';
+                
+                closeBtn.addEventListener('click', function() {
+                    document.body.removeChild(modal);
+                });
+                
+                header.appendChild(title);
+                header.appendChild(closeBtn);
+                
+                // Контейнер для iframe
+                const iframeContainer = document.createElement('div');
+                iframeContainer.style.flex = '1';
+                iframeContainer.style.padding = '10px';
+                
+                const iframe = document.createElement('iframe');
+                iframe.style.width = '100%';
+                iframe.style.height = '100%';
+                iframe.style.border = 'none';
+                iframe.style.borderRadius = '8px';
+                iframe.style.background = 'white';
+                
+                iframeContainer.appendChild(iframe);
+                
+                modal.appendChild(header);
+                modal.appendChild(iframeContainer);
+                
+                document.body.appendChild(modal);
+                
+                // Загружаем контент в iframe
+                const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                iframeDoc.open();
+                iframeDoc.write(fullHtml);
+                iframeDoc.close();
+            }
+            
+            // Открытие сайта в новой вкладке
+            function openInNewTab() {
+                const htmlCode = htmlEditor.textContent;
+                const cssCode = cssEditor.textContent;
+                const jsCode = jsEditor.textContent;
+                
+                const fullHtml = `
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <title>${currentProject.name}</title>
+                        <style>${cssCode}</style>
+                    </head>
+                    <body>
+                        ${htmlCode}
+                        <script>${jsCode}<\/script>
+                    </body>
+                    </html>
+                `;
+                
+                // Создаем новое окно
+                const newWindow = window.open('', '_blank');
+                newWindow.document.open();
+                newWindow.document.write(fullHtml);
+                newWindow.document.close();
+            }
+            
+            // Обновление нумерации строк
+            function updateLineNumbers(lineNumbersElement, editorElement) {
+                const lines = editorElement.textContent.split('\n').length;
+                let numbers = '';
+                
+                for (let i = 1; i <= lines; i++) {
+                    numbers += i + '<br>';
+                }
+                
+                lineNumbersElement.innerHTML = numbers;
+            }
+            
+            // Обновление счетчиков строк
+            function updateLineCounters() {
+                const htmlLines = htmlEditor.textContent.split('\n').length;
+                const cssLines = cssEditor.textContent.split('\n').length;
+                const jsLines = jsEditor.textContent.split('\n').length;
+                
+                linesCount.textContent = `${htmlLines} строк`;
+                cssLinesCount.textContent = `${cssLines} строк`;
+                jsLinesCount.textContent = `${jsLines} строк`;
+            }
+            
+            // Генерация случайного URL
+            function generateRandomUrl() {
+                const adjective = words.adjectives[Math.floor(Math.random() * words.adjectives.length)];
+                const noun = words.nouns[Math.floor(Math.random() * words.nouns.length)];
+                const randomNum = Math.floor(Math.random() * 1000);
+                
+                return `${adjective}-${noun}-${randomNum}.html`;
+            }
+            
+            // Обновление URL сайта
+            function updateSiteUrl() {
+                const url = generateRandomUrl();
+                siteUrlElement.textContent = url;
+                siteUrlElement.href = `https://oinktech.ru/${url}`;
+            }
+            
+            // Публикация проекта
+            function publishProject() {
+                // Генерируем окончательный HTML
+                const htmlCode = htmlEditor.textContent;
+                const cssCode = cssEditor.textContent;
+                const jsCode = jsEditor.textContent;
+                
+                const fullHtml = `
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <title>${currentProject.name}</title>
+                        <meta name="description" content="${currentProject.description}">
+                        <style>${cssCode}</style>
+                    </head>
+                    <body>
+                        ${htmlCode}
+                        <script>${jsCode}<\/script>
+                    </body>
+                    </html>
+                `;
+                
+                // Создаем blob и ссылку для скачивания
+                const blob = new Blob([fullHtml], { type: 'text/html' });
+                const url = URL.createObjectURL(blob);
+                
+                // Создаем временную ссылку для скачивания
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = siteUrlElement.textContent;
+                document.body.appendChild(a);
+                a.click();
+                
+                // Очищаем
+                setTimeout(() => {
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                }, 100);
+                
+                // Показываем уведомление
+                alert(`Сайт "${currentProject.name}" успешно опубликован!\n\nФайл: ${siteUrlElement.textContent}\n\nСохраните этот файл и откройте в Oink Platforms.`);
+            }
+            
+            // Переключение темы
+            function toggleTheme() {
+                document.body.classList.toggle('light-theme');
+                
+                if (document.body.classList.contains('light-theme')) {
+                    themeBtn.innerHTML = `
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                            <path d="M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm0 14c-3.3 0-6-2.7-6-6s2.7-6 6-6 6 2.7 6 6-2.7 6-6 6z"/>
+                            <path d="M8 4c-2.2 0-4 1.8-4 4s1.8 4 4 4 4-1.8 4-4-1.8-4-4-4z"/>
+                        </svg>
+                        Темная тема
+                    `;
+                } else {
+                    themeBtn.innerHTML = `
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                            <path d="M8 13a1 1 0 011 1v1a1 1 0 01-2 0v-1a1 1 0 011-1zM8 3a1 1 0 01-1-1V1a1 1 0 012 0v1a1 1 0 01-1 1zM3 8a1 1 0 01-1 1H1a1 1 0 010-2h1a1 1 0 011 1zM15 8a1 1 0 011 1h1a1 1 0 010-2h-1a1 1 0 011 1zM3.5 12.5a1 1 0 011-1h1a1 1 0 010 2h-1a1 1 0 01-1-1zM11.5 3.5a1 1 0 011-1h1a1 1 0 010 2h-1a1 1 0 01-1-1zM3.5 3.5a1 1 0 011-1h1a1 1 0 010 2h-1a1 1 0 01-1-1zM11.5 12.5a1 1 0 011-1h1a1 1 0 010 2h-1a1 1 0 01-1-1z"/>
+                        </svg>
+                        Светлая тема
+                    `;
+                }
+                
+                saveProject();
+            }
+            
+            // Сохранение проекта в localStorage
+            function saveProject() {
+                const projectData = {
+                    html: htmlEditor.textContent,
+                    css: cssEditor.textContent,
+                    js: jsEditor.textContent,
+                    name: projectNameInput.value,
+                    description: projectDescInput.value,
+                    theme: document.body.classList.contains('light-theme') ? 'light' : 'dark'
+                };
+                
+                localStorage.setItem('oinkSiteBuilderProject', JSON.stringify(projectData));
+            }
+            
+            // Загрузка проекта из localStorage
+            function loadProject() {
+                const savedProject = localStorage.getItem('oinkSiteBuilderProject');
+                
+                if (savedProject) {
+                    const projectData = JSON.parse(savedProject);
+                    
+                    htmlEditor.textContent = projectData.html || '';
+                    cssEditor.textContent = projectData.css || '';
+                    jsEditor.textContent = projectData.js || '';
+                    projectNameInput.value = projectData.name || 'Мой сайт Oink';
+                    projectDescInput.value = projectData.description || 'Создано в Oink Site Builder';
+                    
+                    if (projectData.theme === 'light') {
+                        document.body.classList.add('light-theme');
+                        themeBtn.innerHTML = `
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                                <path d="M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm0 14c-3.3 0-6-2.7-6-6s2.7-6 6-6 6 2.7 6 6-2.7 6-6 6z"/>
+                                <path d="M8 4c-2.2 0-4 1.8-4 4s1.8 4 4 4 4-1.8 4-4-1.8-4-4-4z"/>
+                            </svg>
+                            Темная тема
+                        `;
+                    }
+                    
+                    currentProject = projectData;
+                }
+                
+                // Обновляем нумерацию строк
+                updateLineNumbers(lineNumbers, htmlEditor);
+                updateLineNumbers(cssLineNumbers, cssEditor);
+                updateLineNumbers(jsLineNumbers, jsEditor);
+            }
+            
+            // Инициализация редактора
+            initEditor();
+        });
+    </script>
+</body>
+</html>

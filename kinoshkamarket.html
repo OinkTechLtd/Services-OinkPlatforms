@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .token-section h2 {
+            color: #4a5568;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .token-section h2::before {
+            content: "🤖";
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .input-group input, .input-group textarea, .input-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus, .input-group textarea:focus, .input-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .bot-builder h2 {
+            color: #4a5568;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .bot-builder h2::before {
+            content: "⚙️";
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+
+        .command-list {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 15px;
+            background: #f7fafc;
+        }
+
+        .command-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin: 5px 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+
+        .command-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .command-info {
+            flex-grow: 1;
+        }
+
+        .command-name {
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 2px;
+        }
+
+        .command-desc {
+            font-size: 12px;
+            color: #718096;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-edit {
+            background: #4299e1;
+            color: white;
+            margin-right: 5px;
+        }
+
+        .btn-edit:hover {
+            background: #3182ce;
+            transform: scale(1.05);
+        }
+
+        .btn-delete {
+            background: #f56565;
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background: #e53e3e;
+            transform: scale(1.05);
+        }
+
+        .btn-add {
+            background: #48bb78;
+            color: white;
+            padding: 12px 24px;
+            font-size: 14px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+        }
+
+        .btn-add:hover {
+            background: #38a169;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(72, 187, 120, 0.3);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px 30px;
+            font-size: 16px;
+            border-radius: 10px;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .status {
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .status.success {
+            background: #c6f6d5;
+            color: #22543d;
+            border: 2px solid #9ae6b4;
+        }
+
+        .status.error {
+            background: #fed7d7;
+            color: #742a2a;
+            border: 2px solid #fc8181;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: modalAppear 0.3s ease;
+        }
+
+        @keyframes modalAppear {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .close:hover {
+            color: #333;
+        }
+
+        .preview-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .preview-section h3 {
+            color: #4a5568;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .preview-section h3::before {
+            content: "👁️";
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+
+        .code-preview {
+            background: #1a202c;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .modal-content {
+                margin: 10% auto;
+                width: 95%;
+                padding: 20px;
+            }
+        }
+
+        .feature-highlight {
+            background: linear-gradient(135deg, #ffecd2, #fcb69f);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            text-align: center;
+            color: #8b4513;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🤖 Конструктор ботов</h1>
+            <p>Создайте своего бота за несколько кликов</p>
+        </div>
+
+        <div class="main-content">
+            <div class="card token-section">
+                <h2>Настройки бота</h2>
+                
+                <div class="input-group">
+                    <label for="botToken">Токен бота:</label>
+                    <input type="text" id="botToken" placeholder="Вставьте токен">
+                </div>
+
+                <div class="input-group">
+                    <label for="botName">Имя бота:</label>
+                    <input type="text" id="botName" placeholder="Мой крутой бот" value="Мой бот">
+                </div>
+
+                <div class="input-group">
+                    <label for="welcomeMessage">Приветственное сообщение:</label>
+                    <textarea id="welcomeMessage" rows="3" placeholder="Привет! Я твой новый бот 🤖">Привет! Я твой новый бот 🤖</textarea>
+                </div>
+
+                <div class="input-group">
+                    <label for="botMode">Режим работы:</label>
+                    <select id="botMode">
+                        <option value="polling">Polling (для тестирования)</option>
+                        <option value="webhook">Webhook (для продакшена)</option>
+                    </select>
+                </div>
+
+                <div class="feature-highlight">
+                    💡 Получите токен из любого сервиса который предоставляет Доступ к Созданию Ботов. (Telegram/MAX/Oink Platforms)
+                </div>
+
+                <button class="btn btn-primary" onclick="validateAndStart()">
+                    🚀 Запустить бота
+                </button>
+
+                <div id="status"></div>
+            </div>
+
+            <div class="card bot-builder">
+                <h2>Конструктор команд</h2>
+                
+                <button class="btn btn-add" onclick="openModal()">
+                    ➕ Добавить команду
+                </button>
+
+                <div class="command-list" id="commandList">
+                    <!-- Команды будут добавляться динамически -->
+                </div>
+            </div>
+        </div>
+
+        <div class="preview-section">
+            <h3>Предпросмотр кода</h3>
+            <div class="code-preview" id="codePreview">
+                <div style="color: #68d391;">// Ваш код бота появится здесь после добавления команд</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно для добавления/редактирования команд -->
+    <div id="commandModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle">Добавить команду</h2>
+            
+            <div class="input-group">
+                <label for="commandName">Команда (без /):</label>
+                <input type="text" id="commandName" placeholder="start">
+            </div>
+
+            <div class="input-group">
+                <label for="commandDescription">Описание:</label>
+                <input type="text" id="commandDescription" placeholder="Команда для запуска бота">
+            </div>
+
+            <div class="input-group">
+                <label for="commandType">Тип ответа:</label>
+                <select id="commandType" onchange="toggleCommandFields()">
+                    <option value="text">Текстовое сообщение</option>
+                    <option value="photo">Отправить фото</option>
+                    <option value="file">Отправить файл</option>
+                    <option value="keyboard">Клавиатура</option>
+                    <option value="inline">Инлайн клавиатура</option>
+                </select>
+            </div>
+
+            <div class="input-group" id="responseField">
+                <label for="commandResponse">Ответ бота:</label>
+                <textarea id="commandResponse" rows="4" placeholder="Привет! Это команда start"></textarea>
+            </div>
+
+            <div class="input-group" id="keyboardField" style="display:none;">
+                <label for="keyboardButtons">Кнопки (по одной в строке):</label>
+                <textarea id="keyboardButtons" rows="4" placeholder="Кнопка 1&#10;Кнопка 2&#10;Кнопка 3"></textarea>
+            </div>
+
+            <button class="btn btn-primary" onclick="saveCommand()">
+                💾 Сохранить команду
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let commands = [];
+        let editingIndex = -1;
+
+        // Добавляем базовые команды при загрузке
+        window.onload = function() {
+            commands = [
+                {
+                    name: 'start',
+                    description: 'Запуск бота',
+                    type: 'text',
+                    response: 'Привет! Я работаю! 🚀'
+                },
+                {
+                    name: 'help',
+                    description: 'Список команд',
+                    type: 'text',
+                    response: 'Доступные команды:\n/start - Запуск бота\n/help - Список команд'
+                }
+            ];
+            updateCommandList();
+            updateCodePreview();
+        };
+
+        function openModal(index = -1) {
+            editingIndex = index;
+            const modal = document.getElementById('commandModal');
+            const title = document.getElementById('modalTitle');
+            
+            if (index >= 0) {
+                title.textContent = 'Редактировать команду';
+                const cmd = commands[index];
+                document.getElementById('commandName').value = cmd.name;
+                document.getElementById('commandDescription').value = cmd.description;
+                document.getElementById('commandType').value = cmd.type;
+                document.getElementById('commandResponse').value = cmd.response || '';
+                document.getElementById('keyboardButtons').value = cmd.buttons ? cmd.buttons.join('\n') : '';
+            } else {
+                title.textContent = 'Добавить команду';
+                document.getElementById('commandName').value = '';
+                document.getElementById('commandDescription').value = '';
+                document.getElementById('commandType').value = 'text';
+                document.getElementById('commandResponse').value = '';
+                document.getElementById('keyboardButtons').value = '';
+            }
+            
+            toggleCommandFields();
+            modal.style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('commandModal').style.display = 'none';
+        }
+
+        function toggleCommandFields() {
+            const type = document.getElementById('commandType').value;
+            const responseField = document.getElementById('responseField');
+            const keyboardField = document.getElementById('keyboardField');
+            const responseLabel = responseField.querySelector('label');
+            
+            if (type === 'photo') {
+                responseLabel.textContent = 'URL фотографии:';
+                responseField.style.display = 'block';
+                keyboardField.style.display = 'none';
+            } else if (type === 'file') {
+                responseLabel.textContent = 'URL файла:';
+                responseField.style.display = 'block';
+                keyboardField.style.display = 'none';
+            } else if (type === 'keyboard' || type === 'inline') {
+                responseLabel.textContent = 'Текст сообщения:';
+                responseField.style.display = 'block';
+                keyboardField.style.display = 'block';
+            } else {
+                responseLabel.textContent = 'Ответ бота:';
+                responseField.style.display = 'block';
+                keyboardField.style.display = 'none';
+            }
+        }
+
+        function saveCommand() {
+            const name = document.getElementById('commandName').value.trim();
+            const description = document.getElementById('commandDescription').value.trim();
+            const type = document.getElementById('commandType').value;
+            const response = document.getElementById('commandResponse').value.trim();
+            const buttons = document.getElementById('keyboardButtons').value.trim();
+
+            if (!name || !description) {
+                alert('Пожалуйста, заполните название и описание команды');
+                return;
+            }
+
+            if (!response && (type === 'text' || type === 'keyboard' || type === 'inline')) {
+                alert('Пожалуйста, заполните ответ бота');
+                return;
+            }
+
+            const command = {
+                name: name,
+                description: description,
+                type: type,
+                response: response
+            };
+
+            if (type === 'keyboard' || type === 'inline') {
+                command.buttons = buttons.split('\n').filter(b => b.trim());
+            }
+
+            if (editingIndex >= 0) {
+                commands[editingIndex] = command;
+            } else {
+                commands.push(command);
+            }
+
+            updateCommandList();
+            updateCodePreview();
+            closeModal();
+        }
+
+        function editCommand(index) {
+            openModal(index);
+        }
+
+        function deleteCommand(index) {
+            if (confirm('Удалить эту команду?')) {
+                commands.splice(index, 1);
+                updateCommandList();
+                updateCodePreview();
+            }
+        }
+
+        function updateCommandList() {
+            const list = document.getElementById('commandList');
+            list.innerHTML = '';
+
+            commands.forEach((cmd, index) => {
+                const item = document.createElement('div');
+                item.className = 'command-item';
+                item.innerHTML = `
+                    <div class="command-info">
+                        <div class="command-name">/${cmd.name}</div>
+                        <div class="command-desc">${cmd.description} (${getTypeLabel(cmd.type)})</div>
+                    </div>
+                    <div>
+                        <button class="btn btn-edit" onclick="editCommand(${index})">✏️</button>
+                        <button class="btn btn-delete" onclick="deleteCommand(${index})">🗑️</button>
+                    </div>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        function getTypeLabel(type) {
+            const labels = {
+                'text': 'Текст',
+                'photo': 'Фото',
+                'file': 'Файл',
+                'keyboard': 'Клавиатура',
+                'inline': 'Инлайн'
+            };
+            return labels[type] || 'Неизвестно';
+        }
+
+        function updateCodePreview() {
+            const preview = document.getElementById('codePreview');
+            const botName = document.getElementById('botName').value || 'Мой бот';
+            const welcomeMessage = document.getElementById('welcomeMessage').value || 'Привет!';
+            
+            let code = `<span style="color: #68d391;">// Код вашего Telegram бота</span>
+<span style="color: #fbb6ce;">const</span> <span style="color: #90cdf4;">TelegramBot</span> = <span style="color: #f687b3;">require</span>(<span style="color: #68d391;">'node-telegram-bot-api'</span>);
+
+<span style="color: #fbb6ce;">const</span> <span style="color: #90cdf4;">token</span> = <span style="color: #68d391;">'YOUR_BOT_TOKEN'</span>;
+<span style="color: #fbb6ce;">const</span> <span style="color: #90cdf4;">bot</span> = <span style="color: #fbb6ce;">new</span> <span style="color: #90cdf4;">TelegramBot</span>(token, {<span style="color: #90cdf4;">polling</span>: <span style="color: #f687b3;">true</span>});
+
+<span style="color: #68d391;">// Приветственное сообщение</span>
+<span style="color: #90cdf4;">console</span>.<span style="color: #f687b3;">log</span>(<span style="color: #68d391;">'${botName} запущен!'</span>);
+`;
+
+            commands.forEach(cmd => {
+                code += `\n<span style="color: #68d391;">// Команда /${cmd.name}</span>
+<span style="color: #90cdf4;">bot</span>.<span style="color: #f687b3;">onText</span>(<span style="color: #68d391;">/${cmd.name}/</span>, (<span style="color: #90cdf4;">msg</span>) => {
+    <span style="color: #fbb6ce;">const</span> <span style="color: #90cdf4;">chatId</span> = <span style="color: #90cdf4;">msg</span>.<span style="color: #90cdf4;">chat</span>.<span style="color: #90cdf4;">id</span>;`;
+
+                if (cmd.type === 'text') {
+                    code += `
+    <span style="color: #90cdf4;">bot</span>.<span style="color: #f687b3;">sendMessage</span>(<span style="color: #90cdf4;">chatId</span>, <span style="color: #68d391;">'${cmd.response}'</span>);`;
+                } else if (cmd.type === 'photo') {
+                    code += `
+    <span style="color: #90cdf4;">bot</span>.<span style="color: #f687b3;">sendPhoto</span>(<span style="color: #90cdf4;">chatId</span>, <span style="color: #68d391;">'${cmd.response}'</span>);`;
+                } else if (cmd.type === 'file') {
+                    code += `
+    <span style="color: #90cdf4;">bot</span>.<span style="color: #f687b3;">sendDocument</span>(<span style="color: #90cdf4;">chatId</span>, <span style="color: #68d391;">'${cmd.response}'</span>);`;
+                } else if (cmd.type === 'keyboard') {
+                    const buttons = cmd.buttons.map(b => `['${b}']`).join(', ');
+                    code += `
+    <span style="color: #fbb6ce;">const</span> <span style="color: #90cdf4;">keyboard</span> = {
+        <span style="color: #90cdf4;">reply_markup</span>: {
+            <span style="color: #90cdf4;">keyboard</span>: [${buttons}],
+            <span style="color: #90cdf4;">resize_keyboard</span>: <span style="color: #f687b3;">true</span>
+        }
+    };
+    <span style="color: #90cdf4;">bot</span>.<span style="color: #f687b3;">sendMessage</span>(<span style="color: #90cdf4;">chatId</span>, <span style="color: #68d391;">'${cmd.response}'</span>, <span style="color: #90cdf4;">keyboard</span>);`;
+                }
+
+                code += `
+});`;
+            });
+
+            preview.innerHTML = code;
+        }
+
+        function validateAndStart() {
+            const token = document.getElementById('botToken').value.trim();
+            const status = document.getElementById('status');
+
+            if (!token) {
+                status.innerHTML = '<div class="status error">❌ Пожалуйста, введите токен бота</div>';
+                return;
+            }
+
+            if (commands.length === 0) {
+                status.innerHTML = '<div class="status error">❌ Добавьте хотя бы одну команду</div>';
+                return;
+            }
+
+            // Симуляция запуска бота
+            status.innerHTML = '<div class="status success">✅ Бот успешно настроен! Код готов к использованию.</div>';
+            
+            // Обновляем предпросмотр с реальным токеном
+            updateCodePreview();
+        }
+
+        // Закрытие модального окна при клике вне его
+        window.onclick = function(event) {
+            const modal = document.getElementById('commandModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        };
+
+        // Обновление предпросмотра при изменении настроек
+        document.getElementById('botName').addEventListener('input', updateCodePreview);
+        document.getElementById('welcomeMessage').addEventListener('input', updateCodePreview);
+    </script>
+</body>
+</html>

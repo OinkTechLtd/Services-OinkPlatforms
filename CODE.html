@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Продвинутый редактор кода с проверкой синтаксиса</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Fira+Code:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #0a0a0a;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+            color: #fff;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(circle at 25% 25%, #ff0080 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, #00d4ff 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, #8000ff 0%, transparent 50%);
+            filter: blur(100px);
+            opacity: 0.3;
+            animation: backgroundShift 10s ease-in-out infinite alternate;
+        }
+
+        @keyframes backgroundShift {
+            0% { transform: scale(1) rotate(0deg); }
+            100% { transform: scale(1.1) rotate(5deg); }
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            animation: float 15s linear infinite;
+        }
+
+        .particle:nth-child(1) { left: 10%; animation-delay: 0s; }
+        .particle:nth-child(2) { left: 20%; animation-delay: 2s; }
+        .particle:nth-child(3) { left: 30%; animation-delay: 4s; }
+        .particle:nth-child(4) { left: 40%; animation-delay: 6s; }
+        .particle:nth-child(5) { left: 50%; animation-delay: 8s; }
+        .particle:nth-child(6) { left: 60%; animation-delay: 10s; }
+        .particle:nth-child(7) { left: 70%; animation-delay: 12s; }
+        .particle:nth-child(8) { left: 80%; animation-delay: 14s; }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            z-index: 10;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        .header h1 {
+            font-size: 36px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ff0080, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+            text-shadow: 0 0 30px rgba(255, 0, 128, 0.5);
+        }
+
+        .header p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 16px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .panel {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #ff0080, #8000ff);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 0, 128, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 0, 128, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .language-selector {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        select {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 10px 15px;
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            outline: none;
+            cursor: pointer;
+            min-width: 150px;
+        }
+
+        select option {
+            background: #1a1a1a;
+            color: white;
+        }
+
+        .editor-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            width: 100%;
+            padding: 20px;
+            position: relative;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .editor-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #ff0080, #00d4ff, #8000ff, #ff0080);
+            background-size: 300% 100%;
+            animation: gradientMove 3s linear infinite;
+            border-radius: 16px 16px 0 0;
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 300% 50%; }
+        }
+
+        .editor-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .code-wrapper {
+            display: flex;
+            width: 100%;
+            position: relative;
+            height: 400px;
+            overflow: auto;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .line-numbers {
+            width: 50px;
+            padding: 15px 5px;
+            background: rgba(0, 0, 0, 0.4);
+            color: rgba(255, 255, 255, 0.5);
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            text-align: right;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        #code-editor {
+            flex: 1;
+            padding: 15px;
+            background: transparent;
+            color: #f8f8f2;
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            resize: none;
+            border: none;
+            outline: none;
+            tab-size: 4;
+            -moz-tab-size: 4;
+            white-space: pre;
+            overflow-wrap: normal;
+            overflow: auto;
+        }
+
+        .editor-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .editor-info {
+            display: flex;
+            gap: 15px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .preview-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            width: 100%;
+            padding: 20px;
+            position: relative;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .preview-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #00d4ff, #ff0080, #8000ff, #00d4ff);
+            background-size: 300% 100%;
+            animation: gradientMove 3s linear infinite;
+            border-radius: 16px 16px 0 0;
+        }
+
+        .preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .preview-title {
+            font-size: 22px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00d4ff, #ff0080);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .preview-tabs {
+            display: flex;
+            gap: 5px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 4px;
+        }
+
+        .tab {
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tab.active {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .preview-content {
+            min-height: 200px;
+            max-height: 300px;
+            overflow: auto;
+        }
+
+        .error-list {
+            list-style: none;
+        }
+
+        .error-item {
+            padding: 12px;
+            margin-bottom: 10px;
+            background: rgba(255, 0, 0, 0.1);
+            border-left: 3px solid #ff3333;
+            border-radius: 4px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .error-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .error-icon {
+            color: #ff3333;
+            font-size: 16px;
+        }
+
+        .error-title {
+            font-weight: 600;
+            color: #ff6666;
+        }
+
+        .error-details {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+            margin-left: 26px;
+        }
+
+        .error-line {
+            color: #ff9999;
+            font-family: 'Fira Code', monospace;
+        }
+
+        .success-message {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px;
+            background: rgba(0, 255, 136, 0.1);
+            border-left: 3px solid #00ff88;
+            border-radius: 4px;
+            color: #00ff88;
+        }
+
+        .suggestion-list {
+            list-style: none;
+        }
+
+        .suggestion-item {
+            padding: 12px;
+            margin-bottom: 10px;
+            background: rgba(0, 212, 255, 0.1);
+            border-left: 3px solid #00d4ff;
+            border-radius: 4px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .suggestion-title {
+            font-weight: 600;
+            color: #00d4ff;
+        }
+
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 14px;
+            width: 100%;
+        }
+
+        /* Стили для подсветки синтаксиса */
+        .keyword {
+            color: #ff79c6;
+            font-weight: bold;
+        }
+
+        .comment {
+            color: #6272a4;
+        }
+
+        .string {
+            color: #f1fa8c;
+        }
+
+        .function {
+            color: #50fa7b;
+        }
+
+        .number {
+            color: #bd93f9;
+        }
+
+        .operator {
+            color: #ff79c6;
+        }
+
+        .preprocessor {
+            color: #ffb86c;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .panel {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+
+            .header h1 {
+                font-size: 28px;
+            }
+
+            .editor-info {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+
+    <div class="container">
+        <div class="header">
+            <h1>Продвинутый редактор кода</h1>
+            <p>Мощный редактор с расширенной проверкой синтаксиса для различных языков программирования</p>
+        </div>
+
+        <div class="panel">
+            <div class="controls">
+                <button class="btn btn-primary" id="run-btn">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M2.5 2.5v11l9-5.5-9-5.5z"/>
+                    </svg>
+                    Запустить проверку
+                </button>
+                <button class="btn btn-secondary" id="clear-btn">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M2 2v12h12V2H2zm3 1h1v1H5V3zm2 0h1v1H7V3zm2 0h1v1H9V3zm2 0h1v1h-1V3zm-8 2h10v8H3V5z"/>
+                    </svg>
+                    Очистить
+                </button>
+            </div>
+            <div class="language-selector">
+                <span>Язык программирования:</span>
+                <select id="language-select">
+                    <option value="pawn">PAWN</option>
+                    <option value="javascript">JavaScript</option>
+                    <option value="python">Python</option>
+                    <option value="cpp">C++</option>
+                    <option value="java">Java</option>
+                    <option value="html">HTML</option>
+                    <option value="css">CSS</option>
+                    <option value="php">PHP</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="editor-container">
+            <div class="editor-wrapper">
+                <div class="code-wrapper">
+                    <div class="line-numbers" id="line-numbers">1</div>
+                    <pre id="code-editor" contenteditable="true" spellcheck="false">#include &lt;a_samp&gt;
+
+main() {
+    // Это пример кода на PAWN
+    print("Добро пожаловать в мой редактор кода!");
+    new number = 10;
+    if(number == 10) {
+        printf("Число равно %d", number);
+    }
+    return 1;
+}</pre>
+                </div>
+            </div>
+            <div class="editor-footer">
+                <div class="editor-info">
+                    <div class="info-item">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                            <path d="M8 1a7 7 0 100 14A7 7 0 008 1zm0 13A6 6 0 118 2a6 6 0 010 12z"/>
+                            <path d="M9 11H7V7h2v4zM8 6a1 1 0 100-2 1 1 0 000 2z"/>
+                        </svg>
+                        <span id="lines-count">1 строка</span>
+                    </div>
+                    <div class="info-item">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                            <path d="M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm0 14c-3.3 0-6-2.7-6-6s2.7-6 6-6 6 2.7 6 6-2.7 6-6 6z"/>
+                            <path d="M9 5H7v6h2V5zM9 11H7v2h2v-2z"/>
+                        </svg>
+                        <span id="errors-count">0 ошибок</span>
+                    </div>
+                </div>
+                <button class="btn btn-secondary" id="theme-btn">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M8 13a1 1 0 011 1v1a1 1 0 01-2 0v-1a1 1 0 011-1zM8 3a1 1 0 01-1-1V1a1 1 0 012 0v1a1 1 0 01-1 1zM3 8a1 1 0 01-1 1H1a1 1 0 010-2h1a1 1 0 011 1zM15 8a1 1 0 011 1h1a1 1 0 010-2h-1a1 1 0 011 1zM3.5 12.5a1 1 0 011-1h1a1 1 0 010 2h-1a1 1 0 01-1-1zM11.5 3.5a1 1 0 011-1h1a1 1 0 010 2h-1a1 1 0 01-1-1zM3.5 3.5a1 1 0 011-1h1a1 1 0 010 2h-1a1 1 0 01-1-1zM11.5 12.5a1 1 0 011-1h1a1 1 0 010 2h-1a1 1 0 01-1-1z"/>
+                    </svg>
+                    Сменить тему
+                </button>
+            </div>
+        </div>
+
+        <div class="preview-container">
+            <div class="preview-header">
+                <h2 class="preview-title">Результаты проверки</h2>
+                <div class="preview-tabs">
+                    <div class="tab active" data-tab="errors">Ошибки</div>
+                    <div class="tab" data-tab="warnings">Предупреждения</div>
+                    <div class="tab" data-tab="suggestions">Предложения</div>
+                </div>
+            </div>
+            <div class="preview-content">
+                <div class="tab-content" id="errors-tab">
+                    <ul class="error-list" id="error-list">
+                        <li class="error-item">
+                            <div class="error-header">
+                                <svg class="error-icon" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                                    <path d="M8 1a7 7 0 100 14A7 7 0 008 1zm0 13A6 6 0 118 2a6 6 0 010 12z"/>
+                                    <path d="M7.5 4.5h1v5h-1v-5zM7.5 10.5h1v1h-1v-1z"/>
+                                </svg>
+                                <span class="error-title">Синтаксическая ошибка</span>
+                            </div>
+                            <div class="error-details">
+                                <p>Отсутствует точка с запятой в конце строки</p>
+                                <p class="error-line">Строка 5: <code>new number = 10</code></p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="tab-content" id="warnings-tab" style="display: none;">
+                    <ul class="error-list" id="warning-list">
+                        <!-- Контент для предупреждений -->
+                    </ul>
+                </div>
+                <div class="tab-content" id="suggestions-tab" style="display: none;">
+                    <ul class="suggestion-list" id="suggestion-list">
+                        <li class="suggestion-item">
+                            <span class="suggestion-title">Оптимизация кода</span>
+                            <div class="error-details">
+                                <p>Используйте более описательные имена переменных</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Продвинутый редактор кода с проверкой синтаксиса &copy; Theme by Zenettany</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const codeEditor = document.getElementById('code-editor');
+            const lineNumbers = document.getElementById('line-numbers');
+            const runBtn = document.getElementById('run-btn');
+            const clearBtn = document.getElementById('clear-btn');
+            const languageSelect = document.getElementById('language-select');
+            const themeBtn = document.getElementById('theme-btn');
+            const errorList = document.getElementById('error-list');
+            const warningList = document.getElementById('warning-list');
+            const suggestionList = document.getElementById('suggestion-list');
+            const linesCount = document.getElementById('lines-count');
+            const errorsCount = document.getElementById('errors-count');
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            // Правила проверки для разных языков
+            const languageRules = {
+                pawn: {
+                    keywords: ['new', 'if', 'else', 'for', 'while', 'return', 'main', 'print', 'printf', 'switch', 'case', 'default'],
+                    commonErrors: [
+                        { pattern: /[^=]=[^=]/, error: "Используйте == для сравнения, а не =", type: "error" },
+                        { pattern: /main\s*\(\s*\)\s*\{/, error: "Функция main() должна быть объявлена", type: "error" },
+                        { pattern: /print\([^)]*\)\;/, error: "Проверьте синтаксис print()", type: "error" },
+                        { pattern: /printf\([^)]*\)\;/, error: "Проверьте синтаксис printf()", type: "error" },
+                        { pattern: /[a-zA-Z_][a-zA-Z0-9_]*\s*\([^)]*\)\s*[^{]/, error: "Отсутствует открывающая фигурная скобка после условия", type: "error" }
+                    ],
+                    warnings: [
+                        { pattern: /[a-z][a-zA-Z0-9_]*/, error: "Используйте camelCase или PascalCase для имен переменных", type: "warning" }
+                    ]
+                },
+                javascript: {
+                    keywords: ['function', 'var', 'let', 'const', 'if', 'else', 'for', 'while', 'return', 'console', 'log'],
+                    commonErrors: [
+                        { pattern: /console\.log\([^)]*\)/, error: "Проверьте синтаксис console.log()", type: "error" },
+                        { pattern: /function\s+[a-zA-Z_$][0-9a-zA-Z_$]*\s*\([^)]*\)\s*\{/, error: "Проверьте объявление функции", type: "error" }
+                    ],
+                    warnings: [
+                        { pattern: /var\s+[a-zA-Z_$][0-9a-zA-Z_$]*/, error: "Используйте let или const вместо var", type: "warning" }
+                    ]
+                },
+                python: {
+                    keywords: ['def', 'if', 'else', 'for', 'while', 'return', 'print', 'import', 'from', 'class'],
+                    commonErrors: [
+                        { pattern: /print\([^)]*\)/, error: "Проверьте синтаксис print()", type: "error" },
+                        { pattern: /def\s+[a-zA-Z_][0-9a-zA-Z_]*\s*\([^)]*\)\s*:/, error: "Проверьте объявление функции", type: "error" }
+                    ],
+                    warnings: [
+                        { pattern: /[a-zA-Z_][a-zA-Z0-9_]*\s*=\s*[0-9]*/, error: "Используйте описательные имена переменных", type: "warning" }
+                    ]
+                },
+                cpp: {
+                    keywords: ['include', 'int', 'main', 'if', 'else', 'for', 'while', 'return', 'cout', 'cin', 'using', 'namespace', 'std'],
+                    commonErrors: [
+                        { pattern: /#include\s*<[^>]*>/, error: "Проверьте директиву #include", type: "error" },
+                        { pattern: /int\s+main\s*\([^)]*\)\s*\{/, error: "Проверьте объявление функции main()", type: "error" }
+                    ],
+                    warnings: [
+                        { pattern: /using\s+namespace\s+std;/, error: "Избегайте using namespace std в глобальной области", type: "warning" }
+                    ]
+                },
+                // Добавлены правила для других языков
+                java: {
+                    keywords: ['public', 'class', 'static', 'void', 'main', 'String', 'int', 'if', 'else', 'for', 'while', 'return'],
+                    commonErrors: [
+                        { pattern: /public\s+class\s+[A-Z][a-zA-Z]*\s*\{/, error: "Проверьте объявление класса", type: "error" },
+                        { pattern: /public\s+static\s+void\s+main\s*\([^)]*\)\s*\{/, error: "Проверьте объявление метода main", type: "error" }
+                    ],
+                    warnings: [
+                        { pattern: /System\.out\.println\([^)]*\)\;/, error: "Рассмотрите использование логгера вместо System.out.println", type: "warning" }
+                    ]
+                },
+                html: {
+                    keywords: ['html', 'body', 'div', 'span', 'class', 'id', 'style', 'script'],
+                    commonErrors: [
+                        { pattern: /<[a-zA-Z]+>/, error: "Проверьте открывающий тег", type: "error" },
+                        { pattern: /<\/[a-zA-Z]+>/, error: "Проверьте закрывающий тег", type: "error" }
+                    ],
+                    warnings: [
+                        { pattern: /<style>/, error: "Вынесите стили в отдельный файл", type: "warning" }
+                    ]
+                },
+                css: {
+                    keywords: ['body', 'div', 'class', 'id', 'color', 'background', 'font', 'width', 'height'],
+                    commonErrors: [
+                        { pattern: /[a-zA-Z-]+\s*:\s*[^;]*;/, error: "Проверьте CSS правило", type: "error" }
+                    ],
+                    warnings: [
+                        { pattern: /!important/, error: "Избегайте чрезмерного использования !important", type: "warning" }
+                    ]
+                },
+                php: {
+                    keywords: ['<?php', '?>', 'echo', 'if', 'else', 'for', 'while', 'return', 'function'],
+                    commonErrors: [
+                        { pattern: /echo\s+[^;]*;/, error: "Проверьте синтаксис echo", type: "error" },
+                        { pattern: /function\s+[a-zA-Z_][0-9a-zA-Z_]*\s*\([^)]*\)\s*\{/, error: "Проверьте объявление функции", type: "error" }
+                    ],
+                    warnings: [
+                        { pattern: /mysql_/, error: "Используйте mysqli или PDO вместо устаревших mysql функций", type: "warning" }
+                    ]
+                }
+            };
+
+            // Инициализация редактора
+            function initEditor() {
+                updateLineNumbers();
+                applySyntaxHighlighting();
+                
+                codeEditor.addEventListener('input', function() {
+                    updateLineNumbers();
+                    applySyntaxHighlighting();
+                    updateEditorInfo();
+                });
+                
+                codeEditor.addEventListener('scroll', function() {
+                    lineNumbers.scrollTop = codeEditor.scrollTop;
+                });
+                
+                runBtn.addEventListener('click', checkCode);
+                clearBtn.addEventListener('click', clearCode);
+                languageSelect.addEventListener('change', function() {
+                    applySyntaxHighlighting();
+                    checkCode();
+                });
+                
+                themeBtn.addEventListener('click', toggleTheme);
+                
+                // Обработчики для табов
+                tabs.forEach(tab => {
+                    tab.addEventListener('click', function() {
+                        const tabName = this.getAttribute('data-tab');
+                        
+                        // Убираем активный класс у всех табов
+                        tabs.forEach(t => t.classList.remove('active'));
+                        // Добавляем активный класс текущему табу
+                        this.classList.add('active');
+                        
+                        // Скрываем все содержимое табов
+                        tabContents.forEach(content => {
+                            content.style.display = 'none';
+                        });
+                        
+                        // Показываем содержимое текущего таба
+                        document.getElementById(`${tabName}-tab`).style.display = 'block';
+                    });
+                });
+                
+                // Первоначальная проверка кода
+                checkCode();
+            }
+
+            // Обновление нумерации строк
+            function updateLineNumbers() {
+                const lines = codeEditor.textContent.split('\n').length;
+                let numbers = '';
+                
+                for (let i = 1; i <= lines; i++) {
+                    numbers += i + '<br>';
+                }
+                
+                lineNumbers.innerHTML = numbers;
+            }
+
+            // Подсветка синтаксиса
+            function applySyntaxHighlighting() {
+                const language = languageSelect.value;
+                const code = codeEditor.textContent;
+                
+                // Очищаем предыдущую подсветку
+                codeEditor.innerHTML = code;
+                
+                // Применяем правила подсветки в зависимости от языка
+                if (language === 'pawn') {
+                    highlightPawnCode();
+                } else if (language === 'javascript') {
+                    highlightJSCode();
+                } else if (language === 'python') {
+                    highlightPythonCode();
+                } else if (language === 'cpp') {
+                    highlightCppCode();
+                }
+                
+                updateLineNumbers();
+            }
+
+            // Подсветка кода на PAWN
+            function highlightPawnCode() {
+                const code = codeEditor.textContent;
+                
+                // Подсветка ключевых слов
+                languageRules.pawn.keywords.forEach(keyword => {
+                    const regex = new RegExp(`\\b${keyword}\\b`, 'g');
+                    codeEditor.innerHTML = codeEditor.innerHTML.replace(regex, `<span class="keyword">${keyword}</span>`);
+                });
+                
+                // Подсветка комментариев
+                codeEditor.innerHTML = codeEditor.innerHTML.replace(/\/\/.*/g, '<span class="comment">$&</span>');
+                codeEditor.innerHTML = codeEditor.innerHTML.replace(/\/\*[\s\S]*?\*\//g, '<span class="comment">$&</span>');
+                
+                // Подсветка строк
+                codeEditor.innerHTML = codeEditor.innerHTML.replace(/".*?"/g, '<span class="string">$&</span>');
+                codeEditor.innerHTML = codeEditor.innerHTML.replace(/'.*?'/g, '<span class="string">$&</span>');
+                
+                // Подсветка чисел
+                codeEditor.innerHTML = codeEditor.innerHTML.replace(/\b\d+\b/g, '<span class="number">$&</span>');
+                
+                // Подсветка препроцессора
+                codeEditor.innerHTML = codeEditor.innerHTML.replace(/#[a-zA-Z]+\b/g, '<span class="preprocessor">$&</span>');
+            }
+
+            // Подсветка кода на JavaScript
+            function highlightJSCode() {
+                const code = codeEditor.textContent;
+                
+                // Подсветка ключевых слов
+                languageRules.javascript.keywords.forEach(keyword => {
+                    const regex = new RegExp(`\\b${keyword}\\b`, 'g');
+                    codeEditor.innerHTML = codeEditor.innerHTML.replace(regex, `<span class="keyword">${keyword}</span>`);
+                });
+                
+                // Подсветка комментариев
+                codeEditor.innerHTML = codeEditor.innerHTML.replace(/\/\/.*/g, '<span class="comment">$&</span>');
+                codeEditor.innerHTML = codeEditor.innerHTML.replace(/\/\*[\s\S]*?\*\//g, '<span class="comment">$&</span>');
+                
+                // Подсветка строк
+                codeEditor.innerHTML = codeEditor.innerHTML.replace(/".*?"/g, '<span class="string">$&</span>');
+                codeEditor.innerHTML = codeEditor.innerHTML.replace(/'.*?'/g, '<span class="string">$&</span>');
+                codeEditor.innerHTML = codeEditor.innerHTML.replace(/`[\s\S]*?`/g, '<span class="string">$&</span>');
+                
+                // Подсветка чисел
+                codeEditor.innerHTML = codeEditor.innerHTML.replace(/\b\d+\b/g, '<span class="number">$&</span>');
+                
+                // Подсветка функций
+                codeEditor.innerHTML = codeEditor.innerHTML.replace(/\b[a-zA-Z_][a-zA-Z0-9_]*\(/g, '<span class="function">$&</span>');
+            }
+
+            // Подсветка кода на Python
+            function highlightPythonCode() {
+                const code = codeEditor.textContent;
+                
+                // Подсветка ключевых слов
+                languageRules.python.keywords.forEach(keyword => {
+                    const regex = new RegExp(`\\b${keyword}\\b`, 'g');
+                    codeEditor.innerHTML = codeEditor.innerHTML.replace(regex, `<span class="keyword">${keyword}</span>`);
+                });
+                
+                // Подсветка комментариев
+                codeEditor.innerHTML = codeEditor.innerHTML.replace(/#.*/g, '<span class="comment">$&</span>');
+                
+                // Подсветка строк
+                codeEditor.innerHTML = codeEditor.innerHTML.replace(/".*?"/g, '<span class="string">$&</span>');
+                codeEditor.innerHTML = codeEditor.innerHTML.replace(/'.*?'/g, '<span class="string">$&</span>');
+                codeEditor.innerHTML = codeEditor.innerHTML.replace(/""".*?"""/gs, '<span class="string">$&</span>');
+                codeEditor.innerHTML = codeEditor.innerHTML.replace(/'''.*?'''/gs, '<span class="string">$&</span>');
+                
+                // Подсветка чисел
+                codeEditor.innerHTML = codeEditor.innerHTML.replace(/\b\d+\b/g, '<span class="number">$&</span>');
+                
+                // Подсветка функций
+                codeEditor.innerHTML = codeEditor.innerHTML.replace(/\b[a-zA-Z_][a-zA-Z0-9_]*\(/g, '<span class="function">$&</span>');
+            }
+
+            // Подсветка кода на C++
+            function highlightCppCode() {
+                const code = codeEditor.textContent;
+                
+                // Подсветка ключевых слов
+                languageRules.cpp.keywords.forEach(keyword => {
+                    const regex = new RegExp(`\\b${keyword}\\b`, 'g');
+                    codeEditor.innerHTML = codeEditor.innerHTML.replace(regex, `<span class="keyword">${keyword}</span>`);
+                });
+                
+                // Подсветка комментариев
+                codeEditor.innerHTML = codeEditor.innerHTML.replace(/\/\/.*/g, '<span class="comment">$&</span>');
+                codeEditor.innerHTML = codeEditor.innerHTML.replace(/\/\*[\s\S]*?\*\//g, '<span class="comment">$&</span>');
+                
+                // Подсветка строк
+                codeEditor.innerHTML = codeEditor.innerHTML.replace(/".*?"/g, '<span class="string">$&</span>');
+                codeEditor.innerHTML = codeEditor.innerHTML.replace(/'.*?'/g, '<span class="string">$&</span>');
+                
+                // Подсветка чисел
+                codeEditor.innerHTML = codeEditor.innerHTML.replace(/\b\d+\b/g, '<span class="number">$&</span>');
+                
+                // Подсветка препроцессора
+                codeEditor.innerHTML = codeEditor.innerHTML.replace(/#[a-zA-Z]+\b/g, '<span class="preprocessor">$&</span>');
+                
+                // Подсветка функций
+                codeEditor.innerHTML = codeEditor.innerHTML.replace(/\b[a-zA-Z_][a-zA-Z0-9_]*\(/g, '<span class="function">$&</span>');
+            }
+
+            // Проверка кода
+            function checkCode() {
+                const code = codeEditor.textContent;
+                const language = languageSelect.value;
+                const rules = languageRules[language];
+                
+                // Очищаем списки ошибок и предупреждений
+                errorList.innerHTML = '';
+                warningList.innerHTML = '';
+                suggestionList.innerHTML = '';
+                
+                // Проверка на пустой код
+                if (!code.trim()) {
+                    const errorItem = document.createElement('li');
+                    errorItem.className = 'error-item';
+                    errorItem.innerHTML = `
+                        <div class="error-header">
+                            <svg class="error-icon" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                                <path d="M8 1a7 7 0 100 14A7 7 0 008 1zm0 13A6 6 0 118 2a6 6 0 010 12z"/>
+                                <path d="M7.5 4.5h1v5h-1v-5zM7.5 10.5h1v1h-1v-1z"/>
+                            </svg>
+                            <span class="error-title">Пустой код</span>
+                        </div>
+                        <div class="error-details">
+                            <p>Напишите код для проверки</p>
+                        </div>
+                    `;
+                    errorList.appendChild(errorItem);
+                    
+                    updateErrorsCount(1, 0);
+                    return;
+                }
+                
+                const lines = code.split('\n');
+                let errorCount = 0;
+                let warningCount = 0;
+                
+                // Проверка на распространенные ошибки
+                for (let i = 0; i < lines.length; i++) {
+                    const line = lines[i];
+                    
+                    // Проверка на отсутствие точки с запятой в JS/C++/PAWN
+                    if (['javascript', 'cpp', 'pawn', 'java', 'php'].includes(language)) {
+                        const trimmedLine = line.trim();
+                        if (trimmedLine && !trimmedLine.endsWith(';') && 
+                            !trimmedLine.endsWith('{') && 
+                            !trimmedLine.startsWith('//') && 
+                            !trimmedLine.startsWith('/*') &&
+                            !trimmedLine.startsWith('*') &&
+                            !trimmedLine.startsWith('#') &&
+                            !trimmedLine.endsWith('}') &&
+                            !trimmedLine.includes('if') &&
+                            !trimmedLine.includes('for') &&
+                            !trimmedLine.includes('while') &&
+                            !trimmedLine.includes('else') &&
+                            !trimmedLine.includes('main()') &&
+                            !trimmedLine.includes('function') &&
+                            !trimmedLine.includes('class') &&
+                            !trimmedLine.includes('import') &&
+                            !trimmedLine.includes('include')) {
+                            
+                            const errorItem = document.createElement('li');
+                            errorItem.className = 'error-item';
+                            errorItem.innerHTML = `
+                                <div class="error-header">
+                                    <svg class="error-icon" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                                        <path d="M8 1a7 7 0 100 14A7 7 0 008 1zm0 13A6 6 0 118 2a6 6 0 010 12z"/>
+                                        <path d="M7.5 4.5h1v5h-1v-5zM7.5 10.5h1v1h-1v-1z"/>
+                                    </svg>
+                                    <span class="error-title">Синтаксическая ошибка</span>
+                                </div>
+                                <div class="error-details">
+                                    <p>Отсутствует точка с запятой в конце строки</p>
+                                    <p class="error-line">Строка ${i + 1}: <code>${trimmedLine}</code></p>
+                                </div>
+                            `;
+                            errorList.appendChild(errorItem);
+                            errorCount++;
+                        }
+                    }
+                    
+                    // Проверка по правилам языка
+                    if (rules && rules.commonErrors) {
+                        for (const rule of rules.commonErrors) {
+                            if (rule.pattern.test(line)) {
+                                const errorItem = document.createElement('li');
+                                errorItem.className = 'error-item';
+                                errorItem.innerHTML = `
+                                    <div class="error-header">
+                                        <svg class="error-icon" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                                            <path d="M8 1a7 7 0 100 14A7 7 0 008 1zm0 13A6 6 0 118 2a6 6 0 010 12z"/>
+                                            <path d="M7.5 4.5h1v5h-1v-5zM7.5 10.5h1v1h-1v-1z"/>
+                                        </svg>
+                                        <span class="error-title">${rule.type === 'error' ? 'Ошибка' : 'Предупреждение'}</span>
+                                    </div>
+                                    <div class="error-details">
+                                        <p>${rule.error}</p>
+                                        <p class="error-line">Строка ${i + 1}: <code>${line.trim()}</code></p>
+                                    </div>
+                                `;
+                                
+                                if (rule.type === 'error') {
+                                    errorList.appendChild(errorItem);
+                                    errorCount++;
+                                } else {
+                                    warningList.appendChild(errorItem);
+                                    warningCount++;
+                                }
+                            }
+                        }
+                    }
+                    
+                    // Проверка на предупреждения
+                    if (rules && rules.warnings) {
+                        for (const warning of rules.warnings) {
+                            if (warning.pattern.test(line)) {
+                                const warningItem = document.createElement('li');
+                                warningItem.className = 'error-item';
+                                warningItem.innerHTML = `
+                                    <div class="error-header">
+                                        <svg class="error-icon" width="16" height="16" viewBox="0 0 16 16" fill="currentColor" style="color: #ffcc00;">
+                                            <path d="M8 1a7 7 0 100 14A7 7 0 008 1zm0 13A6 6 0 118 2a6 6 0 010 12z"/>
+                                            <path d="M7.5 4.5h1v5h-1v-5zM7.5 10.5h1v1h-1v-1z"/>
+                                        </svg>
+                                        <span class="error-title" style="color: #ffcc00;">Предупреждение</span>
+                                    </div>
+                                    <div class="error-details">
+                                        <p>${warning.error}</p>
+                                        <p class="error-line">Строка ${i + 1}: <code>${line.trim()}</code></p>
+                                    </div>
+                                `;
+                                warningList.appendChild(warningItem);
+                                warningCount++;
+                            }
+                        }
+                    }
+                }
+                
+                // Добавляем предложения по улучшению кода
+                if (errorCount === 0 && warningCount === 0) {
+                    const successItem = document.createElement('li');
+                    successItem.className = 'success-message';
+                    successItem.innerHTML = `
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm-1 15l-5-5 1.41-1.41L9 12.17l7.59-7.59L18 6l-9 9z"/>
+                        </svg>
+                        <span>Код успешно проверен! Ошибок не найдено.</span>
+                    `;
+                    errorList.appendChild(successItem);
+                    
+                    // Добавляем предложения по улучшению
+                    const suggestionItem = document.createElement('li');
+                    suggestionItem.className = 'suggestion-item';
+                    suggestionItem.innerHTML = `
+                        <span class="suggestion-title">Оптимизация кода</span>
+                        <div class="error-details">
+                            <p>Используйте более описательные имена переменных</p>
+                        </div>
+                    `;
+                    suggestionList.appendChild(suggestionItem);
+                    
+                    const suggestionItem2 = document.createElement('li');
+                    suggestionItem2.className = 'suggestion-item';
+                    suggestionItem2.innerHTML = `
+                        <span class="suggestion-title">Совет по стилю</span>
+                        <div class="error-details">
+                            <p>Добавьте комментарии для сложных частей кода</p>
+                        </div>
+                    `;
+                    suggestionList.appendChild(suggestionItem2);
+                }
+                
+                updateErrorsCount(errorCount, warningCount);
+            }
+
+            // Обновление счетчика ошибок и предупреждений
+            function updateErrorsCount(errors, warnings) {
+                errorsCount.textContent = `${errors} ошибок, ${warnings} предупреждений`;
+            }
+
+            // Обновление информации редактора
+            function updateEditorInfo() {
+                const lines = codeEditor.textContent.split('\n').length;
+                linesCount.textContent = `${lines} строк`;
+            }
+
+            // Очистка редактора
+            function clearCode() {
+                codeEditor.textContent = '';
+                updateLineNumbers();
+                updateEditorInfo();
+                
+                // Очищаем списки ошибок
+                errorList.innerHTML = '';
+                warningList.innerHTML = '';
+                suggestionList.innerHTML = '';
+                
+                updateErrorsCount(0, 0);
+            }
+
+            // Переключение темы
+            function toggleTheme() {
+                const body = document.body;
+                if (body.classList.contains('dark-theme')) {
+                    body.classList.remove('dark-theme');
+                    body.style.backgroundColor = '#0a0a0a';
+                    body.style.color = '#fff';
+                    themeBtn.innerHTML = `
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                            <path d="M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm0 14c-3.3 0-6-2.7-6-6s2.7-6 6-6 6 2.7 6 6-2.7 6-6 6z"/>
+                            <path d="M8 4c-2.2 0-4 1.8-4 4s1.8 4 4 4 4-1.8 4-4-1.8-4-4-4z"/>
+                        </svg>
+                        Светлая тема
+                    `;
+                } else {
+                    body.classList.add('dark-theme');
+                    body.style.backgroundColor = '#f0f0f0';
+                    body.style.color = '#333';
+                    themeBtn.innerHTML = `
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                            <path d="M8 13a1 1 0 011 1v1a1 1 0 01-2 0v-1a1 1 0 011-1zM8 3a1 1 0 01-1-1V1a1 1 0 012 0v1a1 1 0 01-1 1zM3 8a1 1 0 01-1 1H1a1 1 0 010-2h1a1 1 0 011 1zM15 8a1 1 0 011 1h1a1 1 0 010-2h-1a1 1 0 011 1zM3.5 12.5a1 1 0 011-1h1a1 1 0 010 2h-1a1 1 0 01-1-1zM11.5 3.5a1 1 0 011-1h1a1 1 0 010 2h-1a1 1 0 01-1-1zM3.5 3.5a1 1 0 011-1h1a1 1 0 010 2h-1a1 1 0 01-1-1zM11.5 12.5a1 1 0 011-1h1a1 1 0 010 2h-1a1 1 0 01-1-1z"/>
+                        </svg>
+                        Темная тема
+                    `;
+                }
+            }
+
+            // Инициализация редактора
+            initEditor();
+        });
+    </script>
+</body>
+</html>

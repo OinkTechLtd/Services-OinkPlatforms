@@ -1,0 +1,512 @@
+                 <!-- PWA Status bar color -->
+                 <meta name="theme-color" content="#000000">
+
+
+                 <style id="splash-screen-style">
+                 .mobile-nav {
+                 background: #000000;
+                 position: fixed;
+                 bottom: 0;
+                 height: 65px;
+                 width: 100%;
+                 display: flex;
+                 justify-content: space-around;
+}
+.bloc-icon {
+                 display: flex;
+                 justify-content: center;
+                 align-items: center;
+}
+}@media screen and (min-width: 600px) {
+                 .mobile-nav {
+                 display: none;
+                 }
+}
+@media                 screen and (min-width: 525px) {
+                 .header-pc {
+                                  display: block
+                 }
+                 .header-mobile {
+                                  display: none
+                 }
+}
+
+
+@media                 screen and (max-width: 525px) {
+                 .header-pc {
+                                  display: none
+                 }
+                 .header-mobile {
+                                  display: block
+                 }
+}
+* {
+                 margin: 0;
+                 padding: 0;
+                 box-sizing: border-box;
+}
+
+
+#nav {
+                 position: fixed;
+                 width: 100%;
+                 right: 0;
+                 left: 0;
+                 top: 0;
+}
+
+
+#nav > ul {
+                 list-style: none;
+                 display: flex;
+                 justify-content: center;
+                 padding: 20px 0;
+}
+
+
+#nav > ul > li {
+                 margin: 0 10px;
+}
+
+
+#nav > ul > li > a {
+                 text-decoration: none;
+                 color: #121212;
+}
+
+
+#nav > ul > li > a > ion-icon {
+                 display: none;
+                 font-size: 20px;
+                 color: #f1f1f1;
+                 background: #1a7523;
+                 padding: 5px;
+                 border-radius: 4px;
+}
+
+
+@media screen and (max-width:768px){
+                 #nav {
+                                  bottom: 0;
+                                  top: unset;
+                                  background: #20992c;
+                                  height: 50px;
+                 }
+                                
+                 #nav > ul {
+                                  list-style: none;
+                                  display: flex;
+                                  justify-content: space-around;
+                                  align-items: center;
+                                  padding: 0;
+                                  height: 100%;
+                 }
+                                
+                 #nav > ul > li {
+                                  margin: 0;
+                                  display: flex;
+                                  justify-content: center;
+                                  align-items: center;
+                 }
+                                
+                 #nav > ul > li > a {
+                                  text-decoration: none;
+                                  color: #121212;
+                                  display: flex;
+                                  justify-content: center;
+                                  align-items: center;
+                 }
+                                
+                 #nav > ul > li > a > ion-icon {
+                                  display: block;
+                 }
+                                
+                 #nav > ul > li > a > span {
+                                  display: none;
+                 }
+}
+.mobile-nav {
+                 background: #F1F1F1;
+                 position: fixed;
+                 bottom: 0;
+                 height: 65px;
+                 width: 100%;
+                 display: flex;
+                 justify-content: space-around;
+}
+.bloc-icon {
+                 display: flex;
+                 justify-content: center;
+                 align-items: center;
+}
+.bloc-icon img {
+                 width: 30px;
+}
+                                  html {
+                                                   height: 100%
+                                  }
+
+
+                                  body {
+                                                   margin: 0;
+                                                   min-height: 100%;
+                                                   background-color: #000000;
+                                                   background-size: 100% 100%;
+                                  }
+
+
+                                  .splash-text-class {
+                                                   margin: 0;
+                                                   position: absolute;
+                                                   top: calc(50% + 50px);
+                                                   left: 50%;
+                                                   -ms-transform: translate(-50%, -50%);
+                                                   transform: translate(-50%, -50%);
+                                                   font-family: 'Nunito Sans', sans-serif;
+                                                   font-size: 16px;
+                                                   font-weight: 400;
+                                                   line-height: 20px;
+                                                   letter-spacing: 0px;
+                                                   text-align: center;
+                                                   color: white;
+                                                   user-select: none;
+                                                   /* Make the text unselectable */
+                                                   transition: opacity 500ms linear;
+                                  }
+
+
+                                  .splash-logo-class {
+                                                   position: absolute;
+                                                   left: 50%;
+                                                   top: 50%;
+                                                   transform: translate(-50%, -50%) translateY(-29px);
+                                                   -ms-transform: translate(-50%, -50%) translateY(-29px);
+                                                   width: 333px;
+                                                   height: 62px;
+                                  }
+
+
+                                  .splash-stars-class {
+                                                   position: absolute;
+                                                   left: 50%;
+                                                   top: 50%;
+                                                   transform: translate(-50%, -50%);
+                                                   -ms-transform: translate(-50%, -50%);
+                                                   width: 556px;
+                                                   height: 250px;
+                                                   user-select: none;
+                                  }
+
+
+                                  .center {
+                                                   margin: 0;
+                                                   position: absolute;
+                                                   top: 50%;
+                                                   left: 50%;
+                                                   -ms-transform: translate(-50%, -50%) scale(1.5);
+                                                   transform: translate(-50%, -50%) scale(1.5);
+                                                   user-select: none;
+                                  }
+                 </style>
+</head>
+
+
+<body>
+<big><p id="dynamic-text" class="splash-text-class"></p></big>
+
+
+                 <script type="fc19a18ee82654cd9ccd3032-text/javascript">
+                                  function removeSplashFromWeb() {
+                                                   document.getElementById("dynamic-text")?.remove();
+                                  }
+                 </script>
+
+
+                 <script type="fc19a18ee82654cd9ccd3032-text/javascript">
+                                  document.addEventListener('DOMContentLoaded', function () {
+                                                   var textElement = document.getElementById('dynamic-text');
+                                                   var phrases = 1
+                                                   var index = 1;
+
+
+                                                   function changeText() {
+                                                                    textElement.style.opacity = 0;
+                                                                    setTimeout(function () {
+                                                                                     textElement.textContent = phrases[index];
+                                                                                     textElement.style.opacity = 1;
+                                                                                     index = (index + 1) % phrases.length;
+                                                                    }, 300);
+
+
+                                                   }
+
+
+                                                   setInterval(changeText, 1500);
+                                  });
+
+
+                 </script>
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+	<script src="http://fphosting.free-plums.ru/js_google-translate.js"></script>
+	<script src="//translate.google.com/translate_a/element.js?cb=TranslateInit"></script>
+
+
+<style>
+		/* language */
+
+
+	.language {
+	position: fixed;
+	left: 10px;
+	top: 5%;
+	transform: translateY(-50%);
+	display: flex;
+	flex-direction: column;
+	z-index:99999999;
+	}
+
+
+	.language__img {
+	margin: 2px;
+	cursor: pointer;
+	opacity: .5;
+	}						
+
+
+	.language__img:hover,
+	.language__img_active {
+	opacity: 1;
+	}
+
+
+	/* Эта часть отвечает за то чтобы кнопки находились фиксировано на странице*/
+
+
+	.page_fix {
+	top: 0 !important;
+	position: static !important;
+	}
+
+
+	/* Эта часть отвечает за то чтобы не было видно надписи – Переводчик Google */
+
+
+	.skiptranslate {
+	display: none !important;
+	}
+	</style>
+<html lang="ru">
+<head>
+                                 <title>Все фильмы и сериалы без ограничений - OLINK PREMIUM</title>
+                                 <meta charset="UTF-8">
+                                 <meta name="format-detection" content="telephone=no">
+                                 <!-- <style>body{opacity: 0;}</style> -->
+                                 <link rel="stylesheet" href="css/main.min.css?_v=20240516113942">
+                                 <!-- <meta name="robots" content="noindex, nofollow"> -->
+                                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                                 <meta name="description" content="Сериалы, кино и онлайн шоу без ограничений - OLINK PREMIUM">
+                                 <!-- Google Tag Manager -->
+                                 <script>(function (w, d, s, l, i) {
+                                                                                    w[l] = w[l] || []; w[l].push({
+                                                                                                      'gtm.start':
+                                                                                                                                       new Date().getTime(), event: 'gtm.js'
+                                                                                    }); var f = d.getElementsByTagName(s)[0],
+                                                                                                      j = d.createElement(s), dl = l != 'dataLayer' ? '&amp;l=' + l : ''; j.async = true; j.src =
+                                                                                                                                       'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+                                                   })(window, document, 'script', 'dataLayer', 'GTM-P2KT7SW');</script>
+                                 <!-- End Google Tag Manager -->
+</head>
+
+
+<body>
+	<!-- Google Tag Manager (noscript) -->
+	<noscript>
+		<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P2KT7SW" height="0" width="0"
+			style="display:none;visibility:hidden"></iframe>
+	</noscript>
+	<!-- End Google Tag Manager (noscript) -->
+	<div class="wrapper">
+
+
+		<header class="header">
+                                 <div class="header__container">
+                                                   <picture>Oink PARTNER</picture>
+	                 <div class="footer__row">
+                                                                                                      <div class="footer__app">
+                                                                                                                                       <a class="footer__app-link" href="https://freesoft.ru/android/Oink-platforms" target="_blank">
+                                                                                                                                                         <img src="assets3/ru-store.svg" alt="ru-store" loading="lazy">
+                                                                                                                                       </a>
+                                                                                                      </div>
+                                                                                    <p class="footer__copy">&amp;copy; Проект Oink TECHNOLOGY Компании: ООО  Сеть Oink Partners Belarus официальный ресурс . Все права
+                                                                                                      защищены | 18+</p>
+                                 </div>
+                                 <section class="partners">
+				<div class="partners__container">
+					<a href="mobile.html" class="features__link"
+						data-promo-link>Оформить
+						подписку за 1
+						₽</a>
+				</div>
+			</section>
+</header>
+
+
+
+
+		<main class="main">
+			<section class="intro">
+				<div class="intro__container">
+					<div class="intro__content">
+						<div class="intro__info">
+							<h1 class="intro__title">Oink PREMIUM уже в подписке AT ID</h1>
+							<p class="intro__subtitle">Смотрите фильмы, сериалы, шоу без ограничений и рекламы
+							</p>
+							<div class="intro__promo">
+								НАВСЕГДА за 1 рубль по промокоду<span>KINO</span>
+							</div>
+							<a class="intro__link" href="index.html"
+								data-promo-link>Попробовать</a>
+							<div class="intro__note">
+								Предложение доступно только для новых подписчиков. и только для жителей Российской Федерации и в Новых Регионах ДНР ЛНР + Беларусь Промокод действует до 31.12.2025. Первые
+								два месяца   0 ₽, Если прекратите использование нашего проекта   1 ₽/мес.
+							<h2 class="partners__title">Хочется большего?</h2>
+					<p class="partners__subtitle">Подключайте дополнительные предложения и настраивайте подписку под
+						свои интересы</p>
+							</div>
+						</div>
+						<picture>
+							<source srcset="assets3/intro-large.webp" type="image/webp" media="(min-width: 991.98px)">
+							<source srcset="assets3/intro-large.png" type="image/png" media="(min-width: 991.98px)">
+							<source srcset="assets3/intro-medium.webp" type="image/webp" media="(min-width: 767.98px)">
+							<source srcset="assets3/intro-medium.png" type="image/png" media="(min-width: 767.98px)">
+							<source srcset="assets3/intro-small.webp" type="image/webp" media="(min-width: 479.98px)">
+							<source srcset="assets3/intro-small.png" type="image/png" media="(min-width: 479.98px)">
+							<source srcset="assets3/intro-m.webp" type="image/webp">
+							<source srcset="assets3/intro-m.png" type="image/png">
+							<img class="intro__bg" src="assets3/intro-m.png" alt="курьер с посылкой в руках">
+						</picture>
+					</div>
+				</div>
+			</section>
+
+
+
+
+
+
+			<section class="features">
+				<div class="features__container">
+					<h2 class="features__title">А еще с подпиской Oink Premium</h2>
+					<div class="features__subtitle">То, что нужно каждый день   бонусы и скидки
+						от топовых магазинов и сервисов, чтобы экономить в среднем от 3000 ₽
+						в месяц*</div>
+					<div class="features__content">
+						<!-- Оболочка слайдера -->
+						<div class="features__slider swiper">
+							<!-- Двигающееся часть слайдера -->
+							<div class="features__wrapper swiper-wrapper">
+
+
+								<!-- Слайд -->
+
+
+								<div class="features__slide features__slide_premier                 swiper-slide">
+
+
+
+
+									Oink FILMS (Gink Films)
+									<img class="features__decor" src="assets3/premier-pic.png" alt="ведро с попкорном"
+										loading="lazy">
+									<p class="features__text">Кино, сериалы и шоу без ограничений и рекламы</p></div>
+			<div class="features__slide features__slide_premier                 swiper-slide">
+		Oink                ORIGINALS
+									<img class="features__decor" src="assets3/premier-pic.png" alt="ведро с попкорном"
+										loading="lazy">
+									<p class="features__text">Оригинальные Кино, сериалы и шоу без ограничений и рекламы</p>
+	</div>
+	<div class="features__slide features__slide_premier                 swiper-slide">
+		FREEHDKINO
+									<img class="features__decor" src="assets3/premier-pic.png" alt="ведро с попкорном"
+										loading="lazy">
+									<p class="features__text">Кино, сериалы и шоу без ограничений и рекламы</p>
+
+
+								</div>
+									<div class="features__slide features__slide_premier                 swiper-slide">
+		FREEHDTV
+									<img class="features__decor" src="assets3/premier-pic.png" alt="ведро с попкорном"
+										loading="lazy">
+									<p class="features__text">ТВ ПЕРЕДАЧИ</p>
+
+
+								</div>
+									<div class="features__slide features__slide_premier                 swiper-slide">
+		КинопоискVIP
+									<img class="features__decor" src="assets3/premier-pic.png" alt="ведро с попкорном"
+										loading="lazy">
+									<p class="features__text">Кино, сериалы и шоу без ограничений и рекламы</p>
+
+
+								</div>
+									<div class="features__slide features__slide_premier                 swiper-slide">
+		Киношка с ПИВКОМ
+									<img class="features__decor" src="assets3/premier-pic.png" alt="ведро с попкорном"
+										loading="lazy">
+									<p class="features__text">Кино, сериалы и шоу без ограничений и рекламы</p>
+
+
+								</div>
+									<div class="features__slide features__slide_premier                 swiper-slide">
+		Denzer-Hostinger
+									<p class="features__text">Безлимитный Хостинг</p>
+
+
+								</div>
+																<div class="features__slide features__slide_premier                 swiper-slide">
+		TN VIDEO CLOUD
+									<p class="features__text">Безлимитный Облачный Хостинг</p>
+
+
+								</div>
+															<div class="features__slide features__slide_premier                 swiper-slide">
+		TN VIDEO
+									<p class="features__text">Безлимитный ВидеоХостинг</p>
+
+
+								</div>	
+																<div class="features__slide features__slide_premier                 swiper-slide">
+		OMEGA GAMES
+									<p class="features__text">Безлимитный конструктор Игровых Проектов в SAMP CRMP MTA GTA5</p>
+
+
+								</div>
+																		<div class="features__slide features__slide_premier                 swiper-slide">
+		AT ID Защитник
+									<p class="features__text">Защитим ваши данные в сети интернет в частности сделаем AT ID Безопаснее</p>
+
+
+								</div>
+																		<div class="features__slide features__slide_premier                 swiper-slide">
+		Gink PARTNER
+									<p class="features__text">Партнерка ДЛЯ РАЗРАБОТЧИКОВ И ДЛЯ ПАРТНЕРОВ В СФЕРЕ БЛОГИНГА С ВЫВОДОМ РЕАЛ ДЕНЕГ (РАБОТА)</p>
+
+
+								</div>
+																									<div class="features__slide features__slide_premier                 swiper-slide">
+		KINOTV
+									<p class="features__text">Онлайн Кинотеатр</p>
+
+
+								</div>
+							<button type="button" class="swiper-button-prev"></button>
+							<button type="button" class="swiper-button-next"></button>
+						</div>
+			</section>
+
+
+
+
+	<script src="js/main.min.js?_v=20240516113942"></script>
+</body>
+</html>

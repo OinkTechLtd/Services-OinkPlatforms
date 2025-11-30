@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body {
+  font-family: sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+  background-color: #f0f0f0;
+}
+
+#drop_zone {
+  border: 2px dashed #ccc;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  margin-bottom: 20px;
+  width: 300px;
+  background-color: #fff;
+}
+
+#drop_zone.hover {
+  border-color: #007bff;
+  background-color: #e9ecef;
+}
+
+#iframe_container {
+  width: 80%;
+  height: 500px;
+  border: 1px solid #ccc;
+  display: none; /* Скрываем контейнер iframe по умолчанию */
+}
+
+#my_iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+#error_message {
+  color: red;
+  margin-top: 10px;
+  display: none;
+}
+
+#loading_message {
+  color: blue;
+  margin-top: 10px;
+  display: none;
+}
+</style>
+</head>
+<body>
+
+<div id="drop_zone">
+  Перетащите АРХИВ сюда или нажмите, чтобы выбрать
+</div>
+<input type="file" id="file_input" style="display: none;" accept=".zip .rar .7zip">
+
+<div id="iframe_container">
+  <iframe id="my_iframe"></iframe>
+</div>
+
+<div id="error_message"></div>
+<div id="loading_message"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script>
+  const dropZone = document.getElementById('drop_zone');
+  const fileInput = document.getElementById('file_input');
+  const iframeContainer = document.getElementById('iframe_container');
+  const myIframe = document.getElementById('my_iframe');
+  const errorMessage = document.getElementById('error_message');
+  const loadingMessage = document.getElementById('loading_message');
+
+  // Обработчики событий для Drag and Drop
+  dropZone.addEventListener('dragover', handleDragOver);
+  dropZone.addEventListener('drop', handleFileSelect);
+  dropZone.addEventListener('click', function() {
+    fileInput.click();
+  });
+  fileInput.addEventListener('change', handleFileSelect);
+
+
+  function handleDragOver(evt) {
+    evt.preventDefault();
+    evt.stopPropagation();
+    dropZone.classList.add('hover');
+  }
+
+  dropZone.addEventListener('dragleave', function(evt) {
+    dropZone.classList.remove('hover');
+  });
+
+  function handleFileSelect(evt) {
+    evt.preventDefault();
+    evt.stopPropagation();
+    dropZone.classList.remove('hover');
+
+    const file = evt.target.files ? evt.target.files[0] : evt.dataTransfer.files[0];  // Поддержка как выбора файла, так и перетаскивания
+
+    if (!file) {
+      return;
+    }
+
+    const fileType = file.name.split('.').pop().toLowerCase();
+    if (fileType !== 'zip') {
+      displayError("Пожалуйста, загрузите ZIP файл.");
+      return;
+    }
+
+    processArchiveFile(file);
+  }
+
+  function displayLoading(message) {
+    loadingMessage.textContent = message;
+    loadingMessage.style.display = 'block';
+    errorMessage.style.display = 'none';
+    iframeContainer.style.display = 'none';
+  }
+
+  function processArchiveFile(file) {
+    displayLoading("Обработка файлов вашего проекта...");
+
+    if (file.name.endsWith('.zip')) {
+      processZipFile(file);
+    } else {
+      displayError("Неподдерживаемый формат архива.");
+    }
+  }
+
+  function processZipFile(file) {
+    JSZip.loadAsync(file)
+      .then(function (zip) {
+        let indexFile = null;
+
+        // Поиск index.html или index.php в любом месте архива
+        for (let filename in zip.files) {
+          if (filename.toLowerCase().endsWith('index.html') || filename.toLowerCase().endsWith('index.php')) {
+            indexFile = zip.files[filename];
+            break;
+          }
+        }
+
+        if (!indexFile) {
+          displayError("В ZIP архиве не найден index.html или index.php");
+          console.error("Не найден index.html или index.php в архиве", zip.files); // Добавлено логирование
+          return;
+        }
+
+        indexFile.async("string").then(function (content) {
+          const blob = new Blob([content], { type: 'text/html' }); // Всегда text/html, т.к. PHP не обрабатывается в браузере
+          const url = URL.createObjectURL(blob);
+
+          myIframe.src = url;
+          iframeContainer.style.display = 'block';
+          errorMessage.style.display = 'none';
+          loadingMessage.style.display = 'none';
+        }).catch(function(error) {
+          displayError("Ошибка при чтении файла из ZIP архива: " + error.message);
+          loadingMessage.style.display = 'none';
+          console.error("Ошибка при чтении файла из ZIP:", error); // Добавлено логирование
+        });
+      })
+      .catch(function (error) {
+        displayError("Ошибка при распаковке ZIP файла: " + error.message);
+        loadingMessage.style.display = 'none';
+        console.error("Ошибка при распаковке ZIP:", error); // Добавлено логирование
+      });
+  }
+
+  function displayError(message) {
+    errorMessage.textContent = message;
+    errorMessage.style.display = 'block';
+    iframeContainer.style.display = 'none';
+    loadingMessage.style.display = 'none';
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex">
+    
+    <!-- Стили -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #222;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        .container {
+            text-align: center;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        #header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        #header h1 {
+            font-size: 36px;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+
+        #header p {
+            font-size: 16px;
+            color: #ccc;
+            line-height: 1.5;
+        }
+
+        .search-container {
+            margin: 20px 0;
+        }
+
+        #search-bar {
+            width: 100%;
+            max-width: 500px;
+            padding: 15px;
+            font-size: 16px;
+            background-color: #333;
+            border: 2px solid #444;
+            border-radius: 8px;
+            color: #fff;
+            margin-bottom: 15px;
+        }
+
+        #search-bar:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .watch-btn {
+            display: inline-block;
+            padding: 15px 30px;
+            font-size: 18px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: transform 0.2s ease;
+            margin: 10px;
+        }
+
+        .watch-btn:hover {
+            transform: translateY(-2px);
+            color: white;
+            text-decoration: none;
+        }
+
+        .players-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .player-card {
+            background: #333;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .player-card:hover {
+            transform: translateY(-3px);
+            border-color: #667eea;
+            background: #444;
+        }
+
+        .player-card i {
+            font-size: 2rem;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .player-card span {
+            font-weight: 500;
+            color: #fff;
+        }
+
+        .info-text {
+            margin-top: 20px;
+            color: #999;
+            font-size: 14px;
+        }
+
+        /* Защитные стили */
+        .protection-notice {
+            background: #dc3545;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-size: 12px;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            #header h1 {
+                font-size: 28px;
+            }
+            
+            #search-bar {
+                width: 90%;
+            }
+            
+            .players-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            #header h1 {
+                font-size: 24px;
+            }
+            
+            .players-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .watch-btn {
+                padding: 12px 25px;
+                font-size: 16px;
+            }
+        }
+    </style>
+
+    <!-- Защитные скрипты -->
+    <script type="text/javascript">
+        // Защита от копирования
+        document.onkeydown = function(e) {
+            if (e.ctrlKey && (e.key === "c" || e.key === "C")) {
+                e.preventDefault();
+                alert("Copying is not allowed on this website.");
+            }
+        };
+
+        // Защита от правого клика
+        function disableClick(){
+            document.onclick = function(event){
+                if (event.button == 2) {
+                    alert('Right Click Message');
+                    return false;
+                }
+            }
+        }
+
+        // Защита от выделения текста
+        function disableSelection(target){
+            if (typeof target.onselectstart != "undefined")
+                target.onselectstart = function(){return false}
+            else if (typeof target.style.MozUserSelect != "undefined")
+                target.style.MozUserSelect = "none"
+            else
+                target.onmousedown = function(){return false}
+            target.style.cursor = "default"
+        }
+
+        // Защита от контекстного меню
+        document.oncontextmenu = function(){return false;}
+    </script>
+</head>
+<body onload="disableClick(); disableSelection(document.body);">
+
+<div class="container">
+    <div id="header">
+        <h1>BALANCER PRO</h1>
+        <p>Вставьте ссылку на ваш видео ролик или ФИЛЬМ И выберите наши ПЛЕЕРА<br>Приятного Просмотра<br>Рекламных вставок нет!</p>
+    </div>
+
+    <div class="protection-notice">
+        Защита контента включена: отключено копирование, правый клик и выделение текста
+    </div>
+
+    <div class="search-container">
+        <input type="text" id="search-bar" name="search-bar" 
+               placeholder="Введите ссылку на видео (MP4, M3U8, YouTube, etc.)" 
+               onchange="updateAllLinks(this.value)">
+    </div>
+
+    <div>
+        <a href="#" id="random-link" class="watch-btn" onclick="openRandomPlayer()">
+            🎲 Смотреть в случайном плеере
+        </a>
+    </div>
+
+  
+
+    <div class="info-text">
+        Выберите плеер вручную или используйте "Смотреть в случайном плеере" для автоматического выбора
+    </div>
+</div>
+
+<!-- Font Awesome для иконок -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+
+<script>
+    // Список всех доступных плееров
+    const players = [
+        'oinkplayersNEWServices2.html',
+        'oinkNEWbalancer555.html',
+        'oinkNEWbalancer333.html',
+        'balancer555.html',
+        'balancer444.html',
+        'balancer333.html',
+         'balancer222.html',
+   'balancer111.html',
+        'balancer666.html',
+        'balancer.html',
+        'balancer777.html',
+        'balancer888.html',
+        'balancer999.html'
+    ];
+
+    // Обновление всех ссылок
+    function updateAllLinks(value) {
+        const videoUrl = encodeURIComponent(value);
+        
+        // Обновляем случайную ссылку
+        document.getElementById('random-link').setAttribute('data-url', videoUrl);
+        
+        // Сохраняем URL в localStorage для использования в других плеерах
+        localStorage.setItem('videoUrl', value);
+    }
+
+    // Открытие случайного плеера
+    function openRandomPlayer() {
+        const searchBar = document.getElementById('search-bar');
+        let videoUrl = searchBar.value.trim();
+        
+        if (!videoUrl) {
+            alert('Пожалуйста, введите ссылку на видео');
+            return false;
+        }
+
+        // Выбираем случайный плеер
+        const randomPlayer = players[Math.floor(Math.random() * players.length)];
+        const encodedUrl = encodeURIComponent(videoUrl);
+        
+        // Открываем в новой вкладке
+        window.open(`${randomPlayer}?file=${encodedUrl}`, '_blank');
+        
+        return false;
+    }
+
+    // Открытие конкретного плеера
+    function openSpecificPlayer(playerName) {
+        const searchBar = document.getElementById('search-bar');
+        let videoUrl = searchBar.value.trim();
+        
+        if (!videoUrl) {
+            alert('Пожалуйста, введите ссылку на видео');
+            return false;
+        }
+
+        const encodedUrl = encodeURIComponent(videoUrl);
+        window.open(`${playerName}?file=${encodedUrl}`, '_blank');
+        
+        return false;
+    }
+
+    // Восстановление URL из localStorage при загрузке
+    document.addEventListener('DOMContentLoaded', function() {
+        const savedUrl = localStorage.getItem('videoUrl');
+        if (savedUrl) {
+            document.getElementById('search-bar').value = savedUrl;
+            updateAllLinks(savedUrl);
+        }
+    });
+
+    // Обработка Enter в поле ввода
+    document.getElementById('search-bar').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            openRandomPlayer();
+        }
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #000;
+            color: white;
+            overflow: hidden;
+            touch-action: pan-y;
+        }
+
+        .app {
+            height: 100vh;
+            position: relative;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 60px;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff0050, #ff4081);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .search-btn, .refresh-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            transition: background-color 0.2s;
+        }
+
+        .search-btn:hover, .refresh-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Search Modal */
+        .search-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 200;
+            display: none;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .search-modal.active {
+            display: block;
+        }
+
+        .search-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            position: sticky;
+            top: 0;
+            background: rgba(0, 0, 0, 0.95);
+            padding: 10px 0;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .close-search {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 28px;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .search-filters {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            position: sticky;
+            top: 60px;
+            background: rgba(0, 0, 0, 0.95);
+            padding: 10px 0;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .filter-btn.active {
+            background: #ff0050;
+        }
+
+        .search-results {
+            padding-bottom: 20px;
+        }
+
+        .search-item {
+            display: flex;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .search-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .search-thumbnail {
+            width: 80px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            margin-right: 15px;
+            background-size: cover;
+            background-position: center;
+            flex-shrink: 0;
+        }
+
+        .search-info {
+            flex: 1;
+        }
+
+        .search-title {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 5px;
+            line-height: 1.3;
+        }
+
+        .search-channel {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 5px;
+        }
+
+        .search-stats {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* Channel View */
+        .channel-header {
+            background: linear-gradient(135deg, rgba(255, 0, 80, 0.3), rgba(255, 64, 129, 0.3));
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .channel-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .channel-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            margin-right: 15px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .channel-details h2 {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .channel-details p {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .channel-description {
+            font-size: 13px;
+            line-height: 1.4;
+            color: rgba(255, 255, 255, 0.8);
+            max-height: 60px;
+            overflow: hidden;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        /* Video Container */
+        .video-container {
+            position: absolute;
+            top: 60px;
+            left: 0;
+            width: 100%;
+            height: calc(100vh - 60px);
+            overflow: hidden;
+            transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .video-item {
+            width: 100%;
+            height: calc(100vh - 60px);
+            position: relative;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .video-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Video Info Overlay */
+        .video-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+            padding: 20px;
+            z-index: 10;
+        }
+
+        .video-info {
+            margin-bottom: 15px;
+        }
+
+        .video-title {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .video-channel {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 5px;
+        }
+
+        .video-stats {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Side Actions */
+        .side-actions {
+            position: absolute;
+            right: 15px;
+            bottom: 100px;
+            z-index: 20;
+        }
+
+        .action-btn {
+            display: block;
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 20px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            transition: all 0.2s;
+        }
+
+        .action-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .action-btn.liked {
+            color: #ff0050;
+            background: rgba(255, 0, 80, 0.3);
+        }
+
+        /* Navigation Indicators */
+        .nav-indicators {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 50;
+        }
+
+        .nav-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            margin: 8px 0;
+            transition: all 0.2s;
+        }
+
+        .nav-dot.active {
+            background: #ff0050;
+            transform: scale(1.3);
+        }
+
+        /* Loading */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            color: rgba(255, 255, 255, 0.6);
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top: 3px solid #ff0050;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Error Message */
+        .error-message {
+            text-align: center;
+            padding: 40px 20px;
+            color: rgba(255, 255, 255, 0.6);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .error-title {
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .error-text {
+            font-size: 16px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .retry-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            background: #ff0050;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.2s;
+        }
+
+        .retry-btn:hover {
+            background: #e6004a;
+        }
+
+        /* API Key Setup */
+        .api-setup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(20, 20, 20, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 300;
+            max-width: 350px;
+            width: 90%;
+        }
+
+        .api-setup h3 {
+            margin-bottom: 15px;
+            color: #ff0050;
+            text-align: center;
+        }
+
+        .api-setup p {
+            margin-bottom: 20px;
+            font-size: 14px;
+            line-height: 1.5;
+            color: rgba(255, 255, 255, 0.8);
+            text-align: center;
+        }
+
+        .api-input {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .api-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .api-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .api-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.2s;
+        }
+
+        .api-btn.primary {
+            background: #ff0050;
+            color: white;
+        }
+
+        .api-btn.primary:hover {
+            background: #e6004a;
+        }
+
+        .api-btn.secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .api-btn.secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Toast notifications */
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 25px;
+            z-index: 1000;
+            font-size: 14px;
+            backdrop-filter: blur(10px);
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translate(-50%, 20px);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
+        }
+
+        /* Swipe instructions */
+        .swipe-hint {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+            text-align: center;
+            z-index: 15;
+            animation: fadeInOut 4s ease-in-out;
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .header {
+                padding: 0 15px;
+            }
+
+            .video-overlay {
+                padding: 15px;
+            }
+
+            .side-actions {
+                right: 10px;
+                bottom: 80px;
+            }
+
+            .nav-indicators {
+                right: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">TikTube</div>
+            <div class="header-controls">
+                <button class="refresh-btn" title="Новое видео">🔄</button>
+                <button class="search-btn" title="Поиск">🔍</button>
+            </div>
+        </div>
+
+        <!-- Navigation Indicators -->
+        <div class="nav-indicators" id="navIndicators"></div>
+
+        <!-- Search Modal -->
+        <div class="search-modal" id="searchModal">
+            <div class="search-header">
+                <input type="text" class="search-input" id="searchInput" placeholder="Поиск видео или каналов...">
+                <button class="close-search">×</button>
+            </div>
+            
+            <div class="search-filters">
+                <button class="filter-btn active" data-type="video">Видео</button>
+                <button class="filter-btn" data-type="channel">Каналы</button>
+            </div>
+            
+            <div class="search-results" id="searchResults"></div>
+        </div>
+
+        <!-- Channel View Modal -->
+        <div class="search-modal" id="channelModal">
+            <div class="search-header">
+                <button class="back-btn">← Назад</button>
+                <button class="close-search">×</button>
+            </div>
+            
+            <div class="channel-header" id="channelHeader"></div>
+            <div class="search-results" id="channelVideos"></div>
+        </div>
+
+        <!-- Video Container -->
+        <div class="video-container" id="videoContainer">
+            <div class="loading">
+                <div class="spinner"></div>
+                <div>Свайпните вверх для просмотра видео</div>
+            </div>
+        </div>
+
+        <!-- API Key Setup Modal -->
+        <div class="api-setup" id="apiSetup">
+            <h3>YouTube API Setup</h3>
+            <p>Введите ваш YouTube API ключ для работы приложения. Получить можно в Google Cloud Console.</p>ТОКЕНЫ ДЛЯ ПРОСМОТРА ВИДЕО В ЮТУБ: 1( AIzaSyDO0DJdEbZuZNzosxWpEiunK-ekJRs57EQ ) 2 ( AIzaSyCR5iSooGmfvsPoCW0VNJsaBlkFNO8BPFE )
+            <input type="text" class="api-input" id="apiKeyInput" placeholder="Введите API ключ">
+            <div class="api-buttons">
+                <button class="api-btn primary" id="saveApiBtn">Сохранить</button>
+                <button class="api-btn secondary" id="demoBtn">Инструкция</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Глобальные переменные
+        let apiKey = '';
+        let currentVideoIndex = 0;
+        let videoHistory = [];
+        let isLoading = false;
+        let startY = 0;
+        let searchType = 'video';
+
+        const videoQueries = [
+            'music', 'funny', 'gaming', 'vlog', 'travel', 'food', 'sports', 'tech',
+            'art', 'animals', 'dance', 'education', 'diy', 'beauty', 'comedy',
+            'trending', 'viral', 'entertainment', 'news', 'science', 'cooking',
+            'fitness', 'lifestyle', 'tutorial', 'review', 'unboxing', 'minecraft'
+        ];
+
+        // Инициализация при загрузке страницы
+        window.onload = function() {
+            // Показать настройку API
+            document.getElementById('apiSetup').style.display = 'block';
+            
+            // Обработчики кнопок API
+            document.getElementById('saveApiBtn').onclick = function() {
+                const key = document.getElementById('apiKeyInput').value.trim();
+                if (key) {
+                    apiKey = key;
+                    document.getElementById('apiSetup').style.display = 'none';
+                    loadRandomVideo();
+                    showToast('API ключ сохранен!');
+                } else {
+                    showToast('Введите API ключ');
+                }
+            };
+
+            document.getElementById('demoBtn').onclick = function() {
+                alert('Получите YouTube API ключ:\n1. Перейдите на console.cloud.google.com\n2. Создайте проект\n3. Включите YouTube Data API v3\n4. Создайте API ключ\n5. Вставьте его сюда');
+            };
+
+            // Обработчики хедера
+            document.querySelector('.refresh-btn').onclick = loadRandomVideo;
+            document.querySelector('.search-btn').onclick = openSearch;
+
+            // Обработчики поиска
+            document.querySelector('#searchModal .close-search').onclick = closeSearch;
+            document.querySelector('#channelModal .close-search').onclick = closeChannelView;
+            document.querySelector('.back-btn').onclick = function() {
+                document.getElementById('channelModal').classList.remove('active');
+                document.getElementById('searchModal').classList.add('active');
+            };
+
+            // Поиск с задержкой
+            let searchTimeout;
+            document.getElementById('searchInput').oninput = function() {
+                clearTimeout(searchTimeout);
+                const query = this.value.trim();
+                if (query) {
+                    searchTimeout = setTimeout(() => performSearch(query), 500);
+                } else {
+                    document.getElementById('searchResults').innerHTML = '';
+                }
+            };
+
+            // Фильтры поиска
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.onclick = function() {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    searchType = this.dataset.type;
+                    
+                    const query = document.getElementById('searchInput').value.trim();
+                    if (query) performSearch(query);
+                };
+            });
+
+            // Touch события для свайпов
+            const container = document.getElementById('videoContainer');
+            
+            container.ontouchstart = function(e) {
+                startY = e.touches[0].clientY;
+            };
+
+            container.ontouchmove = function(e) {
+                e.preventDefault();
+            };
+
+            container.ontouchend = function(e) {
+                const endY = e.changedTouches[0].clientY;
+                const diff = startY - endY;
+                
+                if (Math.abs(diff) > 50) {
+                    if (diff > 0) {
+                        loadRandomVideo(); // Свайп вверх
+                    } else {
+                        showPreviousVideo(); // Свайп вниз
+                    }
+                }
+            };
+
+            // Клавиатура
+            document.onkeydown = function(e) {
+                if (e.key === 'ArrowDown' || e.key === ' ') {
+                    e.preventDefault();
+                    loadRandomVideo();
+                }
+                if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    showPreviousVideo();
+                }
+            };
+
+            // Колесико мыши
+            document.onwheel = function(e) {
+                if (e.deltaY > 0) {
+                    loadRandomVideo();
+                } else {
+                    showPreviousVideo();
+                }
+            };
+        };
+
+        // Основные функции
+        async function loadRandomVideo() {
+            if (isLoading || !apiKey) return;
+            
+            isLoading = true;
+            showLoading();
+
+            try {
+                const query = videoQueries[Math.floor(Math.random() * videoQueries.length)];
+                const response = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&q=${query}&maxResults=10&order=relevance&videoDuration=medium&key=${apiKey}`);
+                
+                if (!response.ok) throw new Error('API Error');
+                
+                const data = await response.json();
+                
+                if (data.items && data.items.length > 0) {
+                    const randomIndex = Math.floor(Math.random() * data.items.length);
+                    const video = data.items[randomIndex];
+                    
+                    // Получаем статистику
+                    const statsResponse = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=statistics,snippet&id=${video.id.videoId}&key=${apiKey}`);
+                    const statsData = await statsResponse.json();
+                    
+                    const fullVideo = statsData.items[0] || video;
+                    
+                    // Добавляем в историю
+                    videoHistory.splice(currentVideoIndex + 1);
+                    videoHistory.push(fullVideo);
+                    currentVideoIndex = videoHistory.length - 1;
+                    
+                    displayVideo(fullVideo);
+                    updateIndicators();
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showError();
+            }
+            
+            isLoading = false;
+        }
+
+        function showPreviousVideo() {
+            if (currentVideoIndex > 0) {
+                currentVideoIndex--;
+                const video = videoHistory[currentVideoIndex];
+                displayVideo(video);
+                updateIndicators();
+            }
+        }
+
+        function displayVideo(video) {
+            const container = document.getElementById('videoContainer');
+            const videoId = video.id.videoId || video.id;
+            const title = video.snippet.title;
+            const channel = video.snippet.channelTitle;
+            const views = formatNumber(video.statistics?.viewCount || 0);
+            const likes = formatNumber(video.statistics?.likeCount || 0);
+
+            container.innerHTML = `
+                <div class="video-item">
+                    <iframe class="video-iframe" 
+                            src="https://www.youtube.com/embed/${videoId}?autoplay=1&controls=1&loop=1&rel=0&modestbranding=1"
+                            allowfullscreen>
+                    </iframe>
+                    
+                    <div class="video-overlay">
+                        <div class="video-info">
+                            <div class="video-title">${escapeHtml(title)}</div>
+                            <div class="video-channel">${escapeHtml(channel)}</div>
+                            <div class="video-stats">${views} просмотров • ${likes} лайков</div>
+                        </div>
+                    </div>
+                    
+                    <div class="side-actions">
+                        <button class="action-btn" onclick="toggleLike(this)">❤️</button>
+                        <button class="action-btn" onclick="shareVideo('${videoId}')">📤</button>
+                    </div>
+                    
+                    <div class="swipe-hint">Свайпните вверх для следующего видео</div>
+                </div>
+            `;
+        }
+
+        // Функции поиска
+        function openSearch() {
+            document.getElementById('searchModal').classList.add('active');
+            document.getElementById('searchInput').focus();
+        }
+
+        function closeSearch() {
+            document.getElementById('searchModal').classList.remove('active');
+            document.getElementById('searchInput').value = '';
+            document.getElementById('searchResults').innerHTML = '';
+        }
+
+        function closeChannelView() {
+            document.getElementById('channelModal').classList.remove('active');
+            document.getElementById('channelHeader').innerHTML = '';
+            document.getElementById('channelVideos').innerHTML = '';
+        }
+
+        async function performSearch(query) {
+            if (!apiKey) return;
+
+            const resultsContainer = document.getElementById('searchResults');
+            resultsContainer.innerHTML = '<div class="loading"><div class="spinner"></div><div>Поиск...</div></div>';
+
+            try {
+                let url;
+                if (searchType === 'video') {
+                    url = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&q=${encodeURIComponent(query)}&maxResults=25&order=relevance&key=${apiKey}`;
+                } else {
+                    url = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=channel&q=${encodeURIComponent(query)}&maxResults=25&order=relevance&key=${apiKey}`;
+                }
+
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('Search failed');
+                
+                const data = await response.json();
+                displaySearchResults(data.items || []);
+            } catch (error) {
+                console.error('Search error:', error);
+                resultsContainer.innerHTML = '<div class="error-message"><div class="error-title">Ошибка поиска</div></div>';
+            }
+        }
+
+        function displaySearchResults(items) {
+            const container = document.getElementById('searchResults');
+            
+            if (items.length === 0) {
+                container.innerHTML = '<div class="error-message"><div class="error-title">Ничего не найдено</div></div>';
+                return;
+            }
+
+            container.innerHTML = items.map(item => {
+                const thumbnail = item.snippet.thumbnails.medium?.url || item.snippet.thumbnails.default?.url || '';
+                const title = item.snippet.title;
+                const channelTitle = item.snippet.channelTitle;
+                const itemId = item.id.videoId || item.id.channelId;
+                
+                return `
+                    <div class="search-item" onclick="selectSearchResult('${itemId}', '${searchType}')">
+                        <div class="search-thumbnail" style="background-image: url('${thumbnail}')"></div>
+                        <div class="search-info">
+                            <div class="search-title">${escapeHtml(title)}</div>
+                            <div class="search-channel">${escapeHtml(channelTitle)}</div>
+                            <div class="search-stats">${searchType === 'video' ? 'Видео' : 'Канал'}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        async function selectSearchResult(id, type) {
+            if (type === 'video') {
+                try {
+                    const response = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&id=${id}&key=${apiKey}`);
+                    const data = await response.json();
+                    
+                    if (data.items && data.items.length > 0) {
+                        const video = data.items[0];
+                        
+                        videoHistory.splice(currentVideoIndex + 1);
+                        videoHistory.push(video);
+                        currentVideoIndex = videoHistory.length - 1;
+                        
+                        displayVideo(video);
+                        updateIndicators();
+                        closeSearch();
+                    }
+                } catch (error) {
+                    console.error('Error loading video:', error);
+                    showToast('Ошибка загрузки видео');
+                }
+            } else {
+                openChannelView(id);
+            }
+        }
+
+        async function openChannelView(channelId) {
+            try {
+                // Получаем информацию о канале
+                const channelResponse = await fetch(`https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics&id=${channelId}&key=${apiKey}`);
+                const channelData = await channelResponse.json();
+                
+                if (channelData.items && channelData.items.length > 0) {
+                    const channel = channelData.items[0];
+                    
+                    // Отображаем информацию о канале
+                    displayChannelHeader(channel);
+                    
+                    // Загружаем видео канала
+                    loadChannelVideos(channelId);
+                    
+                    // Показываем модал канала
+                    document.getElementById('searchModal').classList.remove('active');
+                    document.getElementById('channelModal').classList.add('active');
+                }
+            } catch (error) {
+                console.error('Error loading channel:', error);
+                showToast('Ошибка загрузки канала');
+            }
+        }
+
+        function displayChannelHeader(channel) {
+            const container = document.getElementById('channelHeader');
+            const snippet = channel.snippet;
+            const statistics = channel.statistics;
+            
+            const avatar = snippet.thumbnails.high?.url || snippet.thumbnails.default?.url || '';
+            const subscriberCount = formatNumber(statistics.subscriberCount || 0);
+            const videoCount = formatNumber(statistics.videoCount || 0);
+            
+            container.innerHTML = `
+                <div class="channel-info">
+                    <div class="channel-avatar" style="background-image: url('${avatar}')"></div>
+                    <div class="channel-details">
+                        <h2>${escapeHtml(snippet.title)}</h2>
+                        <p>${subscriberCount} подписчиков • ${videoCount} видео</p>
+                    </div>
+                </div>
+                <div class="channel-description">${escapeHtml(snippet.description || 'Нет описания')}</div>
+            `;
+        }
+
+        async function loadChannelVideos(channelId) {
+            const container = document.getElementById('channelVideos');
+            container.innerHTML = '<div class="loading"><div class="spinner"></div><div>Загрузка видео канала...</div></div>';
+
+            try {
+                // Получаем видео канала
+                const response = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=${channelId}&type=video&order=date&maxResults=25&key=${apiKey}`);
+                const data = await response.json();
+                
+                if (data.items && data.items.length > 0) {
+                    // Получаем статистику для видео
+                    const videoIds = data.items.map(item => item.id.videoId).join(',');
+                    const statsResponse = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=statistics,snippet&id=${videoIds}&key=${apiKey}`);
+                    const statsData = await statsResponse.json();
+                    
+                    displayChannelVideos(statsData.items || data.items);
+                } else {
+                    container.innerHTML = '<div class="error-message"><div class="error-title">Нет видео</div></div>';
+                }
+            } catch (error) {
+                console.error('Error loading channel videos:', error);
+                container.innerHTML = '<div class="error-message"><div class="error-title">Ошибка загрузки</div></div>';
+            }
+        }
+
+        function displayChannelVideos(videos) {
+            const container = document.getElementById('channelVideos');
+            
+            container.innerHTML = videos.map(video => {
+                const videoId = video.id.videoId || video.id;
+                const snippet = video.snippet;
+                const statistics = video.statistics || {};
+                const thumbnail = snippet.thumbnails.medium?.url || snippet.thumbnails.default?.url || '';
+                const views = formatNumber(statistics.viewCount || 0);
+                
+                return `
+                    <div class="search-item" onclick="selectChannelVideo('${videoId}')">
+                        <div class="search-thumbnail" style="background-image: url('${thumbnail}')"></div>
+                        <div class="search-info">
+                            <div class="search-title">${escapeHtml(snippet.title)}</div>
+                            <div class="search-channel">${escapeHtml(snippet.channelTitle)}</div>
+                            <div class="search-stats">${views} просмотров</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        async function selectChannelVideo(videoId) {
+            try {
+                const response = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&id=${videoId}&key=${apiKey}`);
+                const data = await response.json();
+                
+                if (data.items && data.items.length > 0) {
+                    const video = data.items[0];
+                    
+                    // Добавляем в историю
+                    videoHistory.splice(currentVideoIndex + 1);
+                    videoHistory.push(video);
+                    currentVideoIndex = videoHistory.length - 1;
+                    
+                    displayVideo(video);
+                    updateIndicators();
+                    closeChannelView();
+                }
+            } catch (error) {
+                console.error('Error loading video:', error);
+                showToast('Ошибка загрузки видео');
+            }
+        }
+
+        // Вспомогательные функции
+        function showLoading() {
+            document.getElementById('videoContainer').innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <div>Загрузка нового видео...</div>
+                </div>
+            `;
+        }
+
+        function showError() {
+            document.getElementById('videoContainer').innerHTML = `
+                <div class="error-message">
+                    <div class="error-title">Ошибка загрузки</div>
+                    <div class="error-text">Проверьте API ключ и интернет</div>
+                    <button class="retry-btn" onclick="loadRandomVideo()">Повторить</button>
+                </div>
+            `;
+        }
+
+        function updateIndicators() {
+            const container = document.getElementById('navIndicators');
+            const maxDots = Math.min(videoHistory.length, 5);
+            
+            let html = '';
+            for (let i = 0; i < maxDots; i++) {
+                const isActive = i === Math.min(currentVideoIndex, maxDots - 1);
+                html += `<div class="nav-dot ${isActive ? 'active' : ''}"></div>`;
+            }
+            container.innerHTML = html;
+        }
+
+        function toggleLike(btn) {
+            btn.classList.toggle('liked');
+            showToast(btn.classList.contains('liked') ? 'Лайк!' : 'Лайк убран');
+        }
+
+        function shareVideo(videoId) {
+            const url = `https://youtube.com/watch?v=${videoId}`;
+            if (navigator.share) {
+                navigator.share({url: url});
+            } else {
+                navigator.clipboard.writeText(url);
+                showToast('Ссылка скопирована!');
+            }
+        }
+
+        function showToast(message) {
+            const existingToast = document.querySelector('.toast');
+            if (existingToast) existingToast.remove();
+            
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        function formatNumber(num) {
+            const n = parseInt(num) || 0;
+            if (n >= 1000000) return Math.floor(n / 100000) / 10 + 'M';
+            if (n >= 1000) return Math.floor(n / 100) / 10 + 'K';
+            return n.toString();
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Предотвращаем скролл страницы
+        document.addEventListener('touchmove', function(e) {
+            if (!e.target.closest('.search-modal')) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+    </script>
+</body>
+</html>

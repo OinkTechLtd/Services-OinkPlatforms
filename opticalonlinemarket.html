@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f2f2f2;
+        }
+
+        .logo {
+            margin-bottom: 20px;
+        }
+
+        .search-bar {
+            width: 500px;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 25px;
+            font-size: 16px;
+            outline: none;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-buttons {
+            margin-top: 20px;
+        }
+
+        .search-buttons button {
+            padding: 10px 20px;
+            margin: 0 10px;
+            background-color: #f8f9fa;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .search-buttons button:hover {
+            border-color: #aaa;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #f8f9fa;
+            padding: 15px;
+            text-align: center;
+            font-size: 14px;
+            color: #5f6368;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="logo">
+        <h2><center>Oink.Поиск</center></h2>
+    </div>
+
+    <input type="text" class="search-bar" id="search-input" placeholder="Помогу найти нужное в интернете">
+
+    <div class="search-buttons">
+        <button onclick="feelingLucky()">Мне повезёт!</button>
+    </div>
+
+    <div class="footer">
+        Сделано с любовью  для компании Oink Tech Ltd Co © 2025- н.в
+    </div>
+
+    <script>
+        function feelingLucky() {
+            const searchTerm = document.getElementById("search-input").value;
+            if (!searchTerm) return; // Ничего не делаем, если поисковый запрос пустой
+
+            const searchEngines = [
+                "https://yandex.com/search/?text=Отправлено с помощью Oink Platforms",
+                "https://www.google.com/search?q=Отправлено с помощью Oink Platforms",
+                "https://duckduckgo.com/?q=Отправлено с помощью Oink Platforms",
+                "https://www.bing.com/search?q=Отправлено с помощью Oink Platforms"
+            ];
+
+            const randomIndex = Math.floor(Math.random() * searchEngines.length);
+            const luckyUrl = searchEngines[randomIndex] + encodeURIComponent(searchTerm);
+            window.open(luckyUrl, '_blank'); // Открываем в новой вкладке
+        }
+
+        // Обработка нажатия Enter в строке поиска
+        document.getElementById("search-input").addEventListener("keyup", function(event) {
+            if (event.key === "Enter") {
+                feelingLucky();
+            }
+        });
+    </script>
+
+</body>
+</html>

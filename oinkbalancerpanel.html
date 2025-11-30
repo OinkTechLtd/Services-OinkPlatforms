@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ 
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        .logo {
+            margin-bottom: 30px;
+        }
+
+        .logo h1 {
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .logo p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        .input-group label {
+            display: block;
+            text-align: left;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .url-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e1e1;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .url-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .play-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            width: 100%;
+        }
+
+        .play-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .play-button:active {
+            transform: translateY(0);
+        }
+
+        .examples {
+            margin-top: 30px;
+            text-align: left;
+        }
+
+        .examples h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .example-list {
+            list-style: none;
+        }
+
+        .example-list li {
+            padding: 8px 0;
+            color: #666;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .example-list li:last-child {
+            border-bottom: none;
+        }
+
+        .supported-formats {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            text-align: left;
+        }
+
+        .supported-formats h4 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .format-list {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+            }
+            
+            .logo h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <h1>🎬 Oink Balancer</h1>
+            <p>Вставьте ссылку на видео для воспроизведения</p>
+        </div>
+
+        <div class="input-group">
+            <label for="videoUrl">Ссылка на видео:</label>
+            <input 
+                type="url" 
+                id="videoUrl" 
+                class="url-input" 
+                placeholder="https://example.com/video.mp4" 
+                required
+            >
+        </div>
+
+        <button class="play-button" onclick="openPlayer()">
+            ▶️ Смотреть видео
+        </button>
+
+        <div class="examples">
+            <h3>Примеры поддерживаемых ссылок:</h3>
+            <ul class="example-list">
+                <li>https://example.com/video.mp4</li>
+                <li>https://www.youtube.com/watch?v=VIDEO_ID</li>
+                <li>https://vimeo.com/VIDEO_ID</li>
+                <li>/local/video.mp4 (относительный путь)</li>
+            </ul>
+        </div>
+
+        <div class="supported-formats">
+            <h4>📹 Поддерживаемые форматы:</h4>
+            <p class="format-list">MP4, WebM, OGV, YouTube, Vimeo, M3U8 (HLS), MPEG-DASH и другие</p>
+        </div>
+    </div>
+
+    <script>
+        function openPlayer() {
+            const videoUrl = document.getElementById('videoUrl').value.trim();
+            
+            if (!videoUrl) {
+                alert('Пожалуйста, введите ссылку на видео');
+                return;
+            }
+
+            // Проверяем, является ли ссылка валидной
+            try {
+                // Пробуем создать URL объект для проверки
+                new URL(videoUrl);
+            } catch (e) {
+                // Если это не абсолютный URL, проверяем как относительный путь
+                if (!videoUrl.startsWith('/') && !videoUrl.startsWith('./') && !videoUrl.startsWith('../')) {
+                    if (!confirm('Ссылка может быть невалидной. Продолжить?')) {
+                        return;
+                    }
+                }
+            }
+
+            // Кодируем URL для передачи в параметре
+            const encodedUrl = encodeURIComponent(videoUrl);
+            
+            // Перенаправляем на плеер с параметром file
+            window.location.href = `balancer.html?file=${encodedUrl}`;
+        }
+
+        // Разрешаем отправку по Enter
+        document.getElementById('videoUrl').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                openPlayer();
+            }
+        });
+
+        // Автофокус на поле ввода
+        document.getElementById('videoUrl').focus();
+
+        // Пример: вставка тестовой ссылки для демонстрации (можно удалить)
+        setTimeout(() => {
+            document.getElementById('videoUrl').value = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
+        }, 1000);
+    </script>
+</body>
+</html>

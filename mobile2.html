@@ -1,0 +1,468 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+ </head>
+ <body bgcolor="#2A3440">
+<style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+
+        #logo {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        #thank-you {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        #countdown-container {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 5px solid #3498db;
+            margin-bottom: 20px;
+        }
+
+        #countdown {
+            font-size: 24px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        #redirect-button {
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            background-color: #3498db;
+            color: #fff;
+            text-decoration: none;
+            border: none;
+            border-radius: 5px;
+        }
+
+        @media screen and (max-width: 600px) { 
+        countdown-container {
+                width: 80px;
+                height: 80px;
+            }
+
+            #countdown {
+                font-size: 18px;
+            }
+
+            #redirect-button {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+           <center><div id="countdown-container">
+            <div id="countdown">10</div>
+        </div></center>
+ <a id="redirect-button" href="https://t.me/+zHsgWO3fKGVmNDYy">Перейти в телеграм</a>
+<p id="thank-you">Спасибо за установку нашего приложения!
+        Сейчас мы вас переадресуем на наш телеграмм канал. Там Все Новости и общяемся именно там
+        Советуем вам Подписаться</p>
+Для продолжения воспользуйтесь НОВОЙ Актуальной версии, Вы можете пропустить обновления но учтите, некоторые сервисы и обновления вам не будут доступны.
+Скачай Обновление! Платформы Oink Platforms чтобы получить больше Функционала. и контента
+    </div>
+
+
+    <script>
+        let counterValue = 10;
+
+	function downloadFile() {
+            var url = "https://freesoft.ru/android/gink-platforms/download/199589";
+            var fileName = "OinkPlatforms.apk";
+            var link = document.createElement("a");
+            link.setAttribute("href", url);
+            link.setAttribute("download", fileName);
+            link.style.display = "none";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function updateCounter() {
+            document.getElementById('countdown').innerText = counterValue;
+        }
+
+        function redirectToTelegram() {
+            window.location.href = 'https://t.me/+zHsgWO3fKGVmNDYy';
+        }
+
+        function countdown() {
+            updateCounter();
+            if (counterValue === 0) {
+                redirectToTelegram();
+            } else {
+                counterValue--;
+                setTimeout(countdown, 1000);
+            }
+        }
+        document.addEventListener("DOMContentLoaded", function(event) {
+           downloadFile();
+        });
+        setTimeout(countdown, 1000);
+    </script>
+	<div class="container">
+<div class="desktop-text">
+Нажмите на Войти на Платформу если не хотите зайти на платформу, так и нажмите зайти позже.
+</font></center></p></div>
+<!doctype html>
+<html lang="ru"><head editro-current="">
+  <title>WC-6692</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="widget-config" data-type="fixed" data-width="404" data-height="auto" data-right="10" data-bottom="60" data-z-index="10000" data-autoshow="true">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,700,900&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      margin: 0;
+      color: #ffffff;
+      font-family: Roboto, sans-serif;
+    }
+
+    .widget {
+      position: relative;
+      display: block;
+      width: 373px;
+      padding: 25px 45px 30px 30px;
+      border-radius: 5px;
+      background-image: linear-gradient(74deg, rgba(21, 8, 28, 0.91), rgba(47, 30, 54, 0.91)), linear-gradient(to bottom, rgba(10, 9, 7, 0.91), rgba(10, 9, 7, 0.91));
+    }
+
+    .widget__header {
+      margin: 0 0 10px;
+      font-size: 22px;
+      font-weight: 900;
+    }
+
+    .widget__text {
+      margin: 0 0 20px;
+      font-size: 14px;
+      font-weight: 400;
+    }
+
+    .widget__text span {
+      color: #2bc183;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .widget__link {
+      display: block;
+      max-width: 220px;
+      padding: 12px 24px;
+      border-radius: 4px;
+      box-shadow: 0 0 10px #fce759;
+      background-image: linear-gradient(to bottom, #fce759, #fcdc00);
+      color: #000000;
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .widget__close {
+      position: absolute;
+      top: 0;
+      right: -31px;
+      width: 21px;
+      height: 21px;
+      padding: 0;
+      border: none;
+      border-radius: 50%;
+      background-color: rgba(189, 189, 189, 0.91);
+      cursor: pointer;
+    }
+
+    .widget__close::before,
+    .widget__close::after {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      content: "";
+      width: 12px;
+      height: 1px;
+      background-color: #ffffff;
+    }
+
+    .widget__close::before {
+      transform: translate(-50%, -50%) rotate(45deg);
+    }
+
+    .widget__close::after {
+      transform: translate(-50%, -50%) rotate(-45deg);
+    }
+  </style>
+  <style>
+#success, #fail, #promo_field {
+display: block;
+padding: 20px;
+font-size: 20pt;
+font-weight: bold;
+text-align: center;
+}
+#success, #promo_field {background-color: #77f277; color: #000;}
+#fail {background-color: #f74e48; color: #fff;}
+</style>
+</head>
+<body>
+
+<script type="text/javascript">
+var code = {
+name: "promo", // название промокода
+percent: "30%", // процент скидки с учетом промо-кода
+result: 1200 // включение промокода при сумме не меньше 1200
+};
+
+$(function() {
+$(".button-promo").click(function() {
+RESULTS.go();
+if(RESULTS.db.res[1] < code.result) {
+return false;
+} else {
+$("#promo_code").text(code.name);
+}
+});
+
+$(".button-promo").on("click", function() {
+if($("#input_text-ID").val() === code.name) {
+$(".button-promo").attr("disabled", "disabled").css("opacity", ".6");
+$("#input_text-ID").attr("disabled", "disabled").css("opacity", ".6");
+STEPFORM.data.results[0].formula += "-" + code.percent;
+RESULTS.go();
+$("#success").slideDown(400, function() {
+appNormalise();
+});
+$("#fail").slideUp(200);
+} else if($("#input_text-ID").val() !== code.name) {
+$("#fail").show();
+appNormalise();
+}
+})
+});
+    function setDimensions (wrapperClass, isPopup, isRibbon) {
+        isPopup = typeof isPopup !== 'undefined' ? isPopup : true;
+        isRibbon = typeof isRibbon !== 'undefined' ? isRibbon : false;
+
+        var mainWrapper = document.querySelector(wrapperClass);
+
+        // Риббон должен тянуться на всю ширину экрана.
+        if (isRibbon) {
+            widget.configure({ width: '100%', height: mainWrapper.scrollHeight });
+        } else {
+            if (top.innerWidth < mainWrapper.scrollWidth) {
+                widget.configure({ width: '90%', height: mainWrapper.scrollHeight });
+            } else {
+                widget.configure({ width: mainWrapper.scrollWidth, height: mainWrapper.scrollHeight });
+            }
+        }
+
+        // Убирает эффект прилипания попапа к верхней границе экрана.
+        if (isPopup) {
+            if (frameElement.style.position === 'static') {
+                frameElement.style.position = 'absolute';
+                frameElement.style.top = '50%';
+                frameElement.style.left = '50%';
+                frameElement.style.transform = 'translate3d(-50%, -50%, 0)';
+            }
+        }
+    }
+
+    function resize (mutations) {
+        mutations.forEach(function (mutation) {
+            if (mutation.type === 'attributes') {
+                widget.ready(function () {
+                    setDimensions('.js-widget');
+                    top.onresize = function () {
+                        setDimensions('.js-widget');
+                    }
+                });
+                observer.disconnect();
+            }
+        });
+    }
+
+    var observer = new MutationObserver(resize);
+    observer.observe(frameElement.parentElement, { attributes: true, attributeFilter: ['style'] });
+
+    widget.ready(function () {
+      var categoryNameFromDataLayer = (parent.dataLayer && parent.dataLayer.reduce(function(acc, item){
+        if (item.ecommerce && item.ecommerce.impressions) {
+          var categories = ((item.ecommerce.impressions[0] || {}).category || '').split('/')
+          if (categories.length === 2) {
+            acc = categories[1];
+          }
+        }
+        return acc;
+      }, '')).toLowerCase();
+       var categoryName = top.document.querySelector('.breadcrumbsList li:last-child');
+       var categoryNode = document.querySelector('.js-category');
+
+       categoryNode.textContent = categoryNameFromDataLayer; //categoryName.textContent.trim().toLowerCase();
+    });
+</script>
+
+
+</body></html>
+	 <style>
+    body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #222;
+        color: #fff;
+        font-family: Arial, sans-serif;
+    }
+
+    .kinobox_player {
+        display: flex;
+        max-width: 100%;
+    }
+
+    #top-links {
+        margin-top: 20px;
+        display: flex;
+        align-items: center;
+    }
+
+    #top-links a {
+        color: #fff !important;
+        text-decoration: none;
+        margin-right: 40px;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    #header {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    #header.hidden {
+        display: none;
+    }
+
+    #header h1 {
+        font-size: 48px;
+        margin: 0;
+    }
+
+    #search-container {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #search-bar {
+        width: 90%; /* Изменено с 400px на проценты для лучшей адаптации */
+        max-width: 400px; /* Максимальная ширина ограничена для больших экранов */
+        padding: 12px;
+        font-size: 16px;
+        background-color: #333;
+        border: none;
+        color: #fff;
+        margin-bottom: 20px;
+    }
+
+    #search-button {
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #333;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.2s;
+    }
+
+    #search-button:hover {
+        background-color: #999;
+        transform: scale(1.1);
+    }
+
+    .kinobox_player {
+        display: none;
+        width: 100%;
+    }
+
+    #bottom-text {
+        margin-top: 20px;
+        color: #fff;
+    }
+
+    #bottom-text.hidden {
+        display: none;
+    }
+
+    #home-button {
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        background-color: #333;
+        color: #fff;
+        padding: 5px 10px;
+        font-size: 14px;
+        cursor: pointer;
+        z-index: 9999;
+    }
+
+    /* Медиазапросы для мобильных устройств */
+    @media (max-width: 768px) {
+        #header h1 {
+            font-size: 24px; /* Уменьшение размера заголовка */
+        }
+
+        #top-links a {
+            margin-right: 20px; /* Уменьшение расстояния между ссылками */
+        }
+    }
+</style>
+<script src="yo.js"></script>
+
+
+
+<footer class="footer">
+
+	</div>
+<style>	
+.container {
+text-align: center;
+position: absolute;
+    top: 50%;
+    margin-top: 1.25em;
+    margin: auto;
+    margin-left: auto;
+    margin-right: auto;
+
+}
+</style>	
+

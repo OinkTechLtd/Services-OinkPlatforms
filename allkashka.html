@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+   <div class="app-container">
+
+        <header class="app-header">
+            TeleСram
+        </header>
+    <div class="container">
+
+        <aside class="sidebar">
+            <div class="search-bar">
+                <input type="text" placeholder="Поиск">
+            </div>
+            <ul class="chat-list">
+                <li class="chat-item active">
+                    <div class="chat-info">
+                        <h3>Избранное</h3>
+                        <p>Last message preview...</p>
+                    </div>
+                </li>
+                </ul>
+        </aside>
+
+        <main class="chat-window">
+            <header class="chat-header">
+                <h2>Избранное</h2>
+            </header>
+
+            <div class="message-area">
+                <div class="message received">
+                    <p>Привет! Ты Находишься в личных сообщениях самим собой Спасибо За Скачивание TeleCram! Здесь ты можешь отправлять сообщения как в телеге но себе тоесть сохранять себе самые актуальные посты для публикации в социальных сетях мы обновляем сервис и делаем его привычным как в телеге</p>
+                    <span class="message-time">Администрация TeleCram</span>
+                </div>
+                <div class="message received">
+                    <p>Привет! Давно не общались давай пообщяемся самим собой?</p>
+                    <span class="message-time">Рассылка TeleCram LLC</span>
+                </div>
+            </div>
+
+            <div class="input-area">
+                <input type="text" placeholder="Написать...">
+                <button>Отправить</button>
+            </div>
+        </main>
+
+    </div>
+
+</body>
+</html>
+<style>body {
+    font-family: sans-serif;
+    margin: 0;
+    background-color: #f0f2f5;
+    color: #333;
+}
+
+/* App Container */
+.app-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* Full viewport height */
+}
+
+/* Header */
+.app-header {
+    background-color: #54a0ff; /* Telegram blue */
+    color: white;
+    text-align: center;
+    padding: 15px;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+/* Main Content */
+.app-content {
+    flex-grow: 1; /* Take up available space */
+    overflow-y: auto;  /* Make content scrollable if needed */
+    padding: 10px;
+}
+
+/* Tab Content (Contacts, Profile, Groups) */
+.tab-content {
+    display: none; /* Hide all tabs by default */
+}
+
+.tab-content.active {
+    display: block; /* Show the active tab */
+}
+
+/* Contact List */
+.contact-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.contact-list li {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    align-items: center;
+}
+
+.contact-list img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 10px;
+    object-fit: cover;
+}
+
+/* Profile Info */
+.profile-info {
+    text-align: center;
+    padding: 20px;
+}
+
+.profile-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+.profile-info h3 {
+    margin: 5px 0;
+}
+
+.profile-info p {
+    color: #777;
+}
+
+/* Group List */
+.group-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.group-list li {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+/* Bottom Navigation */
+.app-nav {
+    background-color: #f8f9fa;
+    border-top: 1px solid #ddd;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px;
+}
+
+.app-nav button {
+    background: none;
+    border: none;
+    padding: 8px 15px;
+    cursor: pointer;
+    font-size: 1em;
+    color: #555;
+}
+
+.app-nav button i {
+    margin-right: 5px;
+}
+
+/* Media Queries for Mobile Responsiveness */
+@media (max-width: 600px) {
+    .app-header {
+        font-size: 1em;
+    }
+
+    .app-nav button {
+        font-size: 0.9em;
+    }
+}
+
+body {
+    font-family: sans-serif;
+    margin: 0;
+    background-color: #f0f2f5;
+    color: #333;
+}
+
+/* App Container */
+.app-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* Full viewport height */
+}
+
+/* Header */
+.app-header {
+    background-color: #54a0ff; /* Telegram blue */
+    color: white;
+    text-align: center;
+    padding: 15px;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+/* Main Content */
+.app-content {
+    flex-grow: 1; /* Take up available space */
+    overflow-y: auto;  /* Make content scrollable if needed */
+    padding: 10px;
+}
+
+/* Tab Content (Contacts, Profile, Groups) */
+.tab-content {
+    display: none; /* Hide all tabs by default */
+}
+
+.tab-content.active {
+    display: block; /* Show the active tab */
+}
+
+/* Contact List */
+.contact-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.contact-list li {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    align-items: center;
+}
+
+.contact-list img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 10px;
+    object-fit: cover;
+}
+
+/* Profile Info */
+.profile-info {
+    text-align: center;
+    padding: 20px;
+}
+
+.profile-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+.profile-info h3 {
+    margin: 5px 0;
+}
+
+.profile-info p {
+    color: #777;
+}
+
+/* Group List */
+.group-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.group-list li {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+/* Bottom Navigation */
+.app-nav {
+    background-color: #f8f9fa;
+    border-top: 1px solid #ddd;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px;
+}
+
+.app-nav button {
+    background: none;
+    border: none;
+    padding: 8px 15px;
+    cursor: pointer;
+    font-size: 1em;
+    color: #555;
+}
+
+.app-nav button i {
+    margin-right: 5px;
+}
+
+/* Media Queries for Mobile Responsiveness */
+@media (max-width: 600px) {
+    .app-header {
+        font-size: 1em;
+    }
+
+    .app-nav button {
+        font-size: 0.9em;
+    }
+}
+
+body {
+    font-family: sans-serif;
+    margin: 0;
+    background-color: #f0f2f5; /* Telegram background color */
+}
+
+.container {
+    display: flex;
+    height: 100vh;
+}
+
+/* Sidebar Styles */
+.sidebar {
+    width: 300px;
+    background-color: #fff;
+    border-right: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+}
+
+.search-bar {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.search-bar input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.chat-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    overflow-y: auto; /* Make the chat list scrollable */
+    flex-grow: 1; /* Allow the chat list to take up remaining space */
+}
+
+.chat-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+}
+
+.chat-item.active {
+    background-color: #e0f7fa; /* Light blue highlight for active chat */
+}
+
+.chat-item img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+    object-fit: cover; /* Ensure the image covers the entire area */
+}
+
+.chat-info h3 {
+    margin: 0;
+    font-size: 16px;
+}
+
+.chat-info p {
+    margin: 0;
+    font-size: 14px;
+    color: #888;
+}
+
+/* Chat Window Styles */
+.chat-window {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-header {
+    background-color: #f8f9fa;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    align-items: center;
+}
+
+.chat-header img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+    object-fit: cover;
+}
+
+.chat-header h2 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.message-area {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.message {
+    max-width: 80%;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    position: relative;
+}
+
+.message.received {
+    background-color: #e5e7eb; /* Grey */
+    align-self: flex-start; /* Align to the left */
+}
+
+.message.sent {
+    background-color: #dcf8c6; /* Light green */
+    align-self: flex-end; /* Align to the right */
+}
+
+.message p {
+    margin: 0;
+}
+
+.message-time {
+    position: absolute;
+    bottom: 2px;
+    right: 5px;
+    font-size: 10px;
+    color: #888;
+}
+
+.input-area {
+    padding: 10px;
+    border-top: 1px solid #ddd;
+    display: flex;
+    align-items: center;
+}
+
+.input-area input {
+    flex-grow: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+.input-area button {
+    padding: 8px 15px;
+    background-color: #0088cc; /* Telegram blue */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.input-area button:hover {
+    background-color: #0077bb;
+}
+</style>
+<script>document.addEventListener('DOMContentLoaded', () => {
+    const chatList = document.querySelector('.chat-list');
+    const chatItems = document.querySelectorAll('.chat-item');
+    const messageArea = document.querySelector('.message-area');
+    const inputArea = document.querySelector('.input-area input');
+    const sendButton = document.querySelector('.input-area button');
+    const chatHeaderName = document.querySelector('.chat-header h2');
+    const chatHeaderAvatar = document.querySelector('.chat-header img');
+
+    // Fake "sending" message
+    sendButton.addEventListener('click', () => {
+        const messageText = inputArea.value;
+        if (messageText.trim() !== '') {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message', 'sent');
+            messageElement.innerHTML = `<p>${messageText}</p><span class="message-time">${getCurrentTime()}</span>`;
+            messageArea.appendChild(messageElement);
+            inputArea.value = '';  // Clear the input
+            messageArea.scrollTop = messageArea.scrollHeight; // Scroll to bottom
+        }
+    });
+
+    // Update message area when pressing Enter
+    inputArea.addEventListener("keypress", function(event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        sendButton.click();
+      }
+    });
+
+
+    // Function to get the current time
+    function getCurrentTime() {
+        const now = new Date();
+        let hours = now.getHours();
+        let minutes = now.getMinutes();
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+
+        hours = hours % 12;
+        hours = hours ? hours : 12; // the hour '0' should be '12'
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+
+        return hours + ':' + minutes + ' ' + ampm;
+    }
+
+    // Highlight chat item and update header on click
+    chatItems.forEach(item => {
+        item.addEventListener('click', () => {
+            // Remove active class from all items
+            chatItems.forEach(i => i.classList.remove('active'));
+            // Add active class to the clicked item
+            item.classList.add('active');
+
+            // Update the chat header
+            chatHeaderName.textContent = item.querySelector('h3').textContent;
+            chatHeaderAvatar.src = item.querySelector('img').src;
+        });
+    });
+});
+
+</script>
+    <nav class="app-nav">
+            <button data-tab="contacts"><i class="fas fa-address-book"></i> Контакты</button>
+            <button data-tab="profile"><i class="fas fa-user"></i> Я</button>
+            <button data-tab="groups"><i class="fas fa-users"></i> Мои Группы</button>
+        </nav>

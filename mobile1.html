@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: sans-serif;
+            text-align: center;
+        }
+        #videoPlayer {
+            width: 80%;
+            max-width: 800px;
+            margin: 20px auto;
+            border: 1px solid #ccc;
+        }
+        #videoUrlInput {
+            width: 70%;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        #loadButton {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Smotret.Video</h1>
+
+    <input type="text" id="videoUrlInput" placeholder="Вставьте ссылку на видео">
+    <button id="loadButton">Загрузить</button>
+    <br>
+    <video id="videoPlayer" controls></video>
+
+    <script>
+        const videoUrlInput = document.getElementById('videoUrlInput');
+        const loadButton = document.getElementById('loadButton');
+        const videoPlayer = document.getElementById('videoPlayer');
+
+        loadButton.addEventListener('click', function() {
+            const videoURL = videoUrlInput.value;
+            if (videoURL) {
+                videoPlayer.src = videoURL;
+                videoPlayer.play();
+            } else {
+                alert('Пожалуйста, введите ссылку на видео.');
+            }
+        });
+    </script>
+</body>
+</html>

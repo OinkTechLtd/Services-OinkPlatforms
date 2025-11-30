@@ -1,0 +1,43 @@
+1 Player Partner
+<iframe src="https://playeroinkplatformsmobile2024premiumnoads.glitch.com/embed">Обновите Приложение чтобы воспользоваться балансером</iframe>	
+
+
+2 Player Partner	
+<iframe src="https://ws4.fleen-web.ru/player">	Приложение чтобы воспользоваться балансером</iframe>
+3 Player Partner
+<iframe src="https://playeroinkplatformsmobile2024premiumnoads.glitch.com">Обновите Приложение чтобы воспользоваться балансером</iframe>
+4 Player Partner
+<iframe src="http://serverplayeroinkplatforms.free.nf/player">Обновите Приложение чтобы воспользоваться балансером</iframe>
+5 Player Partner	
+<iframe src="http://www.player.blyz.ru/player">	Приложение чтобы воспользоваться балансером</iframe>		
+1 Player No Partner
+<iframe src="//ws4.fleen-web.ru/playernopartnersoinkplatforms/index.html?file=ссылка&poster=ссылка-на-картинку&title=НазваниеВашегоВИДЕО/ФИЛЬМА/Сериала" type="text/html" width="ширина" height="высота" frameborder="0" allowfullscreen></iframe>	
+2 Player No Partner
+<iframe src="https://bird-salty-saturday.glitch.me/index.html?file=ссылка&poster=ссылка-на-картинку&title=НазваниеВашегоВИДЕО/ФИЛЬМА/Сериала" type="text/html" width="ширина" height="высота" frameborder="0" allowfullscreen></iframe>
+1 Player No Partner
+<iframe src="//ws4.fleen-web.ru/playernopartnersoinkplatforms/index.html?file=ссылка&poster=ссылка-на-картинку&title=НазваниеВашегоВИДЕО/ФИЛЬМА/Сериала" type="text/html" width="ширина" height="высота" frameborder="0" allowfullscreen></iframe>	
+3 Player No Partner
+<iframe src="http://serverplayeroinkplatforms.free.nf/index.html?file=ссылка&poster=ссылка-на-картинку&title=НазваниеВашегоВИДЕО/ФИЛЬМА/Сериала" type="text/html" width="ширина" height="высота" frameborder="0" allowfullscreen></iframe>
+4 Player No Partner
+<iframe src="http://serverplayeroinkplatforms.free.nf/playernopartnersoinkplatforms/index.html?file=ссылка&poster=ссылка-на-картинку&title=НазваниеВашегоВИДЕО/ФИЛЬМА/Сериала" type="text/html" width="ширина" height="высота" frameborder="0" allowfullscreen></iframe>
+5 Player No Partner
+<iframe src="http://www.player.blyz.ru/playernopartnersoinkplatforms/index.html?file=ссылка&poster=ссылка-на-картинку&title=НазваниеВашегоВИДЕО/ФИЛЬМА/Сериала" type="text/html" width="ширина" height="высота" frameborder="0" allowfullscreen></iframe>
+6 Player No Partner
+<iframe src="http://www.player.blyz.ru/nopartnernoads/index.html?file=ссылка&poster=ссылка-на-картинку&title=НазваниеВашегоВИДЕО/ФИЛЬМА/Сериала" type="text/html" width="ширина" height="высота" frameborder="0" allowfullscreen></iframe>
+
+
+У нас есть заглушка если к вам явиться Допустим правообладатель то вы ставьте заместо плеера вот:<iframe src="http://www.(Домен Сервера Плеера)?stopbalancer-priflev-oinkplatfoms">Балансер недоступен попробуйте позже</iframe>
+
+
+Если Плеера не работают или на них нет обновлений. То смотрите Обновляйте Приложения возможно в нем будут новые серваки для Плееров (Плеера сохраняются в Память Устройства) 
+
+Рекламные вставки не вставляете - НЕТ!
+
+
+
+Вставка ПЛЕЙЛИСТА ДЛЯ Просмотра ВИДЕО/Фильма/Сериала:
+[{"title":"Season 1","folder":[{"title":"Episode 1","file":"Файл"},{"title":"Episode 2","file":"Файл"},{"title":"Episode 3","file":"Файл"},{"title":"Episode 4","file":"Файл"},{"title":"Episode 5","file":"Файл"},{"title":"Episode 6","file":"Файл"},{"title":"Episode 7","file":"Файл"},{"title":"Episode 8","file":"Файл"},{"title":"Episode 9","file":"Файл"},{"title":"Episode 10","file":"Файл"}]},{"title":"Season 2","folder":[{"title":"Episode 1","file":"Файл"},{"title":"Episode 2","file":"Файл"},{"title":"Episode 3","file":"Файл"},{"title":"Episode 4","file":"Файл"},{"title":"Episode 5","file":"Файл"},{"title":"Episode 6","file":"Файл"},{"title":"Episode 7","file":"Файл"},{"title":"Episode 8","file":"Файл"},{"title":"Episode 9","file":"Файл"},{"title":"Episode 10","file":"Файл"}]},{"title":"Season 3","folder":[{"title":"Episode 1","file":"Файл"},{"title":"Episode 2","file":"Файл"},{"title":"Episode 3","file":"Файл"},{"title":"Episode 4","file":"Файл"},{"title":"Episode 5","file":"Файл"},{"title":"Episode 6","file":"Файл"},{"title":"Episode 7","file":"Файл"},{"title":"Episode 8","file":"Файл"},{"title":"Episode 9","file":"Файл"},{"title":"Episode 10","file":"Файл"}]}]
+Вставьте данный код перед file= 
+На любой плеер от партнера!
+
+Если хотите чтобы ваши видео было в плеерах партнеров то Отпишитесь на почту ginkdev@mail.ru

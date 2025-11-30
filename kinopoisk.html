@@ -1,0 +1,1423 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 900px;
+            height: 90vh;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #0088cc, #0066aa);
+            color: white;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #4CAF50;
+            animation: pulse 2s infinite;
+        }
+
+        .status-dot.disconnected {
+            background: #f44336;
+        }
+
+        .status-dot.connecting {
+            background: #ff9800;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .user-setup {
+            padding: 40px;
+            text-align: center;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .setup-section {
+            margin-bottom: 30px;
+        }
+
+        .user-setup h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+
+        .user-setup input {
+            width: 100%;
+            max-width: 350px;
+            padding: 15px 20px;
+            border: 2px solid #ddd;
+            border-radius: 25px;
+            font-size: 16px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .user-setup input:focus {
+            outline: none;
+            border-color: #0088cc;
+            box-shadow: 0 0 0 3px rgba(0,136,204,0.1);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #0088cc, #0066aa);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,136,204,0.3);
+        }
+
+        .btn.secondary {
+            background: linear-gradient(135deg, #6c757d, #495057);
+        }
+
+        .room-id-display {
+            background: rgba(255,255,255,0.8);
+            padding: 15px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border: 2px dashed #0088cc;
+        }
+
+        .room-id-display h3 {
+            color: #0088cc;
+            margin-bottom: 10px;
+        }
+
+        .room-id-display code {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            background: white;
+            padding: 10px 15px;
+            border-radius: 10px;
+            display: inline-block;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .room-id-display code:hover {
+            background: #f0f0f0;
+        }
+
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .connection-info {
+            background: rgba(255,255,255,0.95);
+            padding: 12px 20px;
+            border-bottom: 1px solid #eee;
+            font-size: 13px;
+            color: #666;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .peer-list {
+            background: #f8f9fa;
+            padding: 10px 20px;
+            border-bottom: 1px solid #eee;
+            max-height: 60px;
+            overflow-y: auto;
+            font-size: 13px;
+        }
+
+        .peer-item {
+            display: inline-block;
+            background: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            margin: 2px;
+            border: 1px solid #ddd;
+            color: #0088cc;
+            font-size: 12px;
+        }
+
+        .messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: #f8f9fa;
+            scroll-behavior: smooth;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            display: flex;
+            animation: messageSlide 0.3s ease-out;
+        }
+
+        @keyframes messageSlide {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.own {
+            justify-content: flex-end;
+        }
+
+        .message-content {
+            max-width: 70%;
+            padding: 12px 18px;
+            border-radius: 18px;
+            word-wrap: break-word;
+            position: relative;
+        }
+
+        .message.own .message-content {
+            background: linear-gradient(135deg, #0088cc, #0066aa);
+            color: white;
+            border-bottom-right-radius: 5px;
+        }
+
+        .message:not(.own) .message-content {
+            background: white;
+            color: #333;
+            border-bottom-left-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .message-info {
+            font-size: 11px;
+            opacity: 0.7;
+            margin-top: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .message.own .message-info {
+            justify-content: flex-end;
+            gap: 5px;
+        }
+
+        .media-content {
+            margin-bottom: 8px;
+            border-radius: 12px;
+            overflow: hidden;
+            max-width: 350px;
+        }
+
+        .media-content img {
+            width: 100%;
+            height: auto;
+            display: block;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            max-height: 300px;
+            object-fit: cover;
+        }
+
+        .media-content img:hover {
+            transform: scale(1.02);
+        }
+
+        .media-content video {
+            width: 100%;
+            height: auto;
+            display: block;
+            max-height: 300px;
+        }
+
+        .file-message {
+            background: rgba(255,255,255,0.1);
+            border: 2px dashed rgba(255,255,255,0.3);
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .message:not(.own) .file-message {
+            background: rgba(0,0,0,0.05);
+            border-color: rgba(0,0,0,0.1);
+        }
+
+        .file-message:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .file-icon {
+            font-size: 24px;
+            min-width: 30px;
+        }
+
+        .file-details {
+            flex: 1;
+        }
+
+        .file-name {
+            font-weight: bold;
+            margin-bottom: 2px;
+            word-break: break-all;
+        }
+
+        .file-size {
+            font-size: 11px;
+            opacity: 0.7;
+        }
+
+        .input-area {
+            padding: 20px;
+            background: white;
+            border-top: 1px solid #eee;
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
+
+        .file-input-container {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .file-btn {
+            background: #f0f0f0;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            font-size: 16px;
+        }
+
+        .file-btn:hover {
+            background: #e0e0e0;
+            transform: scale(1.05);
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .message-input {
+            flex: 1;
+            border: 2px solid #ddd;
+            border-radius: 25px;
+            padding: 12px 20px;
+            font-size: 16px;
+            resize: none;
+            max-height: 100px;
+            min-height: 45px;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .message-input:focus {
+            outline: none;
+            border-color: #0088cc;
+            box-shadow: 0 0 0 3px rgba(0,136,204,0.1);
+        }
+
+        .send-btn {
+            background: linear-gradient(135deg, #0088cc, #0066aa);
+            color: white;
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .send-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,136,204,0.3);
+        }
+
+        .send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 90%;
+            max-height: 90%;
+        }
+
+        .modal img, .modal video {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            max-height: 80vh;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: white;
+            font-size: 35px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .progress-container {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 10px;
+            margin-top: 5px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: white;
+            border-radius: 3px;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        .progress-text {
+            font-size: 11px;
+            margin-top: 5px;
+            opacity: 0.8;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .system-message {
+            text-align: center;
+            margin: 15px 0;
+            padding: 8px 15px;
+            background: rgba(0,136,204,0.1);
+            border-radius: 20px;
+            font-size: 13px;
+            color: #0088cc;
+            font-style: italic;
+        }
+
+        @media (max-width: 600px) {
+            .app-container {
+                height: 100vh;
+                border-radius: 0;
+                max-width: 100%;
+            }
+            
+            .message-content {
+                max-width: 85%;
+            }
+
+            .file-input-container {
+                flex-direction: row;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="header">
+            <h1>
+                <span>🔗</span>
+                Контакты
+            </h1>
+            <div class="status">
+                <div class="status-dot" id="statusDot"></div>
+                <span id="connectionStatus">Загрузка...</span>
+            </div>
+        </div>
+
+        <div id="userSetup" class="user-setup">
+            <div class="setup-section">
+                <h2>Контакты</h2>
+                <p style="margin-bottom: 20px; color: #666;">Прямое подключение между устройствами с Сервера Oink</p>
+                <input type="text" id="usernameInput" placeholder="Ваше имя" maxlength="15">
+            </div>
+
+            <div class="setup-section">
+                <button class="btn" onclick="createRoom()">
+                    <span>🏠</span>
+                    Создать комнату
+                </button>
+                <button class="btn secondary" onclick="showJoinForm()">
+                    <span>🔗</span>
+                    Подключиться к комнате
+                </button>
+            </div>
+
+            <div id="joinForm" style="display: none;">
+                <input type="text" id="roomIdInput" placeholder="ID комнаты" maxlength="20">
+                <br>
+                <button class="btn" onclick="joinRoom()">
+                    <span>🚀</span>
+                    Подключиться
+                </button>
+            </div>
+
+            <div id="roomDisplay" style="display: none;">
+                <div class="room-id-display">
+                    <h3>Ваша комната создана!</h3>
+                    <p>Поделитесь этим ID для подключения:</p>
+                    <code id="roomIdDisplay" onclick="copyRoomId()"></code>
+                    <p style="font-size: 12px; margin-top: 10px;">Нажмите на ID чтобы скопировать</p>
+                </div>
+                <button class="btn" onclick="startAsHost()">
+                    <span>▶️</span>
+                    Начать чат
+                </button>
+            </div>
+        </div>
+
+        <div id="chatContainer" class="chat-container" style="display: none;">
+            <div class="connection-info">
+                <div>
+                    <strong>Пользователь:</strong> <span id="currentUser"></span> |
+                    <strong>Комната:</strong> <span id="currentRoom"></span>
+                </div>
+                <div id="connectionDetails"></div>
+            </div>
+            
+            <div class="peer-list" id="peerList">
+                <strong>Участники:</strong> <span class="peer-item" id="selfPeer"></span>
+            </div>
+            
+            <div class="messages" id="messages"></div>
+            
+                <textarea 
+                    id="messageInput" 
+                    class="message-input" 
+                    placeholder="Введите сообщение..."
+                    rows="1"
+                ></textarea>
+                <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+                    <span>📤</span>
+.               </button>
+            <div class="input-area">
+                <div class="file-input-container">
+                    <button class="file-btn" onclick="document.getElementById('imageInput').click()" title="Фото">
+                        📷
+                    </button>
+                    <button class="file-btn" onclick="document.getElementById('videoInput').click()" title="Видео">
+                        🎥
+                    </button>
+                    <button class="file-btn" onclick="document.getElementById('fileInput').click()" title="Файл">
+                        📎
+                    </button>
+                    <input type="file" id="imageInput" class="file-input" accept="image/*" onchange="handleFileSelect(this, 'image')">
+                    <input type="file" id="videoInput" class="file-input" accept="video/*" onchange="handleFileSelect(this, 'video')">
+                    <input type="file" id="fileInput" class="file-input" onchange="handleFileSelect(this, 'file')">
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal для просмотра медиа -->
+    <div id="mediaModal" class="modal" onclick="closeModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <div id="modalMediaContent"></div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/1.4.7/peerjs.min.js"></script>
+
+    <script>
+        let currentUser = '';
+        let currentRoom = '';
+        let peer = null;
+        let connections = new Map();
+        let isHost = false;
+        let myPeerId = '';
+
+        // Генерация безопасного ID для PeerJS
+        function generateSafeId(prefix = '') {
+            const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+            let result = prefix;
+            for (let i = 0; i < 12; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return result;
+        }
+
+        function generateRoomId() {
+            return generateSafeId('room');
+        }
+
+        function updateConnectionStatus(status, isConnected, isConnecting = false) {
+            document.getElementById('connectionStatus').textContent = status;
+            const statusDot = document.getElementById('statusDot');
+            statusDot.className = 'status-dot';
+            if (isConnecting) {
+                statusDot.classList.add('connecting');
+            } else if (!isConnected) {
+                statusDot.classList.add('disconnected');
+            }
+        }
+
+        function createRoom() {
+            const username = document.getElementById('usernameInput').value.trim();
+            if (!username) {
+                alert('Пожалуйста, введите ваше имя');
+                return;
+            }
+
+            currentUser = username;
+            // Используем пользовательское имя как базу для ID комнаты, но делаем его безопасным
+            const safeName = username.toLowerCase().replace(/[^a-z0-9]/g, '');
+            currentRoom = 'host_' + safeName + '_' + Date.now().toString().slice(-6);
+            isHost = true;
+
+            document.getElementById('roomIdDisplay').textContent = currentRoom;
+            document.querySelector('.setup-section').style.display = 'none';
+            document.getElementById('roomDisplay').style.display = 'block';
+        }
+
+        function showJoinForm() {
+            const username = document.getElementById('usernameInput').value.trim();
+            if (!username) {
+                alert('Пожалуйста, введите ваше имя');
+                return;
+            }
+
+            currentUser = username;
+            document.getElementById('joinForm').style.display = 'block';
+            document.getElementById('roomIdInput').focus();
+        }
+
+        function copyRoomId() {
+            const roomId = document.getElementById('roomIdDisplay').textContent;
+            navigator.clipboard.writeText(roomId).then(() => {
+                const code = document.getElementById('roomIdDisplay');
+                const originalText = code.textContent;
+                code.textContent = 'Скопировано!';
+                code.style.background = '#4CAF50';
+                code.style.color = 'white';
+                
+                setTimeout(() => {
+                    code.textContent = originalText;
+                    code.style.background = 'white';
+                    code.style.color = '#333';
+                }, 1000);
+            });
+        }
+
+        function joinRoom() {
+            const roomId = document.getElementById('roomIdInput').value.trim();
+            if (!roomId) {
+                alert('Пожалуйста, введите ID комнаты');
+                return;
+            }
+
+            currentRoom = roomId;
+            isHost = false;
+            startChat();
+        }
+
+        function startAsHost() {
+            startChat();
+        }
+
+        async function startChat() {
+            document.getElementById('userSetup').style.display = 'none';
+            document.getElementById('chatContainer').style.display = 'flex';
+            document.getElementById('currentUser').textContent = currentUser;
+            document.getElementById('currentRoom').textContent = currentRoom;
+            document.getElementById('selfPeer').textContent = currentUser;
+
+            updateConnectionStatus('Подключение к сети...', false, true);
+            
+            await initializePeerConnection();
+            document.getElementById('messageInput').focus();
+        }
+
+        async function initializePeerConnection() {
+            try {
+                // Генерируем безопасный ID для пира
+                myPeerId = generateSafeId(currentUser.toLowerCase().replace(/[^a-z0-9]/g, ''));
+                
+                // Создаем peer с публичным сервером PeerJS
+                peer = new Peer(myPeerId, {
+                    host: 'peerjs-server.herokuapp.com',
+                    port: 443,
+                    secure: true,
+                    path: '/',
+                    config: {
+                        iceServers: [
+                            { urls: 'stun:stun.l.google.com:19302' },
+                            { urls: 'stun:stun1.l.google.com:19302' },
+                            { urls: 'stun:stun2.l.google.com:19302' }
+                        ]
+                    },
+                    debug: 2
+                });
+
+                peer.on('open', (id) => {
+                    console.log('Peer ID:', id);
+                    myPeerId = id;
+                    updateConnectionStatus('Подключен к сети', true);
+                    document.getElementById('connectionDetails').textContent = `ID: ${id}`;
+                    
+                    addSystemMessage(`Подключились к P2P сети. Ваш ID: ${id}`);
+                    
+                    if (!isHost) {
+                        // Пытаемся подключиться к хосту комнаты
+                        setTimeout(() => connectToRoom(), 1000);
+                    } else {
+                        addSystemMessage(`Комната создана. Ожидание подключений...`);
+                    }
+                });
+
+                peer.on('connection', (conn) => {
+                    console.log('Новое входящее подключение:', conn.peer);
+                    handleNewConnection(conn);
+                });
+
+                peer.on('error', (err) => {
+                    console.error('PeerJS error:', err);
+                    updateConnectionStatus('Ошибка подключения', false);
+                    addSystemMessage(`Ошибка: ${err.message}`);
+                    
+                    // Попытка переподключения через другой сервер
+                    setTimeout(() => {
+                        tryAlternativeConnection();
+                    }, 3000);
+                });
+
+                peer.on('disconnected', () => {
+                    updateConnectionStatus('Переподключение...', false, true);
+                    setTimeout(() => {
+                        if (peer.destroyed) return;
+                        peer.reconnect();
+                    }, 1000);
+                });
+
+            } catch (error) {
+                console.error('Ошибка инициализации P2P:', error);
+                updateConnectionStatus('Ошибка инициализации', false);
+                addSystemMessage('Не удалось инициализировать P2P соединение');
+                tryAlternativeConnection();
+            }
+        }
+
+        function tryAlternativeConnection() {
+            if (peer) {
+                peer.destroy();
+            }
+            
+            addSystemMessage('Попытка подключения к альтернативному серверу...');
+            
+            // Используем публичный сервер PeerJS без указания хоста
+            peer = new Peer(generateSafeId(), {
+                config: {
+                    iceServers: [
+                        { urls: 'stun:stun.l.google.com:19302' },
+                        { urls: 'stun:stun1.l.google.com:19302' },
+                        { urls: 'stun:stun2.l.google.com:19302' },
+                        { urls: 'stun:stun3.l.google.com:19302' }
+                    ]
+                }
+            });
+
+            peer.on('open', (id) => {
+                myPeerId = id;
+                updateConnectionStatus('Подключен (резервный)', true);
+                document.getElementById('connectionDetails').textContent = `ID: ${id}`;
+                addSystemMessage(`Подключение через резервный сервер. ID: ${id}`);
+                
+                if (!isHost) {
+                    setTimeout(() => connectToRoom(), 1000);
+                }
+            });
+
+            peer.on('connection', handleNewConnection);
+            peer.on('error', (err) => {
+                console.error('Alternative connection failed:', err);
+                addSystemMessage('Все попытки подключения неудачны. Попробуйте перезагрузить страницу.');
+            });
+        }
+
+        function connectToRoom() {
+            // Для гостей пытаемся подключиться используя ID комнаты как ID хоста
+            const possibleHostIds = [
+                currentRoom,
+                currentRoom + '_host',
+                'host_' + currentRoom
+            ];
+            
+            let connectionAttempts = 0;
+            
+            function tryConnect(hostIds, index = 0) {
+                if (index >= hostIds.length) {
+                    addSystemMessage('Не удалось найти хоста комнаты. Убедитесь, что ID комнаты правильный.');
+                    return;
+                }
+                
+                const hostId = hostIds[index];
+                console.log('Попытка подключения к:', hostId);
+                addSystemMessage(`Поиск хоста комнаты... (${index + 1}/${hostIds.length})`);
+                
+                const conn = peer.connect(hostId, {
+                    metadata: {
+                        username: currentUser,
+                        room: currentRoom,
+                        joinTime: Date.now()
+                    },
+                    reliable: true
+                });
+
+                conn.on('open', () => {
+                    console.log('Успешное подключение к хосту:', hostId);
+                    addSystemMessage(`Подключились к комнате!`);
+                    handleNewConnection(conn);
+                });
+
+                conn.on('error', (err) => {
+                    console.log('Ошибка подключения к', hostId, ':', err);
+                    // Пробуем следующий ID
+                    setTimeout(() => tryConnect(hostIds, index + 1), 2000);
+                });
+            }
+            
+            tryConnect(possibleHostIds);
+        }
+
+        function handleNewConnection(conn) {
+            connections.set(conn.peer, {
+                connection: conn,
+                username: conn.metadata?.username || 'Неизвестный'
+            });
+
+            conn.on('open', () => {
+                console.log('Соединение открыто с:', conn.peer);
+                const username = conn.metadata?.username || 'Неизвестный';
+                addSystemMessage(`${username} подключился к чату`);
+                updatePeerList();
+                
+                // Отправляем полную информацию о себе
+                conn.send({
+                    type: 'user_info',
+                    username: currentUser,
+                    peerId: myPeerId,
+                    timestamp: Date.now()
+                });
+
+                // Если мы хост, отправляем историю сообщений новому участнику
+                if (isHost && messageHistory.length > 0) {
+                    conn.send({
+                        type: 'message_history',
+                        messages: messageHistory.slice(-50) // Последние 50 сообщений
+                    });
+                }
+            });
+
+            conn.on('data', (data) => {
+                console.log('Получены данные от', conn.peer, ':', data);
+                handleReceivedData(data, conn.peer);
+            });
+
+            conn.on('close', () => {
+                console.log('Соединение закрыто с:', conn.peer);
+                const username = connections.get(conn.peer)?.username || 'Неизвестный';
+                connections.delete(conn.peer);
+                addSystemMessage(`${username} покинул чат`);
+                updatePeerList();
+            });
+
+            conn.on('error', (err) => {
+                console.error('Ошибка соединения с', conn.peer, ':', err);
+                addSystemMessage(`Ошибка соединения с ${conn.metadata?.username || 'участником'}`);
+            });
+        }
+
+        let messageHistory = []; // Хранение истории сообщений
+
+        function handleReceivedData(data, fromPeer) {
+            const senderInfo = connections.get(fromPeer);
+            const senderName = senderInfo?.username || 'Неизвестный';
+
+            console.log('Обработка данных:', data.type, 'от', senderName);
+
+            switch(data.type) {
+                case 'message':
+                    addMessage(senderName, data.content, false);
+                    // Сохраняем в историю
+                    messageHistory.push({
+                        type: 'message',
+                        sender: senderName,
+                        content: data.content,
+                        timestamp: data.timestamp || Date.now(),
+                        isOwn: false
+                    });
+                    break;
+                    
+                case 'file':
+                    addFileMessage(senderName, data.content, data.fileName, data.fileType, data.fileSize, false);
+                    // Сохраняем в историю
+                    messageHistory.push({
+                        type: 'file',
+                        sender: senderName,
+                        content: data.content,
+                        fileName: data.fileName,
+                        fileType: data.fileType,
+                        fileSize: data.fileSize,
+                        timestamp: data.timestamp || Date.now(),
+                        isOwn: false
+                    });
+                    break;
+                    
+                case 'user_info':
+                    if (senderInfo) {
+                        senderInfo.username = data.username;
+                    }
+                    updatePeerList();
+                    break;
+
+                case 'message_history':
+                    // Восстанавливаем историю сообщений для нового участника
+                    data.messages.forEach(msg => {
+                        if (msg.type === 'message') {
+                            addMessage(msg.sender, msg.content, msg.isOwn);
+                        } else if (msg.type === 'file') {
+                            addFileMessage(msg.sender, msg.content, msg.fileName, msg.fileType, msg.fileSize, msg.isOwn);
+                        }
+                    });
+                    break;
+            }
+        }
+
+        function broadcastMessage(message) {
+            console.log('Отправка сообщения всем участникам:', message.type);
+            let successCount = 0;
+            let totalConnections = connections.size;
+
+            connections.forEach((info, peerId) => {
+                const conn = info.connection;
+                if (conn && conn.open) {
+                    try {
+                        conn.send(message);
+                        successCount++;
+                        console.log('Сообщение отправлено:', peerId);
+                    } catch (error) {
+                        console.error('Ошибка отправки сообщения в', peerId, ':', error);
+                    }
+                } else {
+                    console.log('Соединение с', peerId, 'не активно');
+                }
+            });
+
+            console.log(`Сообщение отправлено ${successCount} из ${totalConnections} участников`);
+            
+            // Если никому не отправили, показываем предупреждение
+            if (totalConnections > 0 && successCount === 0) {
+                addSystemMessage('⚠️ Сообщение не доставлено. Проверьте соединение.');
+            }
+        }
+
+        function updatePeerList() {
+            const peerList = document.getElementById('peerList');
+            const peers = [currentUser];
+            
+            connections.forEach((info) => {
+                peers.push(info.username);
+            });
+
+            peerList.innerHTML = '<strong>Участники:</strong> ' + 
+                peers.map(peer => `<span class="peer-item">${peer}</span>`).join('');
+        }
+
+        function addMessage(sender, text, isOwn = false) {
+            const messagesDiv = document.getElementById('messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isOwn ? 'own' : ''}`;
+            
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('ru-RU', { 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            });
+            
+            messageDiv.innerHTML = `
+                <div class="message-content">
+                    ${!isOwn ? `<strong>${sender}</strong><br>` : ''}
+                    ${text}
+                    <div class="message-info">
+                        <span>${timeString}</span>
+                        ${isOwn ? '<span>✓</span>' : ''}
+                    </div>
+                </div>
+            `;
+            
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function addFileMessage(sender, content, fileName, fileType, fileSize, isOwn = false) {
+            const messagesDiv = document.getElementById('messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isOwn ? 'own' : ''}`;
+            
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('ru-RU', { 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            });
+
+            let fileIcon = '📎';
+            let mediaContent = '';
+            
+            if (fileType.startsWith('image/')) {
+                fileIcon = '📷';
+                mediaContent = `
+                    <div class="media-content">
+                        <img src="${content}" alt="${fileName}" onclick="openModal('${content}', 'image')" style="cursor: pointer;">
+                    </div>
+                `;
+            } else if (fileType.startsWith('video/')) {
+                fileIcon = '🎥';
+                // Создаем уникальный ID для каждого видео
+                const videoId = 'video_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                mediaContent = `
+                    <div class="media-content">
+                        <video id="${videoId}" controls preload="metadata" style="width: 100%; max-height: 300px;">
+                            <source src="${content}" type="${fileType}">
+                            <p>Ваш браузер не поддерживает воспроизведение видео.</p>
+                        </video>
+                    </div>
+                `;
+                
+                // Настраиваем видео после добавления в DOM
+                setTimeout(() => {
+                    const videoElement = document.getElementById(videoId);
+                    if (videoElement) {
+                        videoElement.load(); // Принудительная загрузка
+                        
+                        videoElement.onerror = function(e) {
+                            console.error('Ошибка загрузки видео:', e);
+                            videoElement.parentElement.innerHTML = `
+                                <div style="padding: 20px; background: rgba(255,0,0,0.1); border-radius: 10px; text-align: center;">
+                                    <p>❌ Не удалось загрузить видео</p>
+                                    <p style="font-size: 12px; margin-top: 5px;">Формат: ${fileType}</p>
+                                </div>
+                            `;
+                        };
+                        
+                        videoElement.onloadedmetadata = function() {
+                            console.log('Видео метаданные загружены:', fileName);
+                        };
+                        
+                        videoElement.oncanplay = function() {
+                            console.log('Видео готово к воспроизведению:', fileName);
+                        };
+                    }
+                }, 100);
+            }
+            
+            messageDiv.innerHTML = `
+                <div class="message-content">
+                    ${!isOwn ? `<strong>${sender}</strong><br>` : ''}
+                    ${mediaContent}
+                    <div class="file-message" onclick="downloadFile('${content}', '${fileName}')">
+                        <div class="file-info">
+                            <span class="file-icon">${fileIcon}</span>
+                            <div class="file-details">
+                                <div class="file-name">${fileName}</div>
+                                <div class="file-size">${formatFileSize(fileSize)}</div>
+                            </div>
+                            <span style="opacity: 0.7;">💾</span>
+                        </div>
+                    </div>
+                    <div class="message-info">
+                        <span>${timeString}</span>
+                        ${isOwn ? '<span>✓</span>' : ''}
+                    </div>
+                </div>
+            `;
+            
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function addSystemMessage(text) {
+            const messagesDiv = document.getElementById('messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'system-message';
+            messageDiv.textContent = text;
+            
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const text = input.value.trim();
+            
+            if (!text) return;
+            
+            addMessage(currentUser, text, true);
+            
+            // Сохраняем в историю
+            messageHistory.push({
+                type: 'message',
+                sender: currentUser,
+                content: text,
+                timestamp: Date.now(),
+                isOwn: true
+            });
+            
+            const messageData = {
+                type: 'message',
+                content: text,
+                timestamp: Date.now()
+            };
+            
+            broadcastMessage(messageData);
+            
+            input.value = '';
+            adjustTextareaHeight();
+        }
+
+        function handleFileSelect(input, mediaType) {
+            const file = input.files[0];
+            if (!file) return;
+            
+            // Проверяем размер файла (макс 10MB)
+            const maxSize = 10 * 1024 * 1024;
+            if (file.size > maxSize) {
+                alert('Файл слишком большой. Максимальный размер: 10MB');
+                return;
+            }
+            
+            const reader = new FileReader();
+            
+            // Показываем прогресс загрузки
+            const progressMessage = addProgressMessage(`Загрузка ${file.name}...`);
+            
+            reader.onprogress = function(e) {
+                if (e.lengthComputable) {
+                    const progress = (e.loaded / e.total) * 100;
+                    updateProgress(progressMessage, progress);
+                }
+            };
+            
+            reader.onload = function(e) {
+                const content = e.target.result;
+                
+                // Удаляем сообщение о прогрессе
+                removeProgressMessage(progressMessage);
+                
+                // Добавляем сообщение с файлом
+                addFileMessage(currentUser, content, file.name, file.type, file.size, true);
+                
+                // Сохраняем в историю
+                messageHistory.push({
+                    type: 'file',
+                    sender: currentUser,
+                    content: content,
+                    fileName: file.name,
+                    fileType: file.type,
+                    fileSize: file.size,
+                    timestamp: Date.now(),
+                    isOwn: true
+                });
+                
+                // Отправляем файл другим участникам
+                const fileData = {
+                    type: 'file',
+                    content: content,
+                    fileName: file.name,
+                    fileType: file.type,
+                    fileSize: file.size,
+                    timestamp: Date.now()
+                };
+                
+                broadcastMessage(fileData);
+            };
+            
+            reader.onerror = function() {
+                removeProgressMessage(progressMessage);
+                addSystemMessage('Ошибка при загрузке файла');
+            };
+            
+            reader.readAsDataURL(file);
+            input.value = '';
+        }
+
+        function addProgressMessage(text) {
+            const messagesDiv = document.getElementById('messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message own';
+            messageDiv.innerHTML = `
+                <div class="message-content">
+                    <div class="progress-container">
+                        <div class="progress-text">${text}</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill"></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            return messageDiv;
+        }
+
+        function updateProgress(messageDiv, progress) {
+            const progressFill = messageDiv.querySelector('.progress-fill');
+            const progressText = messageDiv.querySelector('.progress-text');
+            
+            if (progressFill) {
+                progressFill.style.width = progress + '%';
+            }
+            if (progressText) {
+                progressText.textContent = `Загрузка... ${Math.round(progress)}%`;
+            }
+        }
+
+        function removeProgressMessage(messageDiv) {
+            if (messageDiv && messageDiv.parentNode) {
+                messageDiv.parentNode.removeChild(messageDiv);
+            }
+        }
+
+        function downloadFile(dataUrl, fileName) {
+            const link = document.createElement('a');
+            link.href = dataUrl;
+            link.download = fileName;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        function openModal(src, type) {
+            const modal = document.getElementById('mediaModal');
+            const modalContent = document.getElementById('modalMediaContent');
+            
+            if (type === 'image') {
+                modalContent.innerHTML = `<img src="${src}" alt="Полноразмерное изображение">`;
+            } else if (type === 'video') {
+                modalContent.innerHTML = `<video controls autoplay><source src="${src}"></video>`;
+            }
+            
+            modal.style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('mediaModal').style.display = 'none';
+        }
+
+        function adjustTextareaHeight() {
+            const textarea = document.getElementById('messageInput');
+            textarea.style.height = 'auto';
+            textarea.style.height = Math.min(textarea.scrollHeight, 100) + 'px';
+        }
+
+        // Обработчики событий
+        document.getElementById('messageInput').addEventListener('input', adjustTextareaHeight);
+        
+        document.getElementById('messageInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        document.getElementById('usernameInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                createRoom();
+            }
+        });
+
+        document.getElementById('roomIdInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                joinRoom();
+            }
+        });
+
+        // Drag & Drop для файлов
+        let dragCounter = 0;
+
+        document.addEventListener('dragenter', function(e) {
+            e.preventDefault();
+            dragCounter++;
+            if (document.getElementById('chatContainer').style.display !== 'none') {
+                document.body.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%), rgba(0,136,204,0.1)';
+            }
+        });
+
+        document.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            dragCounter--;
+            if (dragCounter === 0) {
+                document.body.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+            }
+        });
+
+        document.addEventListener('dragover', function(e) {
+            e.preventDefault();
+        });
+
+        document.addEventListener('drop', function(e) {
+            e.preventDefault();
+            dragCounter = 0;
+            document.body.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+            
+            if (document.getElementById('chatContainer').style.display === 'none') return;
+            
+            const files = e.dataTransfer.files;
+            
+            for (let file of files) {
+                if (file.type.startsWith('image/')) {
+                    handleFileSelect({files: [file]}, 'image');
+                } else if (file.type.startsWith('video/')) {
+                    handleFileSelect({files: [file]}, 'video');
+                } else {
+                    handleFileSelect({files: [file]}, 'file');
+                }
+            }
+        });
+
+        // Закрытие модального окна по ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // Обработка закрытия страницы
+        window.addEventListener('beforeunload', function() {
+            if (peer) {
+                peer.destroy();
+            }
+        });
+
+        // Инициализация при загрузке
+        window.addEventListener('load', () => {
+            document.getElementById('usernameInput').focus();
+            updateConnectionStatus('Готов к подключению', false);
+        });
+    </script>
+</body>
+</html>

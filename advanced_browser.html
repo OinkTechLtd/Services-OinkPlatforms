@@ -1,0 +1,1304 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .browser-window {
+            width: 100%;
+            height: 100vh;
+            background: #1e1e1e;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .title-bar {
+            background: linear-gradient(135deg, #2d3142 0%, #4f4f4f 100%);
+            height: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 10px;
+            color: white;
+            font-size: 12px;
+        }
+
+        .window-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .control-btn {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .close { background: #ff5f56; }
+        .minimize { background: #ffbd2e; }
+        .maximize { background: #27ca3f; }
+
+        .control-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+
+        .toolbar {
+            background: linear-gradient(135deg, #3a3a3a 0%, #2d2d2d 100%);
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid #555;
+        }
+
+        .nav-btn {
+            background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+            border: none;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(74, 144, 226, 0.4);
+        }
+
+        .nav-btn:disabled {
+            background: #555;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .address-bar {
+            flex: 1;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border: 2px solid #4a90e2;
+            border-radius: 20px;
+            padding: 8px 16px;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .address-bar:focus {
+            box-shadow: 0 0 20px rgba(74, 144, 226, 0.3);
+            border-color: #357abd;
+        }
+
+        .menu-btn {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s;
+        }
+
+        .menu-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
+        }
+
+        .tabs-container {
+            background: #2d2d2d;
+            display: flex;
+            align-items: center;
+            padding: 4px 8px;
+            min-height: 36px;
+            border-bottom: 1px solid #555;
+        }
+
+        .tab {
+            background: linear-gradient(135deg, #495057 0%, #343a40 100%);
+            color: white;
+            padding: 6px 12px;
+            margin-right: 2px;
+            border-radius: 6px 6px 0 0;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            max-width: 200px;
+            font-size: 12px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tab:hover {
+            background: linear-gradient(135deg, #5a6268 0%, #495057 100%);
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+            box-shadow: 0 2px 10px rgba(74, 144, 226, 0.3);
+        }
+
+        .tab-title {
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .tab-close {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            transition: all 0.2s;
+        }
+
+        .tab-close:hover {
+            background: #ff4757;
+            transform: scale(1.1);
+        }
+
+        .new-tab-btn {
+            background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+            border: none;
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            transition: all 0.3s;
+            margin-left: 4px;
+        }
+
+        .new-tab-btn:hover {
+            background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+            transform: scale(1.1);
+        }
+
+        .content-area {
+            flex: 1;
+            display: flex;
+            background: #f8f9fa;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: linear-gradient(135deg, #343a40 0%, #495057 100%);
+            border-right: 1px solid #555;
+            transition: all 0.3s;
+            overflow-y: auto;
+        }
+
+        .sidebar.hidden {
+            width: 0;
+            overflow: hidden;
+        }
+
+        .sidebar-section {
+            padding: 16px;
+        }
+
+        .sidebar-title {
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .bookmark-item, .history-item {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 8px 12px;
+            margin-bottom: 4px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .bookmark-item:hover, .history-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(4px);
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .page-content {
+            flex: 1;
+            background: white;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .page-frame {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: white;
+        }
+
+        .start-page {
+            padding: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .start-page h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .start-page p {
+            font-size: 18px;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+
+        .quick-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .quick-link {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        .quick-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .loading-bar {
+            height: 3px;
+            background: linear-gradient(90deg, #4a90e2, #28a745, #ffc107, #dc3545);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .loading-bar.active {
+            opacity: 1;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: #2d2d2d;
+            border: 1px solid #555;
+            border-radius: 6px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            min-width: 200px;
+            display: none;
+        }
+
+        .dropdown-menu.active {
+            display: block;
+        }
+
+        .dropdown-item {
+            padding: 12px 16px;
+            color: white;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .dropdown-item:hover {
+            background: rgba(74, 144, 226, 0.2);
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .tab {
+            animation: slideIn 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="browser-window">
+        <div class="title-bar">
+            <span>ULTRABrowser</span>
+            <div class="window-controls">
+                <div class="control-btn minimize"></div>
+                <div class="control-btn maximize"></div>
+                <div class="control-btn close"></div>
+            </div>
+        </div>
+
+        <div class="toolbar">
+            <button class="nav-btn" id="backBtn" title="Назад">←</button>
+            <button class="nav-btn" id="forwardBtn" title="Вперед">→</button>
+            <button class="nav-btn" id="refreshBtn" title="Обновить">↻</button>
+            <button class="nav-btn" id="homeBtn" title="Домой">🏠</button>
+            <input type="text" class="address-bar" id="addressBar" placeholder="Введите URL или поисковой запрос...">
+            <button class="menu-btn" id="menuBtn">☰ Меню</button>
+            <div class="dropdown-menu" id="dropdownMenu">
+                <div class="dropdown-item" onclick="toggleSidebar()">📑 Показать/скрыть панель</div>
+                <div class="dropdown-item" onclick="addBookmark()">⭐ Добавить в закладки</div>
+                <div class="dropdown-item" onclick="clearHistory()">🗑️ Очистить историю</div>
+                <div class="dropdown-item" onclick="openDevTools()">🔧 Инструменты разработчика</div>
+                <div class="dropdown-item" onclick="showAbout()">ℹ️ О браузере</div>
+            </div>
+        </div>
+
+        <div class="tabs-container">
+            <div class="tab active" data-tab-id="0">
+                <span class="tab-title">Новая вкладка</span>
+                <span class="tab-close" onclick="closeTab(0)">×</span>
+            </div>
+            <button class="new-tab-btn" onclick="createNewTab()">+</button>
+        </div>
+
+        <div class="content-area">
+            <div class="sidebar" id="sidebar">
+                <div class="sidebar-section">
+                    <div class="sidebar-title">Закладки</div>
+                    <div id="bookmarksList">
+                        <div class="bookmark-item" onclick="navigateToUrl('https://google.com')">
+                            🔍 Google
+                        </div>
+                        <div class="bookmark-item" onclick="navigateToUrl('https://github.com')">
+                            💻 GitHub
+                        </div>
+                        <div class="bookmark-item" onclick="navigateToUrl('https://stackoverflow.com')">
+                            📚 Stack Overflow
+                        </div>
+                    </div>
+                </div>
+                <div class="sidebar-section">
+                    <div class="sidebar-title">История</div>
+                    <div id="historyList">
+                        <!-- История будет добавляться динамически -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="main-content">
+                <div class="loading-bar" id="loadingBar"></div>
+                <div class="page-content" id="pageContent">
+                    <div class="start-page">
+                        <h1>UltraBrowser</h1>
+                        <p>Современный браузер для комфортной работы в интернете</p>
+                        <div class="quick-links">
+                            <div class="quick-link" onclick="navigateToUrl('https://google.com')">
+                                <h3>🔍 Google</h3>
+                                <p>Поиск в интернете</p>
+                            </div>
+                            <div class="quick-link" onclick="navigateToUrl('https://youtube.com')">
+                                <h3>📺 YouTube</h3>
+                                <p>Видео контент</p>
+                            </div>
+                            <div class="quick-link" onclick="navigateToUrl('https://github.com')">
+                                <h3>💻 GitHub</h3>
+                                <p>Разработка</p>
+                            </div>
+                            <div class="quick-link" onclick="navigateToUrl('https://news.ycombinator.com')">
+                                <h3>📰 Hacker News</h3>
+                                <p>Технические новости</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class AdvancedBrowser {
+            constructor() {
+                this.tabs = [{
+                    id: 0,
+                    title: 'Новая вкладка',
+                    url: 'about:blank',
+                    history: [],
+                    historyIndex: -1,
+                    isLoading: false
+                }];
+                this.activeTabId = 0;
+                this.tabIdCounter = 1;
+                this.bookmarks = [];
+                this.history = [];
+                this.sidebarVisible = true;
+                
+                this.initializeEventListeners();
+                this.loadSavedData();
+            }
+
+            initializeEventListeners() {
+                const addressBar = document.getElementById('addressBar');
+                const backBtn = document.getElementById('backBtn');
+                const forwardBtn = document.getElementById('forwardBtn');
+                const refreshBtn = document.getElementById('refreshBtn');
+                const homeBtn = document.getElementById('homeBtn');
+                const menuBtn = document.getElementById('menuBtn');
+
+                addressBar.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        this.navigateToUrl(addressBar.value);
+                    }
+                });
+
+                backBtn.addEventListener('click', () => this.goBack());
+                forwardBtn.addEventListener('click', () => this.goForward());
+                refreshBtn.addEventListener('click', () => this.refresh());
+                homeBtn.addEventListener('click', () => this.goHome());
+                menuBtn.addEventListener('click', () => this.toggleDropdown());
+
+                // Закрытие dropdown при клике вне его
+                document.addEventListener('click', (e) => {
+                    if (!e.target.closest('#menuBtn') && !e.target.closest('#dropdownMenu')) {
+                        document.getElementById('dropdownMenu').classList.remove('active');
+                    }
+                });
+            }
+
+            createNewTab() {
+                const newTab = {
+                    id: this.tabIdCounter++,
+                    title: 'Новая вкладка',
+                    url: 'about:blank',
+                    history: [],
+                    historyIndex: -1,
+                    isLoading: false
+                };
+
+                this.tabs.push(newTab);
+                this.renderTabs();
+                this.switchToTab(newTab.id);
+                this.showStartPage();
+            }
+
+            closeTab(tabId) {
+                if (this.tabs.length === 1) return; // Не закрываем последнюю вкладку
+
+                const tabIndex = this.tabs.findIndex(tab => tab.id === tabId);
+                if (tabIndex === -1) return;
+
+                this.tabs.splice(tabIndex, 1);
+                
+                if (this.activeTabId === tabId) {
+                    const newActiveId = this.tabs[Math.max(0, tabIndex - 1)].id;
+                    this.switchToTab(newActiveId);
+                }
+
+                this.renderTabs();
+            }
+
+            switchToTab(tabId) {
+                this.activeTabId = tabId;
+                this.renderTabs();
+                this.updateUI();
+            }
+
+            renderTabs() {
+                const tabsContainer = document.querySelector('.tabs-container');
+                const newTabBtn = tabsContainer.querySelector('.new-tab-btn');
+                
+                // Удаляем все существующие вкладки
+                const existingTabs = tabsContainer.querySelectorAll('.tab');
+                existingTabs.forEach(tab => tab.remove());
+
+                // Создаем вкладки заново
+                this.tabs.forEach(tab => {
+                    const tabElement = document.createElement('div');
+                    tabElement.className = `tab ${tab.id === this.activeTabId ? 'active' : ''}`;
+                    tabElement.dataset.tabId = tab.id;
+                    tabElement.innerHTML = `
+                        <span class="tab-title">${tab.title}</span>
+                        <span class="tab-close" onclick="browser.closeTab(${tab.id})">×</span>
+                    `;
+                    
+                    tabElement.addEventListener('click', (e) => {
+                        if (!e.target.classList.contains('tab-close')) {
+                            this.switchToTab(tab.id);
+                        }
+                    });
+
+                    tabsContainer.insertBefore(tabElement, newTabBtn);
+                });
+            }
+
+            navigateToUrl(url) {
+                if (!url.startsWith('http://') && !url.startsWith('https://') && !url.startsWith('about:')) {
+                    // Если это не URL, используем как поисковой запрос
+                    url = `https://www.google.com/search?q=${encodeURIComponent(url)}`;
+                }
+
+                const activeTab = this.getActiveTab();
+                if (!activeTab) return;
+
+                this.showLoading(true);
+                activeTab.url = url;
+                
+                // Добавляем в историю вкладки
+                if (activeTab.historyIndex < activeTab.history.length - 1) {
+                    activeTab.history.splice(activeTab.historyIndex + 1);
+                }
+                activeTab.history.push(url);
+                activeTab.historyIndex = activeTab.history.length - 1;
+
+                // Добавляем в общую историю
+                this.addToHistory(url);
+
+                // Симулируем загрузку страницы
+                setTimeout(() => {
+                    this.loadPage(url);
+                    this.showLoading(false);
+                }, 1000 + Math.random() * 2000);
+
+                this.updateUI();
+            }
+
+            loadPage(url) {
+                const activeTab = this.getActiveTab();
+                if (!activeTab) return;
+
+                const pageContent = document.getElementById('pageContent');
+                
+                try {
+                    // Обновляем заголовок вкладки
+                    const domain = new URL(url).hostname;
+                    activeTab.title = domain || 'Новая страница';
+                    
+                    // Создаем iframe для отображения страницы
+                    pageContent.innerHTML = `
+                        <iframe class="page-frame" src="${url}" 
+                                onload="browser.onPageLoad()"
+                                onerror="browser.onPageError()"></iframe>
+                    `;
+                } catch (error) {
+                    // Если URL некорректный, показываем ошибку
+                    pageContent.innerHTML = `
+                        <div style="padding: 40px; text-align: center; color: #666;">
+                            <h2>Ошибка загрузки страницы</h2>
+                            <p>Не удалось загрузить: ${url}</p>
+                            <button onclick="browser.goHome()" style="margin-top: 20px; padding: 10px 20px; background: #4a90e2; color: white; border: none; border-radius: 4px; cursor: pointer;">Перейти на главную</button>
+                        </div>
+                    `;
+                }
+
+                this.renderTabs();
+            }
+
+            onPageLoad() {
+                this.showLoading(false);
+            }
+
+            onPageError() {
+                this.showLoading(false);
+                const pageContent = document.getElementById('pageContent');
+                pageContent.innerHTML = `
+                    <div style="padding: 40px; text-align: center; color: #666;">
+                        <h2>Страница недоступна</h2>
+                        <p>Проверьте подключение к интернету и попробуйте снова.</p>
+                        <button onclick="browser.refresh()" style="margin-top: 20px; padding: 10px 20px; background: #4a90e2; color: white; border: none; border-radius: 4px; cursor: pointer;">Повторить</button>
+                    </div>
+                `;
+            }
+
+            showStartPage() {
+                const pageContent = document.getElementById('pageContent');
+                pageContent.innerHTML = `
+                    <div class="start-page">
+                        <h1>ULTRABrowser</h1>
+                        <p>Современный браузер для комфортной работы в интернете</p>
+                        <div class="quick-links">
+                            <div class="quick-link" onclick="browser.navigateToUrl('https://google.com')">
+                                <h3>🔍 Google</h3>
+                                <p>Поиск в интернете</p>
+                            </div>
+                            <div class="quick-link" onclick="browser.navigateToUrl('https://youtube.com')">
+                                <h3>📺 YouTube</h3>
+                                <p>Видео контент</p>
+                            </div>
+                            <div class="quick-link" onclick="browser.navigateToUrl('https://github.com')">
+                                <h3>💻 GitHub</h3>
+                                <p>Разработка</p>
+                            </div>
+                            <div class="quick-link" onclick="browser.navigateToUrl('https://stackoverflow.com')">
+                                <h3>📚 Stack Overflow</h3>
+                                <p>Вопросы и ответы</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            goBack() {
+                const activeTab = this.getActiveTab();
+                if (!activeTab || activeTab.historyIndex <= 0) return;
+
+                activeTab.historyIndex--;
+                const url = activeTab.history[activeTab.historyIndex];
+                activeTab.url = url;
+                this.loadPage(url);
+                this.updateUI();
+            }
+
+            goForward() {
+                const activeTab = this.getActiveTab();
+                if (!activeTab || activeTab.historyIndex >= activeTab.history.length - 1) return;
+
+                activeTab.historyIndex++;
+                const url = activeTab.history[activeTab.historyIndex];
+                activeTab.url = url;
+                this.loadPage(url);
+                this.updateUI();
+            }
+
+            refresh() {
+                const activeTab = this.getActiveTab();
+                if (!activeTab) return;
+
+                if (activeTab.url === 'about:blank') {
+                    this.showStartPage();
+                } else {
+                    this.showLoading(true);
+                    setTimeout(() => {
+                        this.loadPage(activeTab.url);
+                    }, 500);
+                }
+            }
+
+            goHome() {
+                const activeTab = this.getActiveTab();
+                if (!activeTab) return;
+
+                activeTab.url = 'about:blank';
+                activeTab.title = 'Новая вкладка';
+                this.showStartPage();
+                this.renderTabs();
+                this.updateUI();
+            }
+
+            showLoading(show) {
+                const loadingBar = document.getElementById('loadingBar');
+                if (show) {
+                    loadingBar.classList.add('active');
+                } else {
+                    loadingBar.classList.remove('active');
+                }
+            }
+
+            updateUI() {
+                const activeTab = this.getActiveTab();
+                if (!activeTab) return;
+
+                const addressBar = document.getElementById('addressBar');
+                const backBtn = document.getElementById('backBtn');
+                const forwardBtn = document.getElementById('forwardBtn');
+
+                addressBar.value = activeTab.url === 'about:blank' ? '' : activeTab.url;
+                backBtn.disabled = activeTab.historyIndex <= 0;
+                forwardBtn.disabled = activeTab.historyIndex >= activeTab.history.length - 1;
+            }
+
+            getActiveTab() {
+                return this.tabs.find(tab => tab.id === this.activeTabId);
+            }
+
+            addBookmark() {
+                const activeTab = this.getActiveTab();
+                if (!activeTab || activeTab.url === 'about:blank') return;
+
+                const bookmark = {
+                    title: activeTab.title,
+                    url: activeTab.url,
+                    timestamp: Date.now()
+                };
+
+                this.bookmarks.push(bookmark);
+                this.renderBookmarks();
+                this.saveData();
+
+                alert('Закладка добавлена!');
+            }
+
+            addToHistory(url) {
+                const historyItem = {
+                    url: url,
+                    title: this.getActiveTab()?.title || url,
+                    timestamp: Date.now()
+                };
+
+                this.history.unshift(historyItem);
+                if (this.history.length > 50) {
+                    this.history.pop();
+                }
+
+                this.renderHistory();
+                this.saveData();
+            }
+
+            renderBookmarks() {
+                const bookmarksList = document.getElementById('bookmarksList');
+                const defaultBookmarks = bookmarksList.innerHTML;
+                
+                const customBookmarks = this.bookmarks.map(bookmark => 
+                    `<div class="bookmark-item" onclick="browser.navigateToUrl('${bookmark.url}')">
+                        🔖 ${bookmark.title}
+                    </div>`
+                ).join('');
+
+                bookmarksList.innerHTML = defaultBookmarks + customBookmarks;
+            }
+
+            renderHistory() {
+                const historyList = document.getElementById('historyList');
+                const historyItems = this.history.slice(0, 10).map(item => 
+                    `<div class="history-item" onclick="browser.navigateToUrl('${item.url}')">
+                        🌐 ${item.title}
+                    </div>`
+                ).join('');
+
+                historyList.innerHTML = historyItems;
+            }
+
+            clearHistory() {
+                this.history = [];
+                this.renderHistory();
+                this.saveData();
+                alert('История очищена!');
+            }
+
+            toggleSidebar() {
+                const sidebar = document.getElementById('sidebar');
+                this.sidebarVisible = !this.sidebarVisible;
+                
+                if (this.sidebarVisible) {
+                    sidebar.classList.remove('hidden');
+                } else {
+                    sidebar.classList.add('hidden');
+                }
+            }
+
+            toggleDropdown() {
+                const dropdownMenu = document.getElementById('dropdownMenu');
+                dropdownMenu.classList.toggle('active');
+            }
+
+            openDevTools() {
+                const devToolsWindow = window.open('', 'DevTools', 'width=800,height=600');
+                devToolsWindow.document.write(`
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <title>Инструменты разработчика</title>
+                        <style>
+                            body { font-family: 'Courier New', monospace; padding: 20px; background: #1e1e1e; color: #fff; }
+                            .console { background: #2d2d30; padding: 15px; border-radius: 5px; margin: 10px 0; }
+                            .network { background: #2d2d30; padding: 15px; border-radius: 5px; margin: 10px 0; }
+                            h3 { color: #4a90e2; }
+                        </style>
+                    </head>
+                    <body>
+                        <h2>🔧 Инструменты разработчика</h2>
+                        <div class="console">
+                            <h3>Консоль</h3>
+                            <p>console.log("AdvancedBrowser DevTools активированы!");</p>
+                            <p>Время: ${new Date().toLocaleString()}</p>
+                        </div>
+                        <div class="network">
+                            <h3>Сеть</h3>
+                            <p>Активные подключения: ${Math.floor(Math.random() * 10) + 1}</p>
+                            <p>Загружено ресурсов: ${Math.floor(Math.random() * 50) + 10}</p>
+                        </div>
+                    </body>
+                    </html>
+                `);
+                this.toggleDropdown();
+            }
+
+            showAbout() {
+                alert(`AdvancedBrowser v2.0
+                
+Современный веб-браузер с расширенными возможностями:
+• Многовкладочность
+• Система закладок
+• История посещений
+• Боковая панель
+• Инструменты разработчика
+• Современный интерфейс
+
+Создано с использованием современных веб-технологий.`);
+                this.toggleDropdown();
+            }
+
+            saveData() {
+                const data = {
+                    bookmarks: this.bookmarks,
+                    history: this.history
+                };
+                // В реальном браузере здесь был бы localStorage
+                // Но в данной среде мы сохраняем в переменную
+                this.savedData = data;
+            }
+
+            loadSavedData() {
+                // В реальном браузере здесь был бы localStorage
+                if (this.savedData) {
+                    this.bookmarks = this.savedData.bookmarks || [];
+                    this.history = this.savedData.history || [];
+                    this.renderBookmarks();
+                    this.renderHistory();
+                }
+            }
+
+            // Дополнительные методы для улучшения функциональности
+            searchInPage(query) {
+                // Эмуляция поиска по странице
+                if (query) {
+                    alert(`Поиск по странице: "${query}"`);
+                }
+            }
+
+            downloadFile(url) {
+                // Эмуляция скачивания файла
+                alert(`Начинается загрузка: ${url}`);
+            }
+
+            openInNewTab(url) {
+                this.createNewTab();
+                this.navigateToUrl(url);
+            }
+
+            zoomIn() {
+                const pageContent = document.getElementById('pageContent');
+                const currentZoom = parseFloat(pageContent.style.zoom) || 1;
+                pageContent.style.zoom = Math.min(currentZoom + 0.1, 3);
+            }
+
+            zoomOut() {
+                const pageContent = document.getElementById('pageContent');
+                const currentZoom = parseFloat(pageContent.style.zoom) || 1;
+                pageContent.style.zoom = Math.max(currentZoom - 0.1, 0.5);
+            }
+
+            resetZoom() {
+                const pageContent = document.getElementById('pageContent');
+                pageContent.style.zoom = 1;
+            }
+
+            toggleFullscreen() {
+                if (!document.fullscreenElement) {
+                    document.documentElement.requestFullscreen().catch(err => {
+                        console.log(`Ошибка при входе в полноэкранный режим: ${err.message}`);
+                    });
+                } else {
+                    document.exitFullscreen();
+                }
+            }
+
+            // Методы для работы с горячими клавишами
+            initKeyboardShortcuts() {
+                document.addEventListener('keydown', (e) => {
+                    if (e.ctrlKey || e.metaKey) {
+                        switch (e.key) {
+                            case 't':
+                                e.preventDefault();
+                                this.createNewTab();
+                                break;
+                            case 'w':
+                                e.preventDefault();
+                                if (this.tabs.length > 1) {
+                                    this.closeTab(this.activeTabId);
+                                }
+                                break;
+                            case 'r':
+                                e.preventDefault();
+                                this.refresh();
+                                break;
+                            case 'l':
+                                e.preventDefault();
+                                document.getElementById('addressBar').focus();
+                                document.getElementById('addressBar').select();
+                                break;
+                            case 'd':
+                                e.preventDefault();
+                                this.addBookmark();
+                                break;
+                            case 'f':
+                                e.preventDefault();
+                                const query = prompt('Поиск по странице:');
+                                this.searchInPage(query);
+                                break;
+                            case '=':
+                            case '+':
+                                e.preventDefault();
+                                this.zoomIn();
+                                break;
+                            case '-':
+                                e.preventDefault();
+                                this.zoomOut();
+                                break;
+                            case '0':
+                                e.preventDefault();
+                                this.resetZoom();
+                                break;
+                        }
+                    }
+                    
+                    if (e.key === 'F11') {
+                        e.preventDefault();
+                        this.toggleFullscreen();
+                    }
+                });
+            }
+
+            // Инициализация дополнительных функций
+            initAdvancedFeatures() {
+                this.initKeyboardShortcuts();
+                
+                // Добавляем контекстное меню
+                document.addEventListener('contextmenu', (e) => {
+                    e.preventDefault();
+                    this.showContextMenu(e.clientX, e.clientY);
+                });
+
+                // Добавляем обработку перетаскивания вкладок
+                this.initTabDragAndDrop();
+
+                // Автосохранение данных каждые 30 секунд
+                setInterval(() => {
+                    this.saveData();
+                }, 30000);
+            }
+
+            showContextMenu(x, y) {
+                // Создаем контекстное меню
+                const existingMenu = document.querySelector('.context-menu');
+                if (existingMenu) {
+                    existingMenu.remove();
+                }
+
+                const contextMenu = document.createElement('div');
+                contextMenu.className = 'context-menu';
+                contextMenu.style.cssText = `
+                    position: fixed;
+                    top: ${y}px;
+                    left: ${x}px;
+                    background: #2d2d2d;
+                    border: 1px solid #555;
+                    border-radius: 6px;
+                    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+                    z-index: 10000;
+                    min-width: 150px;
+                `;
+
+                const menuItems = [
+                    { text: '← Назад', action: () => this.goBack() },
+                    { text: '→ Вперед', action: () => this.goForward() },
+                    { text: '↻ Обновить', action: () => this.refresh() },
+                    { text: '⭐ Добавить в закладки', action: () => this.addBookmark() },
+                    { text: '📋 Скопировать URL', action: () => this.copyCurrentUrl() },
+                    { text: '🔍 Поиск по странице', action: () => this.searchInPage(prompt('Поиск:')) }
+                ];
+
+                menuItems.forEach(item => {
+                    const menuItem = document.createElement('div');
+                    menuItem.className = 'context-menu-item';
+                    menuItem.textContent = item.text;
+                    menuItem.style.cssText = `
+                        padding: 10px 15px;
+                        color: white;
+                        cursor: pointer;
+                        font-size: 12px;
+                        transition: all 0.2s;
+                        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                    `;
+                    
+                    menuItem.addEventListener('mouseenter', () => {
+                        menuItem.style.background = 'rgba(74, 144, 226, 0.2)';
+                    });
+                    
+                    menuItem.addEventListener('mouseleave', () => {
+                        menuItem.style.background = 'transparent';
+                    });
+                    
+                    menuItem.addEventListener('click', () => {
+                        item.action();
+                        contextMenu.remove();
+                    });
+                    
+                    contextMenu.appendChild(menuItem);
+                });
+
+                document.body.appendChild(contextMenu);
+
+                // Закрываем меню при клике в другом месте
+                setTimeout(() => {
+                    document.addEventListener('click', () => {
+                        contextMenu.remove();
+                    }, { once: true });
+                }, 0);
+            }
+
+            copyCurrentUrl() {
+                const activeTab = this.getActiveTab();
+                if (activeTab && activeTab.url !== 'about:blank') {
+                    // Эмуляция копирования в буфер обмена
+                    const textarea = document.createElement('textarea');
+                    textarea.value = activeTab.url;
+                    document.body.appendChild(textarea);
+                    textarea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textarea);
+                    
+                    // Показываем уведомление
+                    this.showNotification('URL скопирован в буфер обмена');
+                }
+            }
+
+            showNotification(message) {
+                const notification = document.createElement('div');
+                notification.textContent = message;
+                notification.style.cssText = `
+                    position: fixed;
+                    bottom: 20px;
+                    right: 20px;
+                    background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+                    color: white;
+                    padding: 15px 20px;
+                    border-radius: 8px;
+                    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+                    z-index: 10001;
+                    animation: slideInUp 0.3s ease;
+                    font-size: 14px;
+                `;
+
+                document.body.appendChild(notification);
+
+                setTimeout(() => {
+                    notification.style.animation = 'slideOutDown 0.3s ease forwards';
+                    setTimeout(() => {
+                        notification.remove();
+                    }, 300);
+                }, 3000);
+            }
+
+            initTabDragAndDrop() {
+                // Добавляем возможность перетаскивания вкладок
+                // В упрощенной версии просто добавляем визуальные эффекты
+                document.addEventListener('dragstart', (e) => {
+                    if (e.target.closest('.tab')) {
+                        e.target.closest('.tab').style.opacity = '0.5';
+                    }
+                });
+
+                document.addEventListener('dragend', (e) => {
+                    if (e.target.closest('.tab')) {
+                        e.target.closest('.tab').style.opacity = '1';
+                    }
+                });
+            }
+        }
+
+        // Глобальные функции для работы с браузером
+        let browser;
+
+        function navigateToUrl(url) {
+            browser.navigateToUrl(url);
+        }
+
+        function createNewTab() {
+            browser.createNewTab();
+        }
+
+        function closeTab(tabId) {
+            browser.closeTab(tabId);
+        }
+
+        function toggleSidebar() {
+            browser.toggleSidebar();
+        }
+
+        function addBookmark() {
+            browser.addBookmark();
+        }
+
+        function clearHistory() {
+            browser.clearHistory();
+        }
+
+        function openDevTools() {
+            browser.openDevTools();
+        }
+
+        function showAbout() {
+            browser.showAbout();
+        }
+
+        // Инициализация браузера при загрузке страницы
+        document.addEventListener('DOMContentLoaded', () => {
+            browser = new AdvancedBrowser();
+            browser.initAdvancedFeatures();
+            browser.showStartPage();
+            
+            // Добавляем дополнительные стили для анимаций
+            const styleSheet = document.createElement('style');
+            styleSheet.textContent = `
+                @keyframes slideInUp {
+                    from {
+                        opacity: 0;
+                        transform: translateY(100px);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
+                }
+                
+                @keyframes slideOutDown {
+                    from {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
+                    to {
+                        opacity: 0;
+                        transform: translateY(100px);
+                    }
+                }
+
+                .tab {
+                    transition: all 0.3s ease;
+                }
+
+                .tab:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+                }
+
+                .context-menu {
+                    animation: slideIn 0.2s ease;
+                }
+
+                /* Прогрессивные улучшения для современных браузеров */
+                @supports (backdrop-filter: blur(10px)) {
+                    .quick-link {
+                        backdrop-filter: blur(10px);
+                        -webkit-backdrop-filter: blur(10px);
+                    }
+                }
+
+                /* Темная тема для системных настроек */
+                @media (prefers-color-scheme: dark) {
+                    .address-bar {
+                        background: linear-gradient(135deg, #3a3a3a 0%, #2d2d2d 100%);
+                        color: white;
+                    }
+                }
+
+                /* Адаптивность для мобильных устройств */
+                @media (max-width: 768px) {
+                    .sidebar {
+                        position: absolute;
+                        z-index: 1000;
+                        height: 100%;
+                    }
+                    
+                    .tab {
+                        min-width: 120px;
+                        max-width: 150px;
+                    }
+                    
+                    .toolbar {
+                        flex-wrap: wrap;
+                    }
+                    
+                    .nav-btn {
+                        width: 28px;
+                        height: 28px;
+                    }
+                }
+            `;
+            document.head.appendChild(styleSheet);
+            
+            console.log('🚀 AdvancedBrowser успешно инициализирован!');
+        });
+    </script>
+</body>
+</html>
