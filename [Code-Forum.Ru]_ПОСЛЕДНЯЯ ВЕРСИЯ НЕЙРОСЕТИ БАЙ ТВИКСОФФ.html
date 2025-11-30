@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chat - Твоя Умная Нейросеть</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #0a0a0a;
+            min-height: 100vh;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(circle at 25% 25%, #6366f1 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, #8b5cf6 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, #ec4899 0%, transparent 50%);
+            filter: blur(120px);
+            opacity: 0.3;
+            animation: bgShift 15s ease-in-out infinite alternate;
+            z-index: -1;
+        }
+
+        @keyframes bgShift {
+            0% { transform: scale(1) rotate(0deg); }
+            100% { transform: scale(1.1) rotate(10deg); }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            gap: 20px;
+            height: 100vh;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: rgba(20, 20, 20, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #6366f1, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .user-stats {
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 15px;
+            padding: 15px;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .stat-label {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .stat-value {
+            font-weight: 600;
+            color: #6366f1;
+        }
+
+        .coins {
+            color: #fbbf24;
+        }
+
+        .premium-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            border: none;
+            border-radius: 12px;
+            color: #000;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .premium-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .premium-badge {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: #000;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            display: inline-block;
+            margin-left: 10px;
+        }
+
+        .main-chat {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: rgba(20, 20, 20, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .chat-header {
+            padding: 20px 30px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-title {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .new-chat-btn {
+            padding: 10px 20px;
+            background: rgba(99, 102, 241, 0.2);
+            border: 1px solid rgba(99, 102, 241, 0.5);
+            border-radius: 10px;
+            color: #fff;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .new-chat-btn:hover {
+            background: rgba(99, 102, 241, 0.3);
+        }
+
+        /* Плашка лимита как у Claude */
+        .limit-banner {
+            display: none;
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(220, 38, 38, 0.15));
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 0;
+            padding: 16px 30px;
+            align-items: center;
+            justify-content: space-between;
+            animation: slideDown 0.3s ease-out;
+            border-left: none;
+            border-right: none;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .limit-banner-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .limit-banner-icon {
+            font-size: 16px;
+        }
+
+        .limit-banner-text {
+            flex: 1;
+            font-size: 14px;
+            color: #fca5a5;
+        }
+
+        .limit-banner-upgrade {
+            padding: 6px 14px;
+            background: transparent;
+            border: none;
+            color: #fbbf24;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        .limit-banner-upgrade:hover {
+            color: #fcd34d;
+        }
+
+        .messages-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .message {
+            display: flex;
+            gap: 15px;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.user {
+            flex-direction: row-reverse;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .avatar.user {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        }
+
+        .avatar.ai {
+            background: linear-gradient(135deg, #ec4899, #f43f5e);
+        }
+
+        .message-content {
+            max-width: 70%;
+            padding: 15px 20px;
+            border-radius: 15px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+
+        .message.user .message-content {
+            background: rgba(99, 102, 241, 0.2);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+        }
+
+        .message.ai .message-content {
+            background: rgba(236, 72, 153, 0.1);
+            border: 1px solid rgba(236, 72, 153, 0.2);
+        }
+
+        .message-image {
+            max-width: 300px;
+            border-radius: 10px;
+            margin-top: 10px;
+            display: block;
+        }
+
+        .typing-indicator {
+            display: none;
+            padding: 15px 20px;
+            background: rgba(236, 72, 153, 0.1);
+            border: 1px solid rgba(236, 72, 153, 0.2);
+            border-radius: 15px;
+            width: fit-content;
+        }
+
+        .typing-indicator span {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #ec4899;
+            margin: 0 2px;
+            animation: bounce 1.4s infinite;
+        }
+
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes bounce {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-10px); }
+        }
+
+        .input-area {
+            padding: 20px 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            gap: 15px;
+            align-items: flex-end;
+        }
+
+        .file-upload-btn {
+            padding: 12px;
+            background: rgba(139, 92, 246, 0.2);
+            border: 1px solid rgba(139, 92, 246, 0.5);
+            border-radius: 10px;
+            color: #fff;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .file-upload-btn:hover {
+            background: rgba(139, 92, 246, 0.3);
+        }
+
+        .file-upload-btn input {
+            display: none;
+        }
+
+        .input-wrapper {
+            flex: 1;
+            position: relative;
+        }
+
+        .message-input {
+            width: 100%;
+            padding: 15px 20px;
+            background: rgba(30, 30, 30, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            color: #fff;
+            font-size: 15px;
+            font-family: 'Poppins', sans-serif;
+            resize: none;
+            max-height: 150px;
+        }
+
+        .send-btn {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border: none;
+            border-radius: 12px;
+            color: #fff;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .send-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: rgba(20, 20, 20, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .modal-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .premium-features {
+            text-align: left;
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(251, 191, 36, 0.05);
+            border-radius: 15px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .feature-item::before {
+            content: '✓';
+            color: #fbbf24;
+            font-weight: 700;
+            font-size: 20px;
+        }
+
+        .premium-price {
+            font-size: 36px;
+            font-weight: 800;
+            color: #fbbf24;
+            margin: 20px 0;
+        }
+
+        .buy-premium-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            border: none;
+            border-radius: 12px;
+            color: #000;
+            font-weight: 700;
+            font-size: 18px;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+
+        .close-modal-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 10px 30px;
+            border-radius: 10px;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .welcome-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .welcome-title {
+            font-size: 48px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #6366f1, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+        }
+
+        .welcome-subtitle {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.7);
+            max-width: 600px;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                height: auto;
+            }
+
+            .sidebar {
+                width: 100%;
+            }
+
+            .message-content {
+                max-width: 85%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="logo">🤖 AI Chat</div>
+            
+            <div class="user-stats">
+                <div class="stat-item">
+                    <span class="stat-label">Запросов сегодня:</span>
+                    <span class="stat-value" id="requestsToday">0/3</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Монеты:</span>
+                    <span class="stat-value coins" id="coins">0 💰</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Статус:</span>
+                    <span class="stat-value" id="userStatus">Бесплатно</span>
+                </div>
+            </div>
+
+            <button class="premium-btn" onclick="openPremiumModal()">
+                ⭐ Получить Premium
+            </button>
+        </div>
+
+        <div class="main-chat">
+            <div class="chat-header">
+                <div class="chat-title">
+                    Чат с AI
+                    <span id="premiumBadge" style="display: none;" class="premium-badge">PREMIUM</span>
+                </div>
+                <button class="new-chat-btn" onclick="clearChat()">🔄 Новый чат</button>
+            </div>
+
+            <!-- Плашка лимита как у Claude -->
+            <div class="limit-banner" id="limitBanner">
+                <div class="limit-banner-content">
+                    <div class="limit-banner-icon">⏱️</div>
+                    <div class="limit-banner-text" id="limitText">
+                        Лимит исчерпан • сброс через <span id="resetTime">6:00</span>
+                    </div>
+                </div>
+                <button class="limit-banner-upgrade" onclick="openPremiumModal()">Upgrade</button>
+            </div>
+
+            <div class="messages-container" id="messagesContainer">
+                <div class="welcome-screen">
+                    <div class="welcome-title">Добро пожаловать!</div>
+                    <div class="welcome-subtitle">
+                        Я умная AI нейросеть, готовая помочь вам с любыми вопросами. 
+                        Задайте мне что угодно - от написания кода до креативных идей!
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-area">
+                <label class="file-upload-btn" id="fileUploadLabel">
+                    📎
+                    <input type="file" id="fileInput" accept="image/*,video/*" onchange="handleFileUpload(event)">
+                </label>
+                <div class="input-wrapper">
+                    <textarea 
+                        id="messageInput" 
+                        class="message-input" 
+                        placeholder="Напишите ваше сообщение..."
+                        rows="1"
+                    ></textarea>
+                </div>
+                <button class="send-btn" onclick="sendMessage()" id="sendBtn">
+                    Отправить ✈️
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="premiumModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-title">⭐ Premium Подписка</div>
+            <div class="premium-features">
+                <div class="feature-item">Безлимитные запросы к AI</div>
+                <div class="feature-item">Загрузка изображений и видео</div>
+                <div class="feature-item">Приоритетная обработка</div>
+                <div class="feature-item">Расширенные возможности</div>
+                <div class="feature-item">Без рекламы</div>
+            </div>
+            <div class="premium-price" id="premiumPrice">500 💰</div>
+            <button class="buy-premium-btn" onclick="buyPremium()">Купить Premium</button>
+            <button class="close-modal-btn" onclick="closePremiumModal()">Закрыть</button>
+        </div>
+    </div>
+
+    <script>
+        // КОНСТАНТЫ
+        const STORAGE_KEY = 'ai_chat_premium_data';
+        const HF_TOKEN = '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';
+        const PREMIUM_COST = 500;
+        const FREE_DAILY_LIMIT = 3;
+        const COOLDOWN_HOURS = 6;
+        const COINS_PER_HOUR = 10;
+
+        // ГЛОБАЛЬНОЕ СОСТОЯНИЕ
+        let appData = {
+            requestsToday: 0,
+            lastRequestDate: new Date().toDateString(),
+            coins: 150,
+            isPremium: false,
+            blockedUntil: null,
+            lastCoinTime: Date.now(),
+            messages: [],
+            uploadedFile: null,
+            conversationHistory: []
+        };
+
+        // УЛУЧШЕННОЕ СОХРАНЕНИЕ ДАННЫХ
+        function saveData() {
+            try {
+                const dataToSave = {
+                    ...appData,
+                    lastCoinTime: appData.lastCoinTime,
+                    blockedUntil: appData.blockedUntil
+                };
+                
+                const jsonData = JSON.stringify(dataToSave);
+                localStorage.setItem(STORAGE_KEY, jsonData);
+                console.log('💾 Данные сохранены');
+            } catch (e) {
+                console.error('❌ Ошибка сохранения:', e);
+            }
+        }
+
+        // УЛУЧШЕННАЯ ЗАГРУЗКА ДАННЫХ
+        function loadData() {
+            try {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    
+                    // Проверяем смену дня
+                    const today = new Date().toDateString();
+                    if (parsed.lastRequestDate !== today) {
+                        parsed.requestsToday = 0;
+                        parsed.lastRequestDate = today;
+                        parsed.blockedUntil = null;
+                    }
+                    
+                    // Восстанавливаем числовые значения
+                    parsed.lastCoinTime = Number(parsed.lastCoinTime) || Date.now();
+                    parsed.blockedUntil = parsed.blockedUntil ? Number(parsed.blockedUntil) : null;
+                    
+                    appData = { ...appData, ...parsed };
+                    console.log('📂 Данные загружены:', appData);
+                }
+            } catch (e) {
+                console.error('❌ Ошибка загрузки:', e);
+            }
+        }
+
+        // РАБОЧИЙ HUGGING FACE API ЗАПРОС - ИСПРАВЛЕННЫЙ
+        async function queryHuggingFaceAPI(message) {
+            try {
+                console.log('🔄 Отправка запроса к Hugging Face API...');
+                
+                // Используем простую текстовую генерацию с популярной моделью
+                const response = await fetch(
+                    'https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.2',
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${HF_TOKEN}`,
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            inputs: `<|system|>
+Ты полезный AI ассистент. Отвечай на вопросы подробно и понятно на русском языке.
+</s>
+<|user|>
+${message}
+</s>
+<|assistant|>`,
+                            parameters: {
+                                max_new_tokens: 512,
+                                temperature: 0.7,
+                                top_p: 0.9,
+                                repetition_penalty: 1.1,
+                                do_sample: true,
+                                return_full_text: false
+                            },
+                            options: {
+                                wait_for_model: false
+                            }
+                        })
+                    }
+                );
+
+                console.log('📡 Статус ответа:', response.status);
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('❌ Ошибка API:', response.status, errorText);
+                    
+                    if (response.status === 503) {
+                        // Модель загружается, пробуем другую
+                        return await tryAlternativeModel(message);
+                    }
+                    throw new Error(`HTTP ${response.status}: ${errorText}`);
+                }
+
+                const data = await response.json();
+                console.log('📦 Полученные данные:', data);
+
+                // Обрабатываем разные форматы ответов
+                if (data && data[0] && data[0].generated_text) {
+                    let text = data[0].generated_text.trim();
+                    console.log('✅ Успешный ответ от Mistral:', text);
+                    
+                    // Очищаем ответ от лишних тегов
+                    text = text.replace(/<\|.*?\|>/g, '').trim();
+                    return text;
+                } else {
+                    console.warn('⚠️ Неожиданный формат ответа:', data);
+                    return await tryAlternativeModel(message);
+                }
+                
+            } catch (error) {
+                console.error('❌ Ошибка сети:', error);
+                return await tryAlternativeModel(message);
+            }
+        }
+
+        // АЛЬТЕРНАТИВНАЯ МОДЕЛЬ - ИСПРАВЛЕННАЯ
+        async function tryAlternativeModel(message) {
+            try {
+                console.log('🔄 Попытка использовать альтернативную модель...');
+                
+                const response = await fetch(
+                    'https://api-inference.huggingface.co/models/google/gemma-7b',
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${HF_TOKEN}`,
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            inputs: `Ты полезный AI ассистент. Ответь на следующий вопрос подробно и понятно на русском языке:
+
+Вопрос: ${message}
+
+Ответ:`,
+                            parameters: {
+                                max_new_tokens: 500,
+                                temperature: 0.7,
+                                top_p: 0.9,
+                                do_sample: true,
+                                return_full_text: false
+                            }
+                        })
+                    }
+                );
+
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data && data[0] && data[0].generated_text) {
+                        let text = data[0].generated_text.trim();
+                        console.log('✅ Успешный ответ от Gemma:', text);
+                        return text;
+                    }
+                }
+                
+                // Если Gemma не сработала, пробуем T5
+                return await tryT5Model(message);
+                
+            } catch (error) {
+                console.error('❌ Ошибка альтернативной модели:', error);
+                return await tryT5Model(message);
+            }
+        }
+
+        // ПРОСТАЯ МОДЕЛЬ T5
+        async function tryT5Model(message) {
+            try {
+                console.log('🔄 Попытка использовать T5 модель...');
+                
+                const response = await fetch(
+                    'https://api-inference.huggingface.co/models/google/flan-t5-base',
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${HF_TOKEN}`,
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            inputs: `ответь на вопрос: ${message}`,
+                            parameters: {
+                                max_new_tokens: 200,
+                                temperature: 0.7,
+                                do_sample: true
+                            }
+                        })
+                    }
+                );
+
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data && data[0] && data[0].generated_text) {
+                        console.log('✅ Успешный ответ от T5:', data[0].generated_text);
+                        return data[0].generated_text.trim();
+                    }
+                }
+            } catch (error) {
+                console.error('❌ T5 модель тоже не работает:', error);
+            }
+            
+            return null;
+        }
+
+        // ИНИЦИАЛИЗАЦИЯ ПРИ ЗАГРУЗКЕ
+        function init() {
+            loadData();
+            updateUI();
+            restoreChat();
+            checkLimitStatus();
+            startCoinGenerator();
+            setupEventListeners();
+            
+            console.log('🚀 AI Chat инициализирован');
+            console.log('🔑 Токен Hugging Face:', HF_TOKEN ? '✅ Настроен' : '❌ Отсутствует');
+        }
+
+        // ВОССТАНОВЛЕНИЕ ЧАТА
+        function restoreChat() {
+            const container = document.getElementById('messagesContainer');
+            if (appData.messages.length > 0) {
+                const welcome = document.querySelector('.welcome-screen');
+                if (welcome) welcome.remove();
+                
+                container.innerHTML = '';
+                appData.messages.forEach(msg => {
+                    addMessageToUI(msg.sender, msg.text, msg.image);
+                });
+                scrollToBottom();
+            }
+        }
+
+        // ГЕНЕРАТОР МОНЕТ
+        function startCoinGenerator() {
+            setInterval(() => {
+                const now = Date.now();
+                const hoursPassed = (now - appData.lastCoinTime) / (1000 * 60 * 60);
+                
+                if (hoursPassed >= 1) {
+                    appData.coins += COINS_PER_HOUR;
+                    appData.lastCoinTime = now;
+                    updateUI();
+                    saveData();
+                }
+            }, 60000);
+        }
+
+        // ПРОВЕРКА ЛИМИТОВ
+        function checkLimitStatus() {
+            const today = new Date().toDateString();
+            
+            if (appData.lastRequestDate !== today) {
+                appData.requestsToday = 0;
+                appData.lastRequestDate = today;
+                appData.blockedUntil = null;
+                saveData();
+            }
+
+            if (appData.blockedUntil && Date.now() >= appData.blockedUntil) {
+                appData.blockedUntil = null;
+                hideLimitBanner();
+                saveData();
+            }
+
+            if (appData.blockedUntil && Date.now() < appData.blockedUntil) {
+                showLimitBanner();
+            } else {
+                hideLimitBanner();
+            }
+        }
+
+        // ПОКАЗАТЬ ПЛАШКУ ЛИМИТА
+        function showLimitBanner() {
+            const banner = document.getElementById('limitBanner');
+            banner.style.display = 'flex';
+            updateCountdown();
+        }
+
+        function hideLimitBanner() {
+            document.getElementById('limitBanner').style.display = 'none';
+        }
+
+        // ОБНОВЛЕНИЕ ТАЙМЕРА
+        function updateCountdown() {
+            if (!appData.blockedUntil) return;
+
+            const now = Date.now();
+            const remaining = appData.blockedUntil - now;
+
+            if (remaining <= 0) {
+                checkLimitStatus();
+                return;
+            }
+
+            const hours = Math.floor(remaining / (1000 * 60 * 60));
+            const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
+            
+            let timeString = '';
+            if (hours > 0) {
+                timeString = `${hours}ч ${minutes}м`;
+            } else {
+                timeString = `${minutes} минут`;
+            }
+            
+            document.getElementById('resetTime').textContent = timeString;
+        }
+
+        // ОБНОВЛЕНИЕ ИНТЕРФЕЙСА
+        function updateUI() {
+            if (appData.isPremium) {
+                document.getElementById('requestsToday').textContent = '∞';
+                document.getElementById('userStatus').textContent = 'Premium ⭐';
+                document.getElementById('premiumBadge').style.display = 'inline-block';
+            } else {
+                document.getElementById('requestsToday').textContent = `${appData.requestsToday}/${FREE_DAILY_LIMIT}`;
+                document.getElementById('userStatus').textContent = 'Бесплатно';
+                document.getElementById('premiumBadge').style.display = 'none';
+            }
+
+            document.getElementById('coins').textContent = `${appData.coins} 💰`;
+        }
+
+        // ПРОВЕРКА ДОСТУПНОСТИ ЗАПРОСА
+        function checkLimit() {
+            if (appData.isPremium) return true;
+
+            checkLimitStatus();
+
+            if (appData.blockedUntil && Date.now() < appData.blockedUntil) {
+                showLimitBanner();
+                return false;
+            }
+
+            if (appData.requestsToday >= FREE_DAILY_LIMIT) {
+                appData.blockedUntil = Date.now() + (COOLDOWN_HOURS * 60 * 60 * 1000);
+                showLimitBanner();
+                saveData();
+                return false;
+            }
+
+            return true;
+        }
+
+        // ЗАГРУЗКА ФАЙЛОВ
+        function handleFileUpload(event) {
+            if (!appData.isPremium) {
+                alert('📎 Загрузка файлов доступна только в Premium!');
+                event.target.value = '';
+                return;
+            }
+
+            const file = event.target.files[0];
+            if (!file) return;
+
+            if (file.size > 5 * 1024 * 1024) {
+                alert('❌ Файл слишком большой! Максимальный размер: 5MB');
+                event.target.value = '';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                appData.uploadedFile = {
+                    name: file.name,
+                    type: file.type,
+                    data: e.target.result
+                };
+                alert(`✅ Файл "${file.name}" загружен! Отправьте сообщение.`);
+            };
+            reader.readAsDataURL(file);
+            event.target.value = '';
+        }
+
+        // ОТПРАВКА СООБЩЕНИЯ - ИСПРАВЛЕННАЯ
+        async function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+
+            if (!message) return;
+            if (!checkLimit()) return;
+
+            const welcome = document.querySelector('.welcome-screen');
+            if (welcome) welcome.remove();
+
+            const imageData = appData.uploadedFile ? appData.uploadedFile.data : null;
+            addMessage('user', message, imageData);
+            appData.uploadedFile = null;
+            
+            input.value = '';
+            input.style.height = 'auto';
+
+            showTypingIndicator();
+
+            document.getElementById('sendBtn').disabled = true;
+
+            try {
+                console.log('🎯 Отправка сообщения в API:', message);
+                
+                // Пытаемся получить ответ от Hugging Face API
+                let response = await queryHuggingFaceAPI(message);
+                
+                hideTypingIndicator();
+
+                if (response && response.length > 10) { // Проверяем что ответ не пустой
+                    console.log('✅ Получен реальный ответ от API');
+                    addMessage('ai', response);
+                    
+                    if (!appData.isPremium) {
+                        appData.requestsToday++;
+                        updateUI();
+                        saveData();
+                    }
+                } else {
+                    console.log('⚠️ API вернул пустой ответ, используем fallback');
+                    // Если API не ответил нормально, показываем ошибку
+                    addMessage('ai', '🤔 Я подумал над вашим вопросом, но сейчас испытываю некоторые технические трудности. Пожалуйста, попробуйте задать вопрос немного по-другому или повторите попытку через несколько минут.');
+                    
+                    if (!appData.isPremium) {
+                        appData.requestsToday++;
+                        updateUI();
+                        saveData();
+                    }
+                }
+
+            } catch (error) {
+                hideTypingIndicator();
+                console.error('❌ Ошибка при отправке сообщения:', error);
+                
+                addMessage('ai', '❌ Произошла ошибка при подключении к AI. Пожалуйста, проверьте подключение к интернету и попробуйте еще раз.');
+                
+                if (!appData.isPremium) {
+                    appData.requestsToday++;
+                    updateUI();
+                    saveData();
+                }
+            }
+
+            document.getElementById('sendBtn').disabled = false;
+        }
+
+        // ИНДИКАТОР НАБОРА
+        function showTypingIndicator() {
+            const container = document.getElementById('messagesContainer');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message ai';
+            typingDiv.id = 'typingIndicator';
+            typingDiv.innerHTML = `
+                <div class="avatar ai">🤖</div>
+                <div class="typing-indicator" style="display: block;">
+                    <span></span><span></span><span></span>
+                </div>
+            `;
+            container.appendChild(typingIndicator);
+            scrollToBottom();
+        }
+
+        function hideTypingIndicator() {
+            const typingDiv = document.getElementById('typingIndicator');
+            if (typingDiv) {
+                typingDiv.remove();
+            }
+        }
+
+        // ДОБАВЛЕНИЕ СООБЩЕНИЙ
+        function addMessage(sender, text, image = null) {
+            const message = { sender, text, image, timestamp: Date.now() };
+            appData.messages.push(message);
+            addMessageToUI(sender, text, image);
+            saveData();
+        }
+
+        function addMessageToUI(sender, text, image = null) {
+            const container = document.getElementById('messagesContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            
+            let imageHtml = '';
+            if (image) {
+                imageHtml = `<img src="${image}" alt="Uploaded image" class="message-image">`;
+            }
+
+            messageDiv.innerHTML = `
+                <div class="avatar ${sender}">${sender === 'user' ? '👤' : '🤖'}</div>
+                <div class="message-content">
+                    ${text.replace(/\n/g, '<br>')}
+                    ${imageHtml}
+                </div>
+            `;
+
+            container.appendChild(messageDiv);
+            scrollToBottom();
+        }
+
+        // ПРОКРУТКА ВНИЗ
+        function scrollToBottom() {
+            const container = document.getElementById('messagesContainer');
+            setTimeout(() => {
+                container.scrollTop = container.scrollHeight;
+            }, 100);
+        }
+
+        // НАСТРОЙКА СОБЫТИЙ
+        function setupEventListeners() {
+            const textarea = document.getElementById('messageInput');
+            
+            textarea.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = Math.min(this.scrollHeight, 150) + 'px';
+            });
+            
+            textarea.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+            
+            setInterval(updateCountdown, 1000);
+            setInterval(checkLimitStatus, 30000);
+        }
+
+        // PREMIUM ФУНКЦИИ
+        function openPremiumModal() {
+            document.getElementById('premiumModal').style.display = 'flex';
+        }
+
+        function closePremiumModal() {
+            document.getElementById('premiumModal').style.display = 'none';
+        }
+
+        function buyPremium() {
+            if (appData.coins >= PREMIUM_COST) {
+                appData.coins -= PREMIUM_COST;
+                appData.isPremium = true;
+                appData.blockedUntil = null;
+                updateUI();
+                hideLimitBanner();
+                saveData();
+                closePremiumModal();
+                alert('🎉 Поздравляем! Теперь у вас Premium доступ!\n\n✅ Безлимитные запросы\n✅ Загрузка файлов\n✅ Приоритетная обработка');
+            } else {
+                alert(`❌ Недостаточно монет! Нужно ${PREMIUM_COST} 💰, у вас ${appData.coins} 💰`);
+            }
+        }
+
+        function clearChat() {
+            if (confirm('Очистить историю чата? Текущий диалог будет удален.')) {
+                appData.messages = [];
+                document.getElementById('messagesContainer').innerHTML = `
+                    <div class="welcome-screen">
+                        <div class="welcome-title">Новый чат</div>
+                        <div class="welcome-subtitle">
+                            Начните новый разговор. Что вас интересует?
+                        </div>
+                    </div>
+                `;
+                saveData();
+            }
+        }
+
+        // ЗАПУСК ПРИ ЗАГРУЗКЕ СТРАНИЦЫ
+        window.addEventListener('load', init);
+        
+        // СОХРАНЕНИЕ ПРИ ЗАКРЫТИИ СТРАНИЦЫ
+        window.addEventListener('beforeunload', saveData);
+    </script>
+</body>
+</html>

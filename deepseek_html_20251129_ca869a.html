@@ -1,0 +1,1427 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OinkAIGram - Сервис для создания ИИ-ботов</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/emojionearea/3.4.2/emojionearea.min.css">
+    <style>
+        /* Основные стили */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: #fff;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+            max-width: 1400px;
+            margin: 0 auto;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Сайдбар */
+        .sidebar {
+            width: 280px;
+            background: rgba(25, 25, 35, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ff6b6b;
+            margin-right: 10px;
+        }
+
+        .logo-icon {
+            color: #ff6b6b;
+            margin-right: 10px;
+        }
+
+        .sidebar h2 {
+            font-size: 1.4rem;
+            margin: 0;
+        }
+
+        .sidebar-menu {
+            margin-top: 20px;
+            flex-grow: 1;
+        }
+
+        .sidebar-menu h3 {
+            font-size: 1rem;
+            margin-bottom: 15px;
+            color: #aaa;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .sidebar-menu ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar-menu li {
+            padding: 12px 15px;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: background-color 0.3s ease;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .sidebar-menu li:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-menu li.active {
+            background-color: rgba(255, 107, 107, 0.2);
+            border-left: 3px solid #ff6b6b;
+        }
+
+        .bot-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .bot-actions button {
+            background: none;
+            border: none;
+            color: #aaa;
+            cursor: pointer;
+            font-size: 0.8rem;
+            padding: 3px;
+        }
+
+        .bot-actions button:hover {
+            color: #fff;
+        }
+
+        #create-bot-button {
+            background: linear-gradient(to right, #ff6b6b, #ff8e53);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 12px 20px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        #create-bot-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+        }
+
+        /* Основной контент */
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+        }
+
+        .chat-header {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .bot-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(to right, #ff6b6b, #ff8e53);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 1.5rem;
+        }
+
+        .bot-info h2 {
+            margin: 0;
+            font-size: 1.4rem;
+        }
+
+        .bot-info p {
+            margin: 5px 0 0;
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        #chat-area {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .message {
+            padding: 12px 18px;
+            border-radius: 18px;
+            max-width: 70%;
+            word-break: break-word;
+            position: relative;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.user {
+            background: linear-gradient(to right, #4776E6, #8E54E9);
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
+        }
+
+        .message.bot {
+            background: rgba(255, 255, 255, 0.1);
+            align-self: flex-start;
+            border-bottom-left-radius: 5px;
+        }
+
+        .message img, .message video {
+            max-width: 100%;
+            border-radius: 10px;
+            margin-top: 8px;
+        }
+
+        .message-time {
+            font-size: 0.7rem;
+            opacity: 0.7;
+            margin-top: 5px;
+            text-align: right;
+        }
+
+        .input-area {
+            display: flex;
+            gap: 10px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+        }
+
+        #message-input {
+            flex-grow: 1;
+            padding: 12px 15px;
+            border: none;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 1rem;
+            resize: none;
+            height: 50px;
+        }
+
+        #message-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .file-input-button, #send-button {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+        }
+
+        .file-input-button:hover, #send-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+
+        #send-button {
+            background: linear-gradient(to right, #4776E6, #8E54E9);
+        }
+
+        /* Модальные окна */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(30, 30, 40, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            color: #fff;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        .close-button {
+            background: none;
+            border: none;
+            color: #aaa;
+            font-size: 24px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close-button:hover {
+            color: #fff;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 1rem;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .checkbox-group input {
+            width: auto;
+            margin-top: 5px;
+        }
+
+        .checkbox-group label {
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .checkbox-group a {
+            color: #ff6b6b;
+            text-decoration: none;
+        }
+
+        .checkbox-group a:hover {
+            text-decoration: underline;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(to right, #ff6b6b, #ff8e53);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Настройки бота */
+        .bot-settings {
+            margin-top: 20px;
+        }
+
+        .bot-settings h4 {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            color: #ff6b6b;
+        }
+
+        .command-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .command-actions button {
+            background: none;
+            border: none;
+            color: #aaa;
+            cursor: pointer;
+            margin-left: 5px;
+        }
+
+        .command-actions button:hover {
+            color: #fff;
+        }
+
+        .command-form {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .command-form input {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                max-height: 40vh;
+            }
+
+            .main-content {
+                min-height: 60vh;
+            }
+
+            .message {
+                max-width: 85%;
+            }
+
+            .modal-content {
+                width: 95%;
+                padding: 20px;
+            }
+        }
+
+        /* Стили для стикеров */
+        .sticker-container {
+            display: flex;
+            overflow-x: auto;
+            padding: 10px;
+            margin-top: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            gap: 10px;
+        }
+
+        .sticker {
+            width: 80px;
+            height: 80px;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .sticker:hover {
+            transform: scale(1.1);
+        }
+
+        /* Стили для мини-приложений */
+        .mini-apps {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .mini-app-button {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 8px 15px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .mini-app-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Уведомления */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            background: rgba(30, 30, 40, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            z-index: 1001;
+            transform: translateX(150%);
+            transition: transform 0.3s ease;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            border-left: 4px solid #4CAF50;
+        }
+
+        .notification.error {
+            border-left: 4px solid #f44336;
+        }
+
+        /* Загрузка */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Сайдбар -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <h2>OinkAIGram</h2>
+            </div>
+            
+            <div class="sidebar-menu">
+                <h3>Мои боты</h3>
+                <ul id="bot-list">
+                    <!-- Боты будут добавляться сюда динамически -->
+                </ul>
+            </div>
+            
+            <button id="create-bot-button">
+                <i class="fas fa-plus"></i> Создать ИИ бота
+            </button>
+        </aside>
+
+        <!-- Основной контент -->
+        <main class="main-content">
+            <div class="chat-header">
+                <div class="bot-avatar">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="bot-info">
+                    <h2>Выберите бота для общения</h2>
+                    <p>Создайте или выберите бота из списка слева</p>
+                </div>
+            </div>
+
+            <!-- Мини-приложения -->
+            <div class="mini-apps">
+                <button class="mini-app-button" id="weather-app">
+                    <i class="fas fa-cloud-sun"></i> Погода
+                </button>
+                <button class="mini-app-button" id="calculator-app">
+                    <i class="fas fa-calculator"></i> Калькулятор
+                </button>
+                <button class="mini-app-button" id="news-app">
+                    <i class="fas fa-newspaper"></i> Новости
+                </button>
+                <button class="mini-app-button" id="translator-app">
+                    <i class="fas fa-language"></i> Переводчик
+                </button>
+            </div>
+
+            <!-- Область чата -->
+            <div id="chat-area">
+                <div class="message bot">
+                    Привет! Я OinkAIGram - сервис для создания и управления ИИ-ботами. Выберите бота из списка слева или создайте нового, чтобы начать общение.
+                    <div class="message-time">Только что</div>
+                </div>
+            </div>
+
+            <!-- Контейнер для стикеров -->
+            <div class="sticker-container" id="sticker-container" style="display: none;">
+                <!-- Стикеры будут добавляться сюда динамически -->
+            </div>
+
+            <!-- Область ввода -->
+            <div class="input-area">
+                <label for="file-input" class="file-input-button">
+                    <i class="fas fa-paperclip"></i>
+                </label>
+                <input type="file" id="file-input" accept="image/*, video/*" style="display:none;">
+                
+                <textarea id="message-input" placeholder="Введите сообщение..."></textarea>
+                
+                <button id="sticker-button" class="file-input-button">
+                    <i class="fas fa-smile"></i>
+                </button>
+                
+                <button id="send-button">
+                    <i class="fas fa-arrow-up"></i>
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <!-- Модальное окно для создания бота -->
+    <div id="bot-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Создать бота</h2>
+                <button class="close-button">&times;</button>
+            </div>
+            
+            <div class="form-group">
+                <label for="bot-name">Имя бота</label>
+                <input type="text" id="bot-name" placeholder="Введите имя бота">
+            </div>
+            
+            <div class="form-group">
+                <label for="bot-description">Описание бота</label>
+                <textarea id="bot-description" placeholder="Опишите назначение бота"></textarea>
+            </div>
+            
+            <div class="checkbox-group">
+                <input type="checkbox" id="agree-to-terms" required>
+                <label for="agree-to-terms">
+                    Я соглашаюсь на использование сервиса "OinkAIGram" и, создавая бота, подтверждаю, что ознакомился и согласен с 
+                    <a href="#" target="_blank">Условиями использования</a> и 
+                    <a href="#" target="_blank">Политикой конфиденциальности</a>.
+                </label>
+            </div>
+            
+            <div class="modal-actions">
+                <button class="btn btn-secondary" id="cancel-bot-creation">Отмена</button>
+                <button class="btn btn-primary" id="create-bot-confirm">Создать бота</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно для настроек бота -->
+    <div id="bot-settings-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Настройки бота</h2>
+                <button class="close-button">&times;</button>
+            </div>
+            
+            <div class="bot-settings">
+                <div class="form-group">
+                    <label for="bot-name-setting">Имя бота</label>
+                    <input type="text" id="bot-name-setting" placeholder="Имя бота">
+                </div>
+                
+                <div class="form-group">
+                    <label for="bot-avatar">URL аватара</label>
+                    <input type="text" id="bot-avatar" placeholder="Ссылка на аватар бота">
+                </div>
+                
+                <div class="form-group">
+                    <label for="welcome-message">Приветственное сообщение</label>
+                    <textarea id="welcome-message" placeholder="Приветственное сообщение"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="bot-description-setting">Описание бота</label>
+                    <textarea id="bot-description-setting" placeholder="Описание бота"></textarea>
+                </div>
+                
+                <h4>Команды бота</h4>
+                <div id="command-list">
+                    <!-- Команды будут добавляться сюда динамически -->
+                </div>
+                
+                <div class="command-form">
+                    <input type="text" id="command-name-input" placeholder="Название команды">
+                    <input type="text" id="command-response-input" placeholder="Ответ бота">
+                    <button class="btn btn-primary" id="add-command-button">Добавить</button>
+                </div>
+            </div>
+            
+            <div class="modal-actions">
+                <button class="btn btn-secondary" id="cancel-bot-settings">Отмена</button>
+                <button class="btn btn-primary" id="save-bot-settings">Сохранить</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Уведомления -->
+    <div class="notification" id="notification"></div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/emojionearea/3.4.2/emojionearea.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Элементы DOM
+            const chatArea = document.getElementById('chat-area');
+            const messageInput = document.getElementById('message-input');
+            const sendButton = document.getElementById('send-button');
+            const fileInput = document.getElementById('file-input');
+            const stickerButton = document.getElementById('sticker-button');
+            const stickerContainer = document.getElementById('sticker-container');
+            const createBotButton = document.getElementById('create-bot-button');
+            const botModal = document.getElementById('bot-modal');
+            const botSettingsModal = document.getElementById('bot-settings-modal');
+            const closeButtons = document.querySelectorAll('.close-button');
+            const botList = document.getElementById('bot-list');
+            const commandList = document.getElementById('command-list');
+            const notification = document.getElementById('notification');
+            
+            // Переменные состояния
+            let currentBot = null;
+            let bots = [];
+            let stickers = [
+                '😀', '😂', '😍', '🤔', '😎', '🥳', '😢', '😡', 
+                '❤️', '👍', '👎', '🔥', '⭐', '🎉', '💯', '🤖'
+            ];
+
+            // Загрузка данных из localStorage
+            function loadBotsFromStorage() {
+                const storedBots = localStorage.getItem('oinkAIGramBots');
+                if (storedBots) {
+                    bots = JSON.parse(storedBots);
+                    renderBotList();
+                }
+            }
+
+            // Сохранение данных в localStorage
+            function saveBotsToStorage() {
+                localStorage.setItem('oinkAIGramBots', JSON.stringify(bots));
+            }
+
+            // Показать уведомление
+            function showNotification(message, type = 'success') {
+                notification.textContent = message;
+                notification.className = `notification ${type}`;
+                notification.classList.add('show');
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 3000);
+            }
+
+            // Отображение списка ботов
+            function renderBotList() {
+                botList.innerHTML = '';
+                
+                if (bots.length === 0) {
+                    const emptyMessage = document.createElement('li');
+                    emptyMessage.textContent = 'У вас пока нет ботов';
+                    emptyMessage.style.padding = '15px';
+                    emptyMessage.style.textAlign = 'center';
+                    emptyMessage.style.color = '#aaa';
+                    botList.appendChild(emptyMessage);
+                    return;
+                }
+                
+                bots.forEach((bot, index) => {
+                    const botItem = document.createElement('li');
+                    botItem.innerHTML = `
+                        <span>${bot.name}</span>
+                        <div class="bot-actions">
+                            <button class="edit-bot" data-index="${index}"><i class="fas fa-cog"></i></button>
+                            <button class="delete-bot" data-index="${index}"><i class="fas fa-trash"></i></button>
+                        </div>
+                    `;
+                    
+                    if (currentBot && currentBot.id === bot.id) {
+                        botItem.classList.add('active');
+                    }
+                    
+                    botItem.addEventListener('click', (e) => {
+                        if (!e.target.classList.contains('edit-bot') && !e.target.classList.contains('delete-bot')) {
+                            selectBot(bot);
+                        }
+                    });
+                    
+                    const editButton = botItem.querySelector('.edit-bot');
+                    editButton.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        openBotSettings(bot);
+                    });
+                    
+                    const deleteButton = botItem.querySelector('.delete-bot');
+                    deleteButton.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        deleteBot(bot.id);
+                    });
+                    
+                    botList.appendChild(botItem);
+                });
+            }
+
+            // Выбор бота
+            function selectBot(bot) {
+                currentBot = bot;
+                renderBotList();
+                
+                // Обновляем заголовок чата
+                const botAvatar = document.querySelector('.bot-avatar');
+                const botName = document.querySelector('.bot-info h2');
+                const botDescription = document.querySelector('.bot-info p');
+                
+                botName.textContent = bot.name;
+                botDescription.textContent = bot.description || 'ИИ-бот для общения';
+                
+                // Очищаем чат
+                chatArea.innerHTML = '';
+                
+                // Добавляем приветственное сообщение
+                if (bot.welcomeMessage) {
+                    displayMessage(bot.welcomeMessage, 'bot');
+                } else {
+                    displayMessage(`Привет! Я ${bot.name}. Чем могу помочь?`, 'bot');
+                }
+                
+                showNotification(`Бот "${bot.name}" выбран`);
+            }
+
+            // Создание нового бота
+            function createBot(name, description) {
+                const newBot = {
+                    id: Date.now(),
+                    name: name,
+                    description: description,
+                    avatar: '',
+                    welcomeMessage: `Привет! Я ${name}. Чем могу помочь?`,
+                    commands: [
+                        { name: 'привет', response: `Привет! Я ${name}. Рад общению с тобой!` },
+                        { name: 'помощь', response: 'Я могу ответить на твои вопросы. Просто напиши мне что-нибудь!' }
+                    ]
+                };
+                
+                bots.push(newBot);
+                saveBotsToStorage();
+                renderBotList();
+                selectBot(newBot);
+                showNotification(`Бот "${name}" создан`);
+            }
+
+            // Удаление бота
+            function deleteBot(botId) {
+                if (confirm('Вы уверены, что хотите удалить этого бота?')) {
+                    bots = bots.filter(bot => bot.id !== botId);
+                    
+                    if (currentBot && currentBot.id === botId) {
+                        currentBot = null;
+                        
+                        // Сбрасываем заголовок чата
+                        const botName = document.querySelector('.bot-info h2');
+                        const botDescription = document.querySelector('.bot-info p');
+                        
+                        botName.textContent = 'Выберите бота для общения';
+                        botDescription.textContent = 'Создайте или выберите бота из списка слева';
+                        
+                        // Очищаем чат
+                        chatArea.innerHTML = '';
+                        displayMessage('Привет! Я OinkAIGram - сервис для создания и управления ИИ-ботами. Выберите бота из списка слева или создайте нового, чтобы начать общение.', 'bot');
+                    }
+                    
+                    saveBotsToStorage();
+                    renderBotList();
+                    showNotification('Бот удален');
+                }
+            }
+
+            // Открытие настроек бота
+            function openBotSettings(bot) {
+                currentBot = bot;
+                
+                // Заполняем поля формы
+                document.getElementById('bot-name-setting').value = bot.name;
+                document.getElementById('bot-avatar').value = bot.avatar || '';
+                document.getElementById('welcome-message').value = bot.welcomeMessage || '';
+                document.getElementById('bot-description-setting').value = bot.description || '';
+                
+                // Отображаем команды
+                renderCommands(bot.commands);
+                
+                // Показываем модальное окно
+                botSettingsModal.style.display = 'block';
+            }
+
+            // Отображение команд бота
+            function renderCommands(commands) {
+                commandList.innerHTML = '';
+                
+                if (commands.length === 0) {
+                    const emptyMessage = document.createElement('div');
+                    emptyMessage.textContent = 'У этого бота пока нет команд';
+                    emptyMessage.style.padding = '10px';
+                    emptyMessage.style.textAlign = 'center';
+                    emptyMessage.style.color = '#aaa';
+                    commandList.appendChild(emptyMessage);
+                    return;
+                }
+                
+                commands.forEach((command, index) => {
+                    const commandItem = document.createElement('div');
+                    commandItem.className = 'command-item';
+                    commandItem.innerHTML = `
+                        <div>
+                            <strong>/${command.name}</strong> - ${command.response}
+                        </div>
+                        <div class="command-actions">
+                            <button class="edit-command" data-index="${index}"><i class="fas fa-edit"></i></button>
+                            <button class="delete-command" data-index="${index}"><i class="fas fa-trash"></i></button>
+                        </div>
+                    `;
+                    
+                    const deleteButton = commandItem.querySelector('.delete-command');
+                    deleteButton.addEventListener('click', () => {
+                        deleteCommand(index);
+                    });
+                    
+                    const editButton = commandItem.querySelector('.edit-command');
+                    editButton.addEventListener('click', () => {
+                        editCommand(index);
+                    });
+                    
+                    commandList.appendChild(commandItem);
+                });
+            }
+
+            // Добавление команды
+            function addCommand() {
+                const nameInput = document.getElementById('command-name-input');
+                const responseInput = document.getElementById('command-response-input');
+                
+                const name = nameInput.value.trim();
+                const response = responseInput.value.trim();
+                
+                if (!name || !response) {
+                    showNotification('Заполните все поля команды', 'error');
+                    return;
+                }
+                
+                if (currentBot) {
+                    currentBot.commands.push({ name, response });
+                    saveBotsToStorage();
+                    renderCommands(currentBot.commands);
+                    
+                    nameInput.value = '';
+                    responseInput.value = '';
+                    
+                    showNotification('Команда добавлена');
+                }
+            }
+
+            // Удаление команды
+            function deleteCommand(index) {
+                if (currentBot && confirm('Удалить эту команду?')) {
+                    currentBot.commands.splice(index, 1);
+                    saveBotsToStorage();
+                    renderCommands(currentBot.commands);
+                    showNotification('Команда удалена');
+                }
+            }
+
+            // Редактирование команды
+            function editCommand(index) {
+                if (currentBot) {
+                    const command = currentBot.commands[index];
+                    const newName = prompt('Введите новое название команды:', command.name);
+                    const newResponse = prompt('Введите новый ответ бота:', command.response);
+                    
+                    if (newName && newResponse) {
+                        currentBot.commands[index] = { name: newName, response: newResponse };
+                        saveBotsToStorage();
+                        renderCommands(currentBot.commands);
+                        showNotification('Команда обновлена');
+                    }
+                }
+            }
+
+            // Отображение сообщения в чате
+            function displayMessage(content, sender, type = 'text') {
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add('message', sender);
+                
+                if (type === 'text') {
+                    messageDiv.textContent = content;
+                } else if (type === 'image') {
+                    const img = document.createElement('img');
+                    img.src = content;
+                    messageDiv.appendChild(img);
+                } else if (type === 'video') {
+                    const video = document.createElement('video');
+                    video.controls = true;
+                    video.width = 320;
+                    const source = document.createElement('source');
+                    source.src = content;
+                    source.type = 'video/mp4';
+                    video.appendChild(source);
+                    messageDiv.appendChild(video);
+                } else if (type === 'sticker') {
+                    messageDiv.textContent = content;
+                    messageDiv.style.fontSize = '2rem';
+                    messageDiv.style.textAlign = 'center';
+                    messageDiv.style.padding = '15px';
+                }
+                
+                const timeDiv = document.createElement('div');
+                timeDiv.className = 'message-time';
+                timeDiv.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                
+                messageDiv.appendChild(timeDiv);
+                chatArea.appendChild(messageDiv);
+                chatArea.scrollTop = chatArea.scrollHeight;
+            }
+
+            // Получение ответа от бота
+            function getBotResponse(message) {
+                if (!currentBot) return "Пожалуйста, выберите бота для общения.";
+                
+                // Проверяем команды
+                for (const command of currentBot.commands) {
+                    if (message.toLowerCase().includes(command.name.toLowerCase())) {
+                        return command.response;
+                    }
+                }
+                
+                // Простые ответы по ключевым словам
+                if (message.toLowerCase().includes('как дела') || message.toLowerCase().includes('как ты')) {
+                    return "У меня всё отлично! Спасибо, что спросил(а). А у тебя как?";
+                }
+                
+                if (message.toLowerCase().includes('погода')) {
+                    return "К сожалению, я не могу проверить погоду прямо сейчас. Но надеюсь, что за окном солнечно!";
+                }
+                
+                if (message.toLowerCase().includes('время')) {
+                    return `Сейчас ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+                }
+                
+                if (message.toLowerCase().includes('спасибо')) {
+                    return "Пожалуйста! Всегда рад помочь!";
+                }
+                
+                // Случайный ответ, если не найдено совпадений
+                const randomResponses = [
+                    "Интересный вопрос! Дайте мне подумать...",
+                    "Пока я умею отвечать только на простые вопросы. Попробуйте спросить что-то другое!",
+                    "Извините, я еще учусь. Можете попробовать задать вопрос по-другому?",
+                    "Хм, хороший вопрос! К сожалению, я пока не знаю ответа на него.",
+                    "Я бы с радостью помог, но мои знания ограничены. Попробуйте использовать одну из моих команд!"
+                ];
+                
+                return randomResponses[Math.floor(Math.random() * randomResponses.length)];
+            }
+
+            // Инициализация стикеров
+            function initStickers() {
+                stickerContainer.innerHTML = '';
+                
+                stickers.forEach(sticker => {
+                    const stickerElement = document.createElement('div');
+                    stickerElement.className = 'sticker';
+                    stickerElement.textContent = sticker;
+                    stickerElement.style.fontSize = '2rem';
+                    stickerElement.style.display = 'flex';
+                    stickerElement.style.alignItems = 'center';
+                    stickerElement.style.justifyContent = 'center';
+                    stickerElement.style.cursor = 'pointer';
+                    
+                    stickerElement.addEventListener('click', () => {
+                        if (currentBot) {
+                            displayMessage(sticker, 'user', 'sticker');
+                            
+                            // Имитация ответа бота
+                            setTimeout(() => {
+                                const botSticker = stickers[Math.floor(Math.random() * stickers.length)];
+                                displayMessage(botSticker, 'bot', 'sticker');
+                            }, 1000);
+                        } else {
+                            showNotification('Сначала выберите бота', 'error');
+                        }
+                        
+                        stickerContainer.style.display = 'none';
+                    });
+                    
+                    stickerContainer.appendChild(stickerElement);
+                });
+            }
+
+            // Инициализация мини-приложений
+            function initMiniApps() {
+                // Погода
+                document.getElementById('weather-app').addEventListener('click', () => {
+                    if (currentBot) {
+                        displayMessage("Какая погода сегодня?", 'user');
+                        
+                        setTimeout(() => {
+                            const weatherConditions = ['солнечно', 'облачно', 'дождливо', 'снежно', 'ветрено'];
+                            const randomWeather = weatherConditions[Math.floor(Math.random() * weatherConditions.length)];
+                            const temperatures = ['+15°C', '+20°C', '+25°C', '+10°C', '+5°C'];
+                            const randomTemp = temperatures[Math.floor(Math.random() * temperatures.length)];
+                            
+                            displayMessage(`Сегодня ${randomWeather}, температура ${randomTemp}. Идеальный день для прогулки!`, 'bot');
+                        }, 1000);
+                    } else {
+                        showNotification('Сначала выберите бота', 'error');
+                    }
+                });
+                
+                // Калькулятор
+                document.getElementById('calculator-app').addEventListener('click', () => {
+                    if (currentBot) {
+                        const expression = prompt('Введите математическое выражение:');
+                        if (expression) {
+                            displayMessage(`Посчитать: ${expression}`, 'user');
+                            
+                            setTimeout(() => {
+                                try {
+                                    // Безопасная оценка выражения
+                                    const result = Function(`"use strict"; return (${expression})`)();
+                                    displayMessage(`Результат: ${expression} = ${result}`, 'bot');
+                                } catch (error) {
+                                    displayMessage('Извините, я не могу вычислить это выражение.', 'bot');
+                                }
+                            }, 1000);
+                        }
+                    } else {
+                        showNotification('Сначала выберите бота', 'error');
+                    }
+                });
+                
+                // Новости
+                document.getElementById('news-app').addEventListener('click', () => {
+                    if (currentBot) {
+                        displayMessage("Какие новости?", 'user');
+                        
+                        setTimeout(() => {
+                            const news = [
+                                "Сегодня состоялся запуск новой версии OinkAIGram!",
+                                "Исследователи ИИ достигли новых успехов в обработке естественного языка.",
+                                "В мире технологий ожидается прорыв в области квантовых вычислений.",
+                                "Разработчики представили новую модель ИИ, способную создавать креативный контент."
+                            ];
+                            const randomNews = news[Math.floor(Math.random() * news.length)];
+                            
+                            displayMessage(randomNews, 'bot');
+                        }, 1000);
+                    } else {
+                        showNotification('Сначала выберите бота', 'error');
+                    }
+                });
+                
+                // Переводчик
+                document.getElementById('translator-app').addEventListener('click', () => {
+                    if (currentBot) {
+                        const text = prompt('Введите текст для перевода:');
+                        if (text) {
+                            displayMessage(`Перевести: "${text}"`, 'user');
+                            
+                            setTimeout(() => {
+                                // Простая имитация перевода
+                                const translations = {
+                                    'привет': 'hello',
+                                    'как дела': 'how are you',
+                                    'спасибо': 'thank you',
+                                    'пока': 'goodbye'
+                                };
+                                
+                                const lowerText = text.toLowerCase();
+                                const translation = translations[lowerText] || `[перевод: ${text}]`;
+                                
+                                displayMessage(`Перевод: "${translation}"`, 'bot');
+                            }, 1000);
+                        }
+                    } else {
+                        showNotification('Сначала выберите бота', 'error');
+                    }
+                });
+            }
+
+            // Обработчики событий
+            sendButton.addEventListener('click', sendMessage);
+            
+            messageInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+            
+            function sendMessage() {
+                const messageText = messageInput.value.trim();
+                if (messageText !== '') {
+                    if (currentBot) {
+                        displayMessage(messageText, 'user');
+                        messageInput.value = '';
+                        
+                        // Имитация задержки ответа бота
+                        sendButton.innerHTML = '<div class="loading"></div>';
+                        sendButton.disabled = true;
+                        
+                        setTimeout(() => {
+                            const botResponse = getBotResponse(messageText);
+                            displayMessage(botResponse, 'bot');
+                            
+                            sendButton.innerHTML = '<i class="fas fa-arrow-up"></i>';
+                            sendButton.disabled = false;
+                        }, 1000 + Math.random() * 2000);
+                    } else {
+                        showNotification('Сначала выберите бота', 'error');
+                    }
+                }
+            }
+            
+            fileInput.addEventListener('change', () => {
+                const file = fileInput.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    
+                    reader.onload = function(e) {
+                        const fileURL = e.target.result;
+                        let messageType;
+                        
+                        if (file.type.startsWith('image/')) {
+                            messageType = 'image';
+                        } else if (file.type.startsWith('video/')) {
+                            messageType = 'video';
+                        } else {
+                            showNotification('Неподдерживаемый тип файла', 'error');
+                            return;
+                        }
+                        
+                        if (currentBot) {
+                            displayMessage(fileURL, 'user', messageType);
+                            
+                            // Имитация ответа бота
+                            setTimeout(() => {
+                                displayMessage('Интересный файл! Спасибо, что поделился(ась).', 'bot');
+                            }, 1000);
+                        } else {
+                            showNotification('Сначала выберите бота', 'error');
+                        }
+                        
+                        fileInput.value = '';
+                    };
+                    
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            stickerButton.addEventListener('click', () => {
+                if (stickerContainer.style.display === 'none' || stickerContainer.style.display === '') {
+                    stickerContainer.style.display = 'flex';
+                } else {
+                    stickerContainer.style.display = 'none';
+                }
+            });
+            
+            createBotButton.addEventListener('click', () => {
+                document.getElementById('bot-name').value = '';
+                document.getElementById('bot-description').value = '';
+                document.getElementById('agree-to-terms').checked = false;
+                botModal.style.display = 'block';
+            });
+            
+            document.getElementById('create-bot-confirm').addEventListener('click', () => {
+                const botName = document.getElementById('bot-name').value.trim();
+                const botDescription = document.getElementById('bot-description').value.trim();
+                const agreeToTerms = document.getElementById('agree-to-terms').checked;
+                
+                if (!botName) {
+                    showNotification('Введите имя бота', 'error');
+                    return;
+                }
+                
+                if (!agreeToTerms) {
+                    showNotification('Необходимо согласиться с условиями использования', 'error');
+                    return;
+                }
+                
+                createBot(botName, botDescription);
+                botModal.style.display = 'none';
+            });
+            
+            document.getElementById('cancel-bot-creation').addEventListener('click', () => {
+                botModal.style.display = 'none';
+            });
+            
+            document.getElementById('add-command-button').addEventListener('click', addCommand);
+            
+            document.getElementById('save-bot-settings').addEventListener('click', () => {
+                if (currentBot) {
+                    currentBot.name = document.getElementById('bot-name-setting').value;
+                    currentBot.avatar = document.getElementById('bot-avatar').value;
+                    currentBot.welcomeMessage = document.getElementById('welcome-message').value;
+                    currentBot.description = document.getElementById('bot-description-setting').value;
+                    
+                    saveBotsToStorage();
+                    renderBotList();
+                    
+                    // Обновляем заголовок чата
+                    const botName = document.querySelector('.bot-info h2');
+                    const botDescription = document.querySelector('.bot-info p');
+                    
+                    botName.textContent = currentBot.name;
+                    botDescription.textContent = currentBot.description || 'ИИ-бот для общения';
+                    
+                    botSettingsModal.style.display = 'none';
+                    showNotification('Настройки бота сохранены');
+                }
+            });
+            
+            document.getElementById('cancel-bot-settings').addEventListener('click', () => {
+                botSettingsModal.style.display = 'none';
+            });
+            
+            // Закрытие модальных окон
+            closeButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const modal = button.closest('.modal');
+                    modal.style.display = 'none';
+                });
+            });
+            
+            window.addEventListener('click', (event) => {
+                if (event.target.classList.contains('modal')) {
+                    event.target.style.display = 'none';
+                }
+            });
+            
+            // Инициализация
+            loadBotsFromStorage();
+            initStickers();
+            initMiniApps();
+            
+            // Инициализация emoji-панели
+            $(messageInput).emojioneArea({
+                pickerPosition: "top",
+                tones: false,
+                search: false,
+                shortnames: false,
+                hideSource: false,
+                container: ".input-area",
+                // Исправление для правильного позиционирования
+                events: {
+                    initialized: function(editor) {
+                        // Настройка для корректного отображения на мобильных устройствах
+                        if (window.innerWidth <= 768) {
+                            this.picker.find('.emojionearea-picker').css({
+                                'position': 'fixed',
+                                'bottom': '0',
+                                'left': '0',
+                                'width': '100%',
+                                'height': '40%'
+                            });
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
