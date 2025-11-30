@@ -1,7 +1,7 @@
-Median iOS
+Services Oink Platforms
 ============
 
-This is the native iOS code used by https://median.co/
+This is the native iOS code used by https://oinktech.blyz.ru/
 
 It allows the creation of full-featured native apps from existing mobile-optimized websites.
 
