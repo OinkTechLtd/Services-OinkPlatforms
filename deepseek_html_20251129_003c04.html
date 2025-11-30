@@ -1,0 +1,194 @@
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mediaelement/4.2.17/mediaelementplayer.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mediaelement/4.2.17/mediaelement-and-player.min.js"></script>
+
+<div class="video-player embed-video-player" style="overflow: hidden;">
+    <div class="watermark">
+        <a href="https://demo.playtubescript.com" target="_blank">
+            <img src="https://demo.playtubescript.com/themes/default/img/icon.png" alt='watermark logo'>
+        </a>
+    </div>
+    
+    <!-- РЕКЛАМНЫЙ БЛОК -->
+    <div id="prerollAd" style="display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999;">
+        <div style="position: relative; width: 100%; height: 100%;">
+            <div id="skipAd" style="position: absolute; top: 20px; right: 20px; background: rgba(0,0,0,0.7); color: white; padding: 10px 15px; border-radius: 5px; cursor: pointer; display: none; z-index: 10000;">
+                Пропустить через <span id="countdown">5</span>с
+            </div>
+            <video id="adVideo" width="100%" height="100%" controls style="background: #000;">
+                <source src="https://demo.playtubescript.com/ads/ad2.mp4" type="video/mp4">
+            </video>
+        </div>
+    </div>
+
+    <video id="my-video" style="width:100%; height:100%;" 
+           poster="https://playtubescript.fra1.cdn.digitaloceanspaces.com/upload/photos/2023/04/kgbxln9OgVQQXwlLcggQ_15_940c68ccd8c69a0e0c491f0239837f7f_image.png" 
+           playsinline controls>
+        <source src="https://playtubescript.fra1.cdn.digitaloceanspaces.com/upload/videos/2023/04/nCujM4xlYCz6CHPaaYJc_15_ae22dc9bf97f0bf27d5eae2d3b517b1d_video_360p_converted.mp4" 
+                type="video/mp4" data-quality="360p">
+        Your browser does not support HTML5 video.
+    </video>
+</div>
+
+<input type="hidden" class="main_session" value="ccea418e09c2b41660903ec8f7d0fb2c6f6a143b">
+
+<style>
+body {
+    margin: 0;
+    padding: 0;
+    background: #000;
+}
+.video-player {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+}
+.watermark {
+    position: absolute;
+    z-index: 100;
+    left: 20px;
+    top: 20px;
+    display: none;
+}
+.watermark img {
+    width: 50px;
+    height: auto;
+}
+#prerollAd {
+    background: #000;
+}
+#skipAd {
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+}
+</style>
+
+<script>
+// ПРЯМАЯ РАБОТАЮЩАЯ РЕКЛАМА - БЕЗ ВСЯКИХ БИБЛИОТЕК
+$(document).ready(function() {
+    
+    // Функция показа рекламы
+    function showPrerollAd() {
+        console.log('Показываем рекламу...');
+        
+        // Показываем блок с рекламой
+        $('#prerollAd').show();
+        
+        // Запускаем рекламное видео
+        var adVideo = document.getElementById('adVideo');
+        adVideo.play();
+        
+        // Таймер для кнопки пропуска
+        var countdown = 5;
+        var countdownInterval = setInterval(function() {
+            countdown--;
+            $('#countdown').text(countdown);
+            
+            if (countdown <= 0) {
+                clearInterval(countdownInterval);
+                $('#skipAd').show().text('Пропустить').off('click').click(function() {
+                    hidePrerollAd();
+                });
+            }
+        }, 1000);
+        
+        // Скрываем рекламу когда она закончится сама
+        adVideo.onended = function() {
+            hidePrerollAd();
+        };
+    }
+    
+    // Функция скрытия рекламы
+    function hidePrerollAd() {
+        console.log('Скрываем рекламу...');
+        
+        // Останавливаем рекламное видео
+        var adVideo = document.getElementById('adVideo');
+        adVideo.pause();
+        adVideo.currentTime = 0;
+        
+        // Скрываем рекламный блок
+        $('#prerollAd').hide();
+        
+        // Запускаем основное видео
+        var mainVideo = document.getElementById('my-video');
+        mainVideo.play();
+    }
+    
+    // ПОКАЗЫВАЕМ РЕКЛАМУ СРАЗУ ПРИ ЗАГРУЗКЕ СТРАНИЦЫ
+    setTimeout(function() {
+        showPrerollAd();
+    }, 1000);
+    
+    // Инициализация основного плеера (УПРОЩЕННАЯ)
+    $('#my-video').mediaelementplayer({
+        features: ['playpause', 'progress', 'volume', 'fullscreen'],
+        success: function(media) {
+            // Блокируем автовоспроизведение основного видео
+            media.pause();
+            
+            media.addEventListener('play', function() {
+                console.log('Основное видео запущено');
+            });
+            
+            media.addEventListener('ended', function() {
+                console.log('Видео завершено');
+                // Можно показать рекламу снова при завершении
+                // showPrerollAd();
+            });
+        }
+    });
+    
+    // Обработка URL параметров для загрузки видео по ссылке
+    function handleUrlParams() {
+        var urlParams = new URLSearchParams(window.location.search);
+        var videoUrl = urlParams.get('video');
+        
+        if (videoUrl) {
+            // Устанавливаем новое видео
+            $('#my-video source').attr('src', videoUrl);
+            var video = document.getElementById('my-video');
+            video.load();
+            console.log('Загружено видео из URL:', videoUrl);
+        }
+    }
+    
+    // Проверяем параметры URL
+    handleUrlParams();
+    
+    // Управление водяным знаком
+    $(".video-player").hover(
+        function() {
+            $('.watermark').show();
+        },
+        function() {
+            setTimeout(function() {
+                if (!$('.video-player:hover').length) {
+                    $('.watermark').hide();
+                }
+            }, 1000);
+        }
+    );
+});
+
+// Функция для открытия видео в плеере по ссылке
+function openVideoInPlayer(videoUrl) {
+    // Пример: player.html?video=https://example.com/video.mp4
+    var playerUrl = window.location.origin + window.location.pathname + '?video=' + encodeURIComponent(videoUrl);
+    window.open(playerUrl, '_blank');
+}
+
+// Пример использования:
+// openVideoInPlayer('https://playtubescript.fra1.cdn.digitaloceanspaces.com/upload/videos/2023/04/your_video.mp4');
+
+// Отслеживание просмотров (оставляем ваш код)
+$.post('https://oinkplatforms.ru.script.com/aj/views?hash=' + $('.main_session').val() + '&type_=add', 
+    {video_id: 1907}, 
+    function(data) {
+        if (data.status == 200) {
+            console.log('Просмотр засчитан');
+        }
+    }
+);
+</script>
