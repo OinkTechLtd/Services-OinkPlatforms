@@ -1,0 +1,3385 @@
+﻿<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Детский мир — смотреть онлайн, прямой эфир бесплатно</title>
+    <meta name="description" content="Детский мир онлайн — смотри любимые мультфильмы, сказки и развивающие программы для детей. Эфир, который дарит радость.">
+    <link rel="stylesheet" href="style.css">
+    <script src="hls.min.js"></script>
+	<!--<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>-->
+    <link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="manifest" href="site.webmanifest">
+</head>
+<body>
+<header class="header">
+    <div class="header__inner">
+        <a href="index.htm" class="brand" title="На главную">
+            <div class="brand__logo">TV</div>
+            <div class="brand__title">Smotrim</div>
+        </a>
+    </div>
+</header>
+
+<div class="container">
+
+    <!-- Sidebar: список каналов -->
+    <aside class="sidebar">
+        <h2>Каналы</h2>
+        <div class="search">
+            <input type="text" id="q" placeholder="Поиск канала" oninput="filterChannels()">
+        </div>
+        <ul class="channel-list" id="list">
+                                                <li class="cat-title">Общие</li>
+                                            <li class="" data-name="вместе рф">
+                            <a href="vmesterf.html">
+                                <div class="channel-logo">
+                                    <img src="images/vmesterf.jpg" alt="Вместе РФ">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Вместе РФ</div>
+                                    <div class="channel-cat">
+                                        На законных основаниях (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="звезда">
+                            <a href="zvezda.html">
+                                <div class="channel-logo">
+                                    <img src="images/zvezda.jpg" alt="Звезда">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Звезда</div>
+                                    <div class="channel-cat">
+                                        Смерть шпионам. Лисья нора (4-я серия) (16+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="красная линия">
+                            <a href="rline.html">
+                                <div class="channel-logo">
+                                    <img src="images/rline.jpg" alt="Красная линия">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Красная линия</div>
+                                    <div class="channel-cat">
+                                        Специальный репортаж (Генералы духа) (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="мир">
+                            <a href="mir.html">
+                                <div class="channel-logo">
+                                    <img src="images/mir.jpg" alt="Мир">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Мир</div>
+                                    <div class="channel-cat">
+                                        Большая перемена (1-я серия) (6+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="мир hd">
+                            <a href="mirhd.html">
+                                <div class="channel-logo">
+                                    <img src="images/mirhd.jpg" alt="Мир HD">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Мир HD</div>
+                                    <div class="channel-cat">
+                                        Большая перемена (1-я серия) (6+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="нтв">
+                            <a href="ntv.html">
+                                <div class="channel-logo">
+                                    <img src="images/ntv.jpg" alt="НТВ">
+                                </div>
+                                <div>
+                                    <div class="channel-name">НТВ</div>
+                                    <div class="channel-cat">
+                                        Утро. Самое лучшее (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="нтв hd">
+                            <a href="ntvhd.html">
+                                <div class="channel-logo">
+                                    <img src="images/ntvhd.jpg" alt="НТВ HD">
+                                </div>
+                                <div>
+                                    <div class="channel-name">НТВ HD</div>
+                                    <div class="channel-cat">
+                                        Утро. Самое лучшее (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="нтв мир">
+                            <a href="ntvmir.html">
+                                <div class="channel-logo">
+                                    <img src="images/ntvmir.jpg" alt="НТВ Мир">
+                                </div>
+                                <div>
+                                    <div class="channel-name">НТВ Мир</div>
+                                    <div class="channel-cat">
+                                                                            </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="отр">
+                            <a href="otr.html">
+                                <div class="channel-logo">
+                                    <img src="images/otr.jpg" alt="ОТР">
+                                </div>
+                                <div>
+                                    <div class="channel-name">ОТР</div>
+                                    <div class="channel-cat">
+                                        &quot;На приеме у главного врача&quot; с Марьяной Лысенко (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="первый канал">
+                            <a href="1tv.html">
+                                <div class="channel-logo">
+                                    <img src="images/1tv.jpg" alt="Первый канал">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Первый канал</div>
+                                    <div class="channel-cat">
+                                        Телеканал &quot;Доброе утро&quot; (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="первый канал hd">
+                            <a href="1tvhd.html">
+                                <div class="channel-logo">
+                                    <img src="images/1tvhd.jpg" alt="Первый канал HD">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Первый канал HD</div>
+                                    <div class="channel-cat">
+                                        Телеканал &quot;Доброе утро&quot; (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="пятый канал">
+                            <a href="5tv.html">
+                                <div class="channel-logo">
+                                    <img src="images/5tv.jpg" alt="Пятый канал">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Пятый канал</div>
+                                    <div class="channel-cat">
+                                        Великолепная пятерка (Глаз-Алмаз) (16+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="рен тв">
+                            <a href="ren.html">
+                                <div class="channel-logo">
+                                    <img src="images/ren.jpg" alt="РЕН ТВ">
+                                </div>
+                                <div>
+                                    <div class="channel-name">РЕН ТВ</div>
+                                    <div class="channel-cat">
+                                        С бодрым утром! (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="россия 1">
+                            <a href="russia.html">
+                                <div class="channel-logo">
+                                    <img src="images/russia.jpg" alt="Россия 1">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Россия 1</div>
+                                    <div class="channel-cat">
+                                        Утро России (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="россия hd">
+                            <a href="russiahd.html">
+                                <div class="channel-logo">
+                                    <img src="images/russiahd.jpg" alt="Россия HD">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Россия HD</div>
+                                    <div class="channel-cat">
+                                        Утро России (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="твц">
+                            <a href="tvc.html">
+                                <div class="channel-logo">
+                                    <img src="images/tvc.jpg" alt="ТВЦ">
+                                </div>
+                                <div>
+                                    <div class="channel-name">ТВЦ</div>
+                                    <div class="channel-cat">
+                                        Настроение (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                                                                    <li class="cat-title">Познавательные</li>
+                                            <li class="" data-name="365 дней">
+                            <a href="365days.html">
+                                <div class="channel-logo">
+                                    <img src="images/365days.jpg" alt="365 Дней">
+                                </div>
+                                <div>
+                                    <div class="channel-name">365 Дней</div>
+                                    <div class="channel-cat">
+                                        Профилактика (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="animal planet">
+                            <a href="animalplanet.html">
+                                <div class="channel-logo">
+                                    <img src="images/animalplanet.jpg" alt="Animal Planet">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Animal Planet</div>
+                                    <div class="channel-cat">
+                                                                            </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="animal planet hd">
+                            <a href="animalplanethd.html">
+                                <div class="channel-logo">
+                                    <img src="images/animalplanethd.jpg" alt="Animal Planet HD">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Animal Planet HD</div>
+                                    <div class="channel-cat">
+                                                                            </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="da vinci learning">
+                            <a href="davincilearning.html">
+                                <div class="channel-logo">
+                                    <img src="images/davincilearning.jpg" alt="Da Vinci Learning">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Da Vinci Learning</div>
+                                    <div class="channel-cat">
+                                        Эбб и Фло (Конкурент) (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="discovery channel">
+                            <a href="discovery.html">
+                                <div class="channel-logo">
+                                    <img src="images/discovery.jpg" alt="Discovery Channel">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Discovery Channel</div>
+                                    <div class="channel-cat">
+                                        Махинаторы (Honda CVCC 1977 года) (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="discovery channel hd">
+                            <a href="discoveryhd.html">
+                                <div class="channel-logo">
+                                    <img src="images/discoveryhd.jpg" alt="Discovery Channel HD">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Discovery Channel HD</div>
+                                    <div class="channel-cat">
+                                        Махинаторы (Honda CVCC 1977 года) (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="discovery science">
+                            <a href="discoveryscience.html">
+                                <div class="channel-logo">
+                                    <img src="images/discoveryscience.jpg" alt="Discovery Science">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Discovery Science</div>
+                                    <div class="channel-cat">
+                                        Взрывая историю (Загадка инопланетной пустыни) (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="discovery science hd">
+                            <a href="discoverysciencehd.html">
+                                <div class="channel-logo">
+                                    <img src="images/discoverysciencehd.jpg" alt="Discovery Science HD">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Discovery Science HD</div>
+                                    <div class="channel-cat">
+                                        Взрывая историю (Загадка инопланетной пустыни) (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="food network">
+                            <a href="foodnetwork.html">
+                                <div class="channel-logo">
+                                    <img src="images/foodnetwork.jpg" alt="Food Network">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Food Network</div>
+                                    <div class="channel-cat">
+                                        Food Network Россия (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="galaxy tv">
+                            <a href="galaxy.html">
+                                <div class="channel-logo">
+                                    <img src="images/galaxy.jpg" alt="Galaxy TV">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Galaxy TV</div>
+                                    <div class="channel-cat">
+                                        Горизонт (Внеземные цивилизации. Часть 1-я) (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="history channel">
+                            <a href="history.html">
+                                <div class="channel-logo">
+                                    <img src="images/history.jpg" alt="History Channel">
+                                </div>
+                                <div>
+                                    <div class="channel-name">History Channel</div>
+                                    <div class="channel-cat">
+                                        Древние пришельцы: истоки (Тайна пирамид) (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="history channel hd">
+                            <a href="historyhd.html">
+                                <div class="channel-logo">
+                                    <img src="images/historyhd.jpg" alt="History Channel HD">
+                                </div>
+                                <div>
+                                    <div class="channel-name">History Channel HD</div>
+                                    <div class="channel-cat">
+                                        Древние пришельцы: истоки (Тайна пирамид) (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="id xtra">
+                            <a href="idxtra.html">
+                                <div class="channel-logo">
+                                    <img src="images/idxtra.jpg" alt="ID Xtra">
+                                </div>
+                                <div>
+                                    <div class="channel-name">ID Xtra</div>
+                                    <div class="channel-cat">
+                                                                            </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="nat geo wild">
+                            <a href="natgeowild.html">
+                                <div class="channel-logo">
+                                    <img src="images/natgeowild.jpg" alt="Nat Geo Wild">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Nat Geo Wild</div>
+                                    <div class="channel-cat">
+                                                                            </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="nat geo wild hd">
+                            <a href="natgeowildhd.html">
+                                <div class="channel-logo">
+                                    <img src="images/natgeowildhd.jpg" alt="Nat Geo Wild HD">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Nat Geo Wild HD</div>
+                                    <div class="channel-cat">
+                                                                            </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="national geographic">
+                            <a href="natgeo.html">
+                                <div class="channel-logo">
+                                    <img src="images/natgeo.jpg" alt="National Geographic">
+                                </div>
+                                <div>
+                                    <div class="channel-name">National Geographic</div>
+                                    <div class="channel-cat">
+                                        Научные глупости (11-я серия) (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="national geographic hd">
+                            <a href="natgeohd.html">
+                                <div class="channel-logo">
+                                    <img src="images/natgeohd.jpg" alt="National Geographic HD">
+                                </div>
+                                <div>
+                                    <div class="channel-name">National Geographic HD</div>
+                                    <div class="channel-cat">
+                                                                            </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="ocean-tv">
+                            <a href="ocean.html">
+                                <div class="channel-logo">
+                                    <img src="images/ocean.jpg" alt="Ocean-TV">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Ocean-TV</div>
+                                    <div class="channel-cat">
+                                        Обитатели Красного моря (1-я серия) (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="rtg hd">
+                            <a href="rtghd.html">
+                                <div class="channel-logo">
+                                    <img src="images/rtghd.jpg" alt="RTG HD">
+                                </div>
+                                <div>
+                                    <div class="channel-name">RTG HD</div>
+                                    <div class="channel-cat">
+                                        Театральный художник Эдуард Кочергин (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="rtg tv">
+                            <a href="rtg.html">
+                                <div class="channel-logo">
+                                    <img src="images/rtg.jpg" alt="RTG TV">
+                                </div>
+                                <div>
+                                    <div class="channel-name">RTG TV</div>
+                                    <div class="channel-cat">
+                                        Зубр. Возвращение в дикую природу (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="russia today doc">
+                            <a href="rtdoc.html">
+                                <div class="channel-logo">
+                                    <img src="images/rtdoc.jpg" alt="Russia Today Doc">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Russia Today Doc</div>
+                                    <div class="channel-cat">
+                                        Art lounge (Dagger. Part 2) (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="travel + adventure">
+                            <a href="traveladventure.html">
+                                <div class="channel-logo">
+                                    <img src="images/traveladventure.jpg" alt="Travel + adventure">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Travel + adventure</div>
+                                    <div class="channel-cat">
+                                                                            </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="travel + adventure hd">
+                            <a href="traveladventurehd.html">
+                                <div class="channel-logo">
+                                    <img src="images/traveladventurehd.jpg" alt="Travel + adventure HD">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Travel + adventure HD</div>
+                                    <div class="channel-cat">
+                                        За пределами стереотипов (Пакистан) (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="travel channel">
+                            <a href="travel.html">
+                                <div class="channel-logo">
+                                    <img src="images/travel.jpg" alt="Travel Channel">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Travel Channel</div>
+                                    <div class="channel-cat">
+                                                                            </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="travel channel hd">
+                            <a href="travelchannelhd.html">
+                                <div class="channel-logo">
+                                    <img src="images/travelchannelhd.jpg" alt="Travel Channel HD">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Travel Channel HD</div>
+                                    <div class="channel-cat">
+                                                                            </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="viju explore">
+                            <a href="viasatexplore.html">
+                                <div class="channel-logo">
+                                    <img src="images/viasatexplore.jpg" alt="viju Explore">
+                                </div>
+                                <div>
+                                    <div class="channel-name">viju Explore</div>
+                                    <div class="channel-cat">
+                                        Переделка старья (Ауди) (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="viju history">
+                            <a href="viasathistory.html">
+                                <div class="channel-logo">
+                                    <img src="images/viasathistory.jpg" alt="viju History">
+                                </div>
+                                <div>
+                                    <div class="channel-name">viju History</div>
+                                    <div class="channel-cat">
+                                        История автомобилей (Период подъема длиной в 30 лет) (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="viju nature">
+                            <a href="viasatnature.html">
+                                <div class="channel-logo">
+                                    <img src="images/viasatnature.jpg" alt="viju Nature">
+                                </div>
+                                <div>
+                                    <div class="channel-name">viju Nature</div>
+                                    <div class="channel-cat">
+                                        Дневники дикой природы (Волки) (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="zooпарк">
+                            <a href="zoopark.html">
+                                <div class="channel-logo">
+                                    <img src="images/zoopark.jpg" alt="ZooПарк">
+                                </div>
+                                <div>
+                                    <div class="channel-name">ZooПарк</div>
+                                    <div class="channel-cat">
+                                        Спасение детенышей гризли (2-я серия) (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="бобёр">
+                            <a href="bober.html">
+                                <div class="channel-logo">
+                                    <img src="images/bober.jpg" alt="Бобёр">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Бобёр</div>
+                                    <div class="channel-cat">
+                                        ПроУют (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="время">
+                            <a href="timetv.html">
+                                <div class="channel-logo">
+                                    <img src="images/timetv.jpg" alt="Время">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Время</div>
+                                    <div class="channel-cat">
+                                        Жизнь как в кино (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="доктор">
+                            <a href="doctv.html">
+                                <div class="channel-logo">
+                                    <img src="images/doctv.jpg" alt="Доктор">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Доктор</div>
+                                    <div class="channel-cat">
+                                        Свидетель эпохи (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="домашние животные">
+                            <a href="domashniezhivotnye.html">
+                                <div class="channel-logo">
+                                    <img src="images/domashniezhivotnye.jpg" alt="Домашние животные">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Домашние животные</div>
+                                    <div class="channel-cat">
+                                        Любовь к домашним питомцам (13-я серия) (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="живая планета">
+                            <a href="liveplanet.html">
+                                <div class="channel-logo">
+                                    <img src="images/liveplanet.jpg" alt="Живая Планета">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Живая Планета</div>
+                                    <div class="channel-cat">
+                                        Звериный репортер (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="живая природа hd">
+                            <a href="wildnaturehd.html">
+                                <div class="channel-logo">
+                                    <img src="images/wildnaturehd.jpg" alt="Живая природа HD">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Живая природа HD</div>
+                                    <div class="channel-cat">
+                                        Природа (Крмольски водопад Сербия) (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="загородная жизнь">
+                            <a href="zagorod.html">
+                                <div class="channel-logo">
+                                    <img src="images/zagorod.jpg" alt="Загородная жизнь">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Загородная жизнь</div>
+                                    <div class="channel-cat">
+                                        Дачная экспертиза (Рассада под искусственным освещением) (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="здоровое тв">
+                            <a href="zdorovoe.html">
+                                <div class="channel-logo">
+                                    <img src="images/zdorovoe.jpg" alt="Здоровое ТВ">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Здоровое ТВ</div>
+                                    <div class="channel-cat">
+                                        Волшебный пендель с Никой Набоковой (5-я серия) (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="зоо тв">
+                            <a href="telezoo.html">
+                                <div class="channel-logo">
+                                    <img src="images/telezoo.jpg" alt="Зоо ТВ">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Зоо ТВ</div>
+                                    <div class="channel-cat">
+                                        Заповедные места (Франция. Вулканы Оверни) (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="история">
+                            <a href="istoriya.html">
+                                <div class="channel-logo">
+                                    <img src="images/istoriya.jpg" alt="История">
+                                </div>
+                                <div>
+                                    <div class="channel-name">История</div>
+                                    <div class="channel-cat">
+                                        Мегаполисы древности (Карфаген. Один город, две империи) (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="калейдоскоп тв">
+                            <a href="kaleidoskop.html">
+                                <div class="channel-logo">
+                                    <img src="images/kaleidoskop.jpg" alt="Калейдоскоп ТВ">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Калейдоскоп ТВ</div>
+                                    <div class="channel-cat">
+                                        Ювелиртрейд (С любовью из Костромы) (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="кто есть кто">
+                            <a href="ktoestkto.html">
+                                <div class="channel-logo">
+                                    <img src="images/ktoestkto.jpg" alt="Кто есть кто">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Кто есть кто</div>
+                                    <div class="channel-cat">
+                                        Тайны монархов (Расплата за величие) (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="моя планета">
+                            <a href="moyaplaneta.html">
+                                <div class="channel-logo">
+                                    <img src="images/moyaplaneta.jpg" alt="Моя планета">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Моя планета</div>
+                                    <div class="channel-cat">
+                                        Рекорды моей планеты (Самые азартные игры) (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="нано тв">
+                            <a href="nano.html">
+                                <div class="channel-logo">
+                                    <img src="images/nano.jpg" alt="Нано ТВ">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Нано ТВ</div>
+                                    <div class="channel-cat">
+                                        Общество &quot;Знание&quot; (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="наука 2.0">
+                            <a href="nauka.html">
+                                <div class="channel-logo">
+                                    <img src="images/nauka.jpg" alt="Наука 2.0">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Наука 2.0</div>
+                                    <div class="channel-cat">
+                                        Истории болезней (Корь. Самая заразная болезнь) (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="нтв право">
+                            <a href="ntvpravo.html">
+                                <div class="channel-logo">
+                                    <img src="images/ntvpravo.jpg" alt="НТВ Право">
+                                </div>
+                                <div>
+                                    <div class="channel-name">НТВ Право</div>
+                                    <div class="channel-cat">
+                                        Основано на реальных событиях (Зоя открывает глаза: Часть 3-я) (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="планета hd">
+                            <a href="planetahd.html">
+                                <div class="channel-logo">
+                                    <img src="images/planetahd.jpg" alt="Планета HD">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Планета HD</div>
+                                    <div class="channel-cat">
+                                        Рекорды моей планеты (Самые азартные игры) (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="поехали!">
+                            <a href="poehali.html">
+                                <div class="channel-logo">
+                                    <img src="images/poehali.jpg" alt="Поехали!">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Поехали!</div>
+                                    <div class="channel-cat">
+                                        Стажерка (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="просвещение">
+                            <a href="prosveshenie.html">
+                                <div class="channel-logo">
+                                    <img src="images/prosveshenie.jpg" alt="Просвещение">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Просвещение</div>
+                                    <div class="channel-cat">
+                                        #БытьВКурсе (Востоковедение. О научно-образовательном сотрудничестве России и Китая) (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="психология 21">
+                            <a href="psihologiya21.html">
+                                <div class="channel-logo">
+                                    <img src="images/psihologiya21.jpg" alt="Психология 21">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Психология 21</div>
+                                    <div class="channel-cat">
+                                        Снимаем маски (Испытываю постоянный страх ошибки) (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="ржд тв">
+                            <a href="rzd.html">
+                                <div class="channel-logo">
+                                    <img src="images/rzd.jpg" alt="РЖД ТВ">
+                                </div>
+                                <div>
+                                    <div class="channel-name">РЖД ТВ</div>
+                                    <div class="channel-cat">
+                                        Тема часа (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="россия к">
+                            <a href="kultura.html">
+                                <div class="channel-logo">
+                                    <img src="images/kultura.jpg" alt="Россия К">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Россия К</div>
+                                    <div class="channel-cat">
+                                        Диалоги о животных (Ташкентский зоопарк) (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="совершенно секретно">
+                            <a href="sovsek.html">
+                                <div class="channel-logo">
+                                    <img src="images/sovsek.jpg" alt="Совершенно секретно">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Совершенно секретно</div>
+                                    <div class="channel-cat">
+                                        Близкие люди (Армен Джигарханян) (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="телекафе">
+                            <a href="telecafe.html">
+                                <div class="channel-logo">
+                                    <img src="images/telecafe.jpg" alt="Телекафе">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Телекафе</div>
+                                    <div class="channel-cat">
+                                        Коллекция рецептов (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="телепутешествия">
+                            <a href="teletravel.html">
+                                <div class="channel-logo">
+                                    <img src="images/teletravel.jpg" alt="Телепутешествия">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Телепутешествия</div>
+                                    <div class="channel-cat">
+                                        Шесть чувств (Татарстан. Обоняние) (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="точка рф">
+                            <a href="hdlife.html">
+                                <div class="channel-logo">
+                                    <img src="images/hdlife.jpg" alt="Точка РФ">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Точка РФ</div>
+                                    <div class="channel-cat">
+                                        Профилактика (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="усадьба">
+                            <a href="usadba.html">
+                                <div class="channel-logo">
+                                    <img src="images/usadba.jpg" alt="Усадьба">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Усадьба</div>
+                                    <div class="channel-cat">
+                                        Сельский туризм (2-я серия) (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="успех">
+                            <a href="uspeh.html">
+                                <div class="channel-logo">
+                                    <img src="images/uspeh.jpg" alt="Успех">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Успех</div>
+                                    <div class="channel-cat">
+                                                                            </div>
+                                </div>
+                            </a>
+                        </li>
+                                                                                    <li class="cat-title">Фильмовые</li>
+                                            <li class="" data-name="amedia 1">
+                            <a href="amedia1.html">
+                                <div class="channel-logo">
+                                    <img src="images/amedia1.jpg" alt="Amedia 1">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Amedia 1</div>
+                                    <div class="channel-cat">
+                                        Свидетельства паранормального (2-я серия) (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="amedia 1 hd">
+                            <a href="amedia1hd.html">
+                                <div class="channel-logo">
+                                    <img src="images/amedia1hd.jpg" alt="Amedia 1 HD">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Amedia 1 HD</div>
+                                    <div class="channel-cat">
+                                        Свидетельства паранормального (2-я серия) (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="amedia 2">
+                            <a href="amedia2.html">
+                                <div class="channel-logo">
+                                    <img src="images/amedia2.jpg" alt="Amedia 2">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Amedia 2</div>
+                                    <div class="channel-cat">
+                                        Женский форум (2-я серия) (16+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="amedia hit">
+                            <a href="amediahit.html">
+                                <div class="channel-logo">
+                                    <img src="images/amediahit.jpg" alt="Amedia Hit">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Amedia Hit</div>
+                                    <div class="channel-cat">
+                                        Маяк 23 (Мародеры) (16+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="amedia premium">
+                            <a href="amediapremium.html">
+                                <div class="channel-logo">
+                                    <img src="images/amediapremium.jpg" alt="Amedia Premium">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Amedia Premium</div>
+                                    <div class="channel-cat">
+                                        Зло (6-я серия) (18+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="amedia premium hd">
+                            <a href="amediapremiumhd.html">
+                                <div class="channel-logo">
+                                    <img src="images/amediapremiumhd.jpg" alt="Amedia Premium HD">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Amedia Premium HD</div>
+                                    <div class="channel-cat">
+                                        Зло (6-я серия) (18+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="black">
+                            <a href="sonyturbo.html">
+                                <div class="channel-logo">
+                                    <img src="images/sonyturbo.jpg" alt="Black">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Black</div>
+                                    <div class="channel-cat">
+                                        Убийства в... (Мост забытых влюбленных) (16+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="bollywood hd">
+                            <a href="bollywoodhd.html">
+                                <div class="channel-logo">
+                                    <img src="images/bollywoodhd.jpg" alt="Bollywood HD">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Bollywood HD</div>
+                                    <div class="channel-cat">
+                                        Сделка (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="cinema">
+                            <a href="cinema.html">
+                                <div class="channel-logo">
+                                    <img src="images/cinema.jpg" alt="Cinema">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Cinema</div>
+                                    <div class="channel-cat">
+                                        Доспехи Бога 2: Операция &quot;Кондор&quot; (16+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="filmbox">
+                            <a href="filmbox.html">
+                                <div class="channel-logo">
+                                    <img src="images/filmbox.jpg" alt="FilmBox">
+                                </div>
+                                <div>
+                                    <div class="channel-name">FilmBox</div>
+                                    <div class="channel-cat">
+                                                                            </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="filmbox arthouse">
+                            <a href="filmboxarthouse.html">
+                                <div class="channel-logo">
+                                    <img src="images/filmboxarthouse.jpg" alt="FilmBox Arthouse">
+                                </div>
+                                <div>
+                                    <div class="channel-name">FilmBox Arthouse</div>
+                                    <div class="channel-cat">
+                                                                            </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="fox">
+                            <a href="fox.html">
+                                <div class="channel-logo">
+                                    <img src="images/fox.jpg" alt="Fox">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Fox</div>
+                                    <div class="channel-cat">
+                                                                            </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="fox hd">
+                            <a href="foxhd.html">
+                                <div class="channel-logo">
+                                    <img src="images/foxhd.jpg" alt="Fox HD">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Fox HD</div>
+                                    <div class="channel-cat">
+                                        Ходячие мертвецы (Связи) (16+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="fox life">
+                            <a href="foxlife.html">
+                                <div class="channel-logo">
+                                    <img src="images/foxlife.jpg" alt="Fox Life">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Fox Life</div>
+                                    <div class="channel-cat">
+                                                                            </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="fox life hd">
+                            <a href="foxlifehd.html">
+                                <div class="channel-logo">
+                                    <img src="images/foxlifehd.jpg" alt="Fox Life HD">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Fox Life HD</div>
+                                    <div class="channel-cat">
+                                                                            </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="red">
+                            <a href="set.html">
+                                <div class="channel-logo">
+                                    <img src="images/set.jpg" alt="Red">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Red</div>
+                                    <div class="channel-cat">
+                                        Гуру сада (3-я серия) (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="sci-fi">
+                            <a href="sonyscifi.html">
+                                <div class="channel-logo">
+                                    <img src="images/sonyscifi.jpg" alt="Sci-Fi">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Sci-Fi</div>
+                                    <div class="channel-cat">
+                                        Затерянная гробница. Последние хроники (12-я серия) (16+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="tv xxi (tv21)">
+                            <a href="tv21.html">
+                                <div class="channel-logo">
+                                    <img src="images/tv21.jpg" alt="TV XXI (TV21)">
+                                </div>
+                                <div>
+                                    <div class="channel-name">TV XXI (TV21)</div>
+                                    <div class="channel-cat">
+                                        Убийство Кеннета Чемберлена (18+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="viju tv1000">
+                            <a href="tv1000.html">
+                                <div class="channel-logo">
+                                    <img src="images/tv1000.jpg" alt="viju TV1000">
+                                </div>
+                                <div>
+                                    <div class="channel-name">viju TV1000</div>
+                                    <div class="channel-cat">
+                                        Ночь в магазине ужастиков (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="viju tv1000 action">
+                            <a href="tv1000action.html">
+                                <div class="channel-logo">
+                                    <img src="images/tv1000action.jpg" alt="viju TV1000 action">
+                                </div>
+                                <div>
+                                    <div class="channel-name">viju TV1000 action</div>
+                                    <div class="channel-cat">
+                                        Нефариус (18+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="viju tv1000 русское кино">
+                            <a href="tv1000rus.html">
+                                <div class="channel-logo">
+                                    <img src="images/tv1000rus.jpg" alt="viju TV1000 Русское кино">
+                                </div>
+                                <div>
+                                    <div class="channel-name">viju TV1000 Русское кино</div>
+                                    <div class="channel-cat">
+                                        Смешарики (Край Земли) (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="viju+ comedy hd">
+                            <a href="vipcomedyhd.html">
+                                <div class="channel-logo">
+                                    <img src="images/vipcomedyhd.jpg" alt="viju+ Comedy HD">
+                                </div>
+                                <div>
+                                    <div class="channel-name">viju+ Comedy HD</div>
+                                    <div class="channel-cat">
+                                        Друг на продажу (16+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="viju+ megahit hd">
+                            <a href="vipmegahithd.html">
+                                <div class="channel-logo">
+                                    <img src="images/vipmegahithd.jpg" alt="viju+ Megahit HD">
+                                </div>
+                                <div>
+                                    <div class="channel-name">viju+ Megahit HD</div>
+                                    <div class="channel-cat">
+                                        Неудержимые (16+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="viju+ premiere hd">
+                            <a href="vippremiumhd.html">
+                                <div class="channel-logo">
+                                    <img src="images/vippremiumhd.jpg" alt="viju+ Premiere HD">
+                                </div>
+                                <div>
+                                    <div class="channel-name">viju+ Premiere HD</div>
+                                    <div class="channel-cat">
+                                        Челюсти. Кровавый риф (18+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="viju+ serial hd">
+                            <a href="vipserialhd.html">
+                                <div class="channel-logo">
+                                    <img src="images/vipserialhd.jpg" alt="viju+ Serial HD">
+                                </div>
+                                <div>
+                                    <div class="channel-name">viju+ Serial HD</div>
+                                    <div class="channel-cat">
+                                        Цыпленок жареный (4-я серия) (16+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="дом кино">
+                            <a href="domkino.html">
+                                <div class="channel-logo">
+                                    <img src="images/domkino.jpg" alt="Дом кино">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Дом кино</div>
+                                    <div class="channel-cat">
+                                        Три богатыря и Шамаханская царица (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="дом кино премиум hd">
+                            <a href="domkinopremiumhd.html">
+                                <div class="channel-logo">
+                                    <img src="images/domkinopremiumhd.jpg" alt="Дом кино Премиум HD">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Дом кино Премиум HD</div>
+                                    <div class="channel-cat">
+                                        Срочно выйду замуж (16+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="дорама">
+                            <a href="dorama.html">
+                                <div class="channel-logo">
+                                    <img src="images/dorama.jpg" alt="Дорама">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Дорама</div>
+                                    <div class="channel-cat">
+                                        Аран и магистрат (10-я серия) (16+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="еврокино">
+                            <a href="eurokino.html">
+                                <div class="channel-logo">
+                                    <img src="images/eurokino.jpg" alt="Еврокино">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Еврокино</div>
+                                    <div class="channel-cat">
+                                        Приговор (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="иллюзион+">
+                            <a href="illusionplus.html">
+                                <div class="channel-logo">
+                                    <img src="images/illusionplus.jpg" alt="Иллюзион+">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Иллюзион+</div>
+                                    <div class="channel-cat">
+                                        Ларри Краун (16+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="кино тв">
+                            <a href="kinotv.html">
+                                <div class="channel-logo">
+                                    <img src="images/kinotv.jpg" alt="Кино ТВ">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Кино ТВ</div>
+                                    <div class="channel-cat">
+                                        Падение ангела (16+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="кино тв hd">
+                            <a href="kinotvhd.html">
+                                <div class="channel-logo">
+                                    <img src="images/kinotvhd.jpg" alt="Кино ТВ HD">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Кино ТВ HD</div>
+                                    <div class="channel-cat">
+                                        Падение ангела (16+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="кинопоказ">
+                            <a href="kinopokaz.html">
+                                <div class="channel-logo">
+                                    <img src="images/kinopokaz.jpg" alt="Кинопоказ">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Кинопоказ</div>
+                                    <div class="channel-cat">
+                                        Скандинавский форсаж: Гонки на льду (16+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="мир сериала">
+                            <a href="mirseriala.html">
+                                <div class="channel-logo">
+                                    <img src="images/mirseriala.jpg" alt="Мир сериала">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Мир сериала</div>
+                                    <div class="channel-cat">
+                                        Чужой среди своих (9-я серия) (18+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="мосфильм. золотая коллекция">
+                            <a href="mosfilm.html">
+                                <div class="channel-logo">
+                                    <img src="images/mosfilm.jpg" alt="Мосфильм. Золотая коллекция">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Мосфильм. Золотая коллекция</div>
+                                    <div class="channel-cat">
+                                        Китайский сервизъ (16+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="наше любимое кино">
+                            <a href="nashelyubimoekino.html">
+                                <div class="channel-logo">
+                                    <img src="images/nashelyubimoekino.jpg" alt="Наше любимое кино">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Наше любимое кино</div>
+                                    <div class="channel-cat">
+                                        Особенности национальной охоты (16+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="нст">
+                            <a href="strashnoe.html">
+                                <div class="channel-logo">
+                                    <img src="images/strashnoe.jpg" alt="НСТ">
+                                </div>
+                                <div>
+                                    <div class="channel-name">НСТ</div>
+                                    <div class="channel-cat">
+                                        Опасные игры (18+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="нтв хит">
+                            <a href="ntvhit.html">
+                                <div class="channel-logo">
+                                    <img src="images/ntvhit.jpg" alt="НТВ Хит">
+                                </div>
+                                <div>
+                                    <div class="channel-name">НТВ Хит</div>
+                                    <div class="channel-cat">
+                                        Практикант (4-я серия) (16+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="победа">
+                            <a href="pobeda.html">
+                                <div class="channel-logo">
+                                    <img src="images/pobeda.jpg" alt="Победа">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Победа</div>
+                                    <div class="channel-cat">
+                                        Белый снег (6+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="русская комедия">
+                            <a href="russkayakomediya.html">
+                                <div class="channel-logo">
+                                    <img src="images/russkayakomediya.jpg" alt="Русская комедия">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Русская комедия</div>
+                                    <div class="channel-cat">
+                                        Три богатыря и Конь на троне (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="русский бестселлер">
+                            <a href="bestrussia.html">
+                                <div class="channel-logo">
+                                    <img src="images/bestrussia.jpg" alt="Русский бестселлер">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Русский бестселлер</div>
+                                    <div class="channel-cat">
+                                        Психология преступления. Черная кошка в темной комнате (2-я серия) (18+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="русский детектив">
+                            <a href="rudetective.html">
+                                <div class="channel-logo">
+                                    <img src="images/rudetective.jpg" alt="Русский детектив">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Русский детектив</div>
+                                    <div class="channel-cat">
+                                        Улицы разбитых фонарей (Возвращение к блудному папе) (16+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="русский иллюзион">
+                            <a href="russkiyillusion.html">
+                                <div class="channel-logo">
+                                    <img src="images/russkiyillusion.jpg" alt="Русский иллюзион">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Русский иллюзион</div>
+                                    <div class="channel-cat">
+                                        Вратарь Галактики (6+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="русский роман">
+                            <a href="rusroman.html">
+                                <div class="channel-logo">
+                                    <img src="images/rusroman.jpg" alt="Русский роман">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Русский роман</div>
+                                    <div class="channel-cat">
+                                        Некрасивая Любовь (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="русский роман hd">
+                            <a href="rusromanhd.html">
+                                <div class="channel-logo">
+                                    <img src="images/rusromanhd.jpg" alt="Русский роман HD">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Русский роман HD</div>
+                                    <div class="channel-cat">
+                                        Некрасивая Любовь (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="тв 3">
+                            <a href="tv3.html">
+                                <div class="channel-logo">
+                                    <img src="images/tv3.jpg" alt="ТВ 3">
+                                </div>
+                                <div>
+                                    <div class="channel-name">ТВ 3</div>
+                                    <div class="channel-cat">
+                                        Мультфильмы (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="точка тв">
+                            <a href="tochka.html">
+                                <div class="channel-logo">
+                                    <img src="images/tochka.jpg" alt="Точка ТВ">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Точка ТВ</div>
+                                    <div class="channel-cat">
+                                        Torre Ricca. Прямая трансляция (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                                                                    <li class="cat-title">Развлекательные</li>
+                                            <li class="" data-name="2x2">
+                            <a href="2x2.html">
+                                <div class="channel-logo">
+                                    <img src="images/2x2.jpg" alt="2x2">
+                                </div>
+                                <div>
+                                    <div class="channel-name">2x2</div>
+                                    <div class="channel-cat">
+                                        Мультфильмы (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="8 канал">
+                            <a href="8tv.html">
+                                <div class="channel-logo">
+                                    <img src="images/8tv.jpg" alt="8 канал">
+                                </div>
+                                <div>
+                                    <div class="channel-name">8 канал</div>
+                                    <div class="channel-cat">
+                                        Пионерское шоу (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="fashion tv">
+                            <a href="fashiontv.html">
+                                <div class="channel-logo">
+                                    <img src="images/fashiontv.jpg" alt="Fashion TV">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Fashion TV</div>
+                                    <div class="channel-cat">
+                                        Купальники (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="shopping live">
+                            <a href="shoppinglive.html">
+                                <div class="channel-logo">
+                                    <img src="images/shoppinglive.jpg" alt="Shopping Live">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Shopping Live</div>
+                                    <div class="channel-cat">
+                                        В центре Внимания (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="tlc">
+                            <a href="tlc.html">
+                                <div class="channel-logo">
+                                    <img src="images/tlc.jpg" alt="TLC">
+                                </div>
+                                <div>
+                                    <div class="channel-name">TLC</div>
+                                    <div class="channel-cat">
+                                                                            </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="вопросы и ответы">
+                            <a href="voprosyiotvety.html">
+                                <div class="channel-logo">
+                                    <img src="images/voprosyiotvety.jpg" alt="Вопросы и ответы">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Вопросы и ответы</div>
+                                    <div class="channel-cat">
+                                        Что? Где? Когда? (1-я серия) (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="домашний">
+                            <a href="domashniy.html">
+                                <div class="channel-logo">
+                                    <img src="images/domashniy.jpg" alt="Домашний">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Домашний</div>
+                                    <div class="channel-cat">
+                                        По делам несовершеннолетних (1129-я серия) (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="жара">
+                            <a href="stv.html">
+                                <div class="channel-logo">
+                                    <img src="images/stv.jpg" alt="Жара">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Жара</div>
+                                    <div class="channel-cat">
+                                        Музыкальный блок (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="нтв стиль">
+                            <a href="ntvstyle.html">
+                                <div class="channel-logo">
+                                    <img src="images/ntvstyle.jpg" alt="НТВ Стиль">
+                                </div>
+                                <div>
+                                    <div class="channel-name">НТВ Стиль</div>
+                                    <div class="channel-cat">
+                                        Первая передача (Новый трюк ростовского каскадера, ДТП на автомагистрали и уловки автосалонов с зимней резиной) (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="пятница">
+                            <a href="friday.html">
+                                <div class="channel-logo">
+                                    <img src="images/friday.jpg" alt="Пятница">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Пятница</div>
+                                    <div class="channel-cat">
+                                        На ножах (Краснодар. Mark) (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="ретро-тв">
+                            <a href="retrotv.html">
+                                <div class="channel-logo">
+                                    <img src="images/retrotv.jpg" alt="Ретро-ТВ">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Ретро-ТВ</div>
+                                    <div class="channel-cat">
+                                        Городской романс (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="сарафан тв">
+                            <a href="sarafan.html">
+                                <div class="channel-logo">
+                                    <img src="images/sarafan.jpg" alt="Сарафан ТВ">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Сарафан ТВ</div>
+                                    <div class="channel-cat">
+                                        Смеяться разрешается (189-я серия) (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="солнце">
+                            <a href="sonce.html">
+                                <div class="channel-logo">
+                                    <img src="images/sonce.jpg" alt="Солнце">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Солнце</div>
+                                    <div class="channel-cat">
+                                                                            </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="стс">
+                            <a href="sts.html">
+                                <div class="channel-logo">
+                                    <img src="images/sts.jpg" alt="СТС">
+                                </div>
+                                <div>
+                                    <div class="channel-name">СТС</div>
+                                    <div class="channel-cat">
+                                        Маша и Медведь (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="стс love">
+                            <a href="ctclove.html">
+                                <div class="channel-logo">
+                                    <img src="images/ctclove.jpg" alt="СТС Love">
+                                </div>
+                                <div>
+                                    <div class="channel-name">СТС Love</div>
+                                    <div class="channel-cat">
+                                        Даешь молодежь! (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="суббота!">
+                            <a href="super.html">
+                                <div class="channel-logo">
+                                    <img src="images/super.jpg" alt="Суббота!">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Суббота!</div>
+                                    <div class="channel-cat">
+                                        Маша и Медведь (Парк Чудес) (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="театр">
+                            <a href="teatr.html">
+                                <div class="channel-logo">
+                                    <img src="images/teatr.jpg" alt="Театр">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Театр</div>
+                                    <div class="channel-cat">
+                                        Театр (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="тнт">
+                            <a href="tnt.html">
+                                <div class="channel-logo">
+                                    <img src="images/tnt.jpg" alt="ТНТ">
+                                </div>
+                                <div>
+                                    <div class="channel-name">ТНТ</div>
+                                    <div class="channel-cat">
+                                        СашаТаня (2-я серия) (16+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="тнт hd">
+                            <a href="tnthd.html">
+                                <div class="channel-logo">
+                                    <img src="images/tnthd.jpg" alt="ТНТ HD">
+                                </div>
+                                <div>
+                                    <div class="channel-name">ТНТ HD</div>
+                                    <div class="channel-cat">
+                                        СашаТаня (2-я серия) (16+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="тнт4">
+                            <a href="tnt4.html">
+                                <div class="channel-logo">
+                                    <img src="images/tnt4.jpg" alt="ТНТ4">
+                                </div>
+                                <div>
+                                    <div class="channel-name">ТНТ4</div>
+                                    <div class="channel-cat">
+                                        Утро. ТНТ (232-я серия) (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="че">
+                            <a href="che.html">
+                                <div class="channel-logo">
+                                    <img src="images/che.jpg" alt="Че">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Че</div>
+                                    <div class="channel-cat">
+                                        Дорожные войны (11-я серия) (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="ю">
+                            <a href="u.html">
+                                <div class="channel-logo">
+                                    <img src="images/u.jpg" alt="Ю">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Ю</div>
+                                    <div class="channel-cat">
+                                        Моя свадьба лучше! (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                                                                    <li class="cat-title">Детские</li>
+                                            <li class="" data-name="ani">
+                            <a href="ani.html">
+                                <div class="channel-logo">
+                                    <img src="images/ani.jpg" alt="Ani">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Ani</div>
+                                    <div class="channel-cat">
+                                        Время малышей (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="cartoon network">
+                            <a href="cartoonnetwork.html">
+                                <div class="channel-logo">
+                                    <img src="images/cartoonnetwork.jpg" alt="Cartoon Network">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Cartoon Network</div>
+                                    <div class="channel-cat">
+                                                                            </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="gulli girl">
+                            <a href="gulli.html">
+                                <div class="channel-logo">
+                                    <img src="images/gulli.jpg" alt="Gulli Girl">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Gulli Girl</div>
+                                    <div class="channel-cat">
+                                        Зиг и Шарко (20-я серия) (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="jimjam">
+                            <a href="jimjam.html">
+                                <div class="channel-logo">
+                                    <img src="images/jimjam.jpg" alt="JimJam">
+                                </div>
+                                <div>
+                                    <div class="channel-name">JimJam</div>
+                                    <div class="channel-cat">
+                                                                            </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="nickelodeon">
+                            <a href="nickelodeon.html">
+                                <div class="channel-logo">
+                                    <img src="images/nickelodeon.jpg" alt="Nickelodeon">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Nickelodeon</div>
+                                    <div class="channel-cat">
+                                                                            </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="nickelodeon hd">
+                            <a href="nickelodeonhd.html">
+                                <div class="channel-logo">
+                                    <img src="images/nickelodeonhd.jpg" alt="Nickelodeon HD">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Nickelodeon HD</div>
+                                    <div class="channel-cat">
+                                                                            </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="tiji">
+                            <a href="tiji.html">
+                                <div class="channel-logo">
+                                    <img src="images/tiji.jpg" alt="TiJi">
+                                </div>
+                                <div>
+                                    <div class="channel-name">TiJi</div>
+                                    <div class="channel-cat">
+                                        Моланг (Моланг актер) (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="в гостях у сказки">
+                            <a href="skazka.html">
+                                <div class="channel-logo">
+                                    <img src="images/skazka.jpg" alt="В гостях у сказки">
+                                </div>
+                                <div>
+                                    <div class="channel-name">В гостях у сказки</div>
+                                    <div class="channel-cat">
+                                        Смешарики. Пин-код (Прививка от Кроша: Часть 2-я) (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="active" data-name="детский мир">
+                            <a href="detskiymir.html">
+                                <div class="channel-logo">
+                                    <img src="images/detskiymir.jpg" alt="Детский мир">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Детский мир</div>
+                                    <div class="channel-cat">
+                                        Пакман в мире привидений (Индиана Пак) (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="карусель">
+                            <a href="karusel.html">
+                                <div class="channel-logo">
+                                    <img src="images/karusel.jpg" alt="Карусель">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Карусель</div>
+                                    <div class="channel-cat">
+                                        Три кота (Сборник 2394-й) (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="мама">
+                            <a href="mama.html">
+                                <div class="channel-logo">
+                                    <img src="images/mama.jpg" alt="Мама">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Мама</div>
+                                    <div class="channel-cat">
+                                        Малышарики (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="мульт">
+                            <a href="mult.html">
+                                <div class="channel-logo">
+                                    <img src="images/mult.jpg" alt="Мульт">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Мульт</div>
+                                    <div class="channel-cat">
+                                        Муся, Чук и Станислав (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="мультиландия">
+                            <a href="multimania.html">
+                                <div class="channel-logo">
+                                    <img src="images/multimania.jpg" alt="Мультиландия">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Мультиландия</div>
+                                    <div class="channel-cat">
+                                        Три кота (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="мультимузыка">
+                            <a href="multimuzyka.html">
+                                <div class="channel-logo">
+                                    <img src="images/multimuzyka.jpg" alt="Мультимузыка">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Мультимузыка</div>
+                                    <div class="channel-cat">
+                                        Просыпайтесь, малыши! (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="радость моя">
+                            <a href="radostmoya.html">
+                                <div class="channel-logo">
+                                    <img src="images/radostmoya.jpg" alt="Радость моя">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Радость моя</div>
+                                    <div class="channel-cat">
+                                        Книжное путешествие (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="рыжий">
+                            <a href="ryzhiy.html">
+                                <div class="channel-logo">
+                                    <img src="images/ryzhiy.jpg" alt="Рыжий">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Рыжий</div>
+                                    <div class="channel-cat">
+                                        BFF. Пушистые друзья (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="стс kids">
+                            <a href="stskids.html">
+                                <div class="channel-logo">
+                                    <img src="images/stskids.jpg" alt="СТС Kids">
+                                </div>
+                                <div>
+                                    <div class="channel-name">СТС Kids</div>
+                                    <div class="channel-cat">
+                                        Детектив Финник (6-я серия) (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="уникум">
+                            <a href="detskiy.html">
+                                <div class="channel-logo">
+                                    <img src="images/detskiy.jpg" alt="Уникум">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Уникум</div>
+                                    <div class="channel-cat">
+                                        Иван Царевич и Серый Волк 3 (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                                                                    <li class="cat-title">Музыкальные</li>
+                                            <li class="" data-name="bridge tv">
+                            <a href="bridge.html">
+                                <div class="channel-logo">
+                                    <img src="images/bridge.jpg" alt="Bridge TV">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Bridge TV</div>
+                                    <div class="channel-cat">
+                                        Music Hits (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="europa plus tv">
+                            <a href="europaplus.html">
+                                <div class="channel-logo">
+                                    <img src="images/europaplus.jpg" alt="Europa Plus TV">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Europa Plus TV</div>
+                                    <div class="channel-cat">
+                                        Хит нон-стоп (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="mezzo">
+                            <a href="mezzo.html">
+                                <div class="channel-logo">
+                                    <img src="images/mezzo.jpg" alt="Mezzo">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Mezzo</div>
+                                    <div class="channel-cat">
+                                        Монтеверди: &quot;Вечерня Пресвятой Богородицы&quot; - Orkester Nord, Мартин Волберг (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="ru tv">
+                            <a href="rutv.html">
+                                <div class="channel-logo">
+                                    <img src="images/rutv.jpg" alt="RU TV">
+                                </div>
+                                <div>
+                                    <div class="channel-name">RU TV</div>
+                                    <div class="channel-cat">
+                                        Караоке (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="муз тв">
+                            <a href="muz.html">
+                                <div class="channel-logo">
+                                    <img src="images/muz.jpg" alt="Муз ТВ">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Муз ТВ</div>
+                                    <div class="channel-cat">
+                                        Новое радио чарт (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="музыка первого">
+                            <a href="muz1.html">
+                                <div class="channel-logo">
+                                    <img src="images/muz1.jpg" alt="Музыка Первого">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Музыка Первого</div>
+                                    <div class="channel-cat">
+                                        #Мюсли (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="тнт-music">
+                            <a href="tntmusic.html">
+                                <div class="channel-logo">
+                                    <img src="images/tntmusic.jpg" alt="ТНТ-Music">
+                                </div>
+                                <div>
+                                    <div class="channel-name">ТНТ-Music</div>
+                                    <div class="channel-cat">
+                                        Плей-лист (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="шансон тв">
+                            <a href="shanson.html">
+                                <div class="channel-logo">
+                                    <img src="images/shanson.jpg" alt="Шансон ТВ">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Шансон ТВ</div>
+                                    <div class="channel-cat">
+                                        Первый ряд (Вика Цыганова) (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                                                                    <li class="cat-title">Спортивные</li>
+                                            <li class="" data-name="eurosport 1">
+                            <a href="eurosport1.html">
+                                <div class="channel-logo">
+                                    <img src="images/eurosport1.jpg" alt="Eurosport 1">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Eurosport 1</div>
+                                    <div class="channel-cat">
+                                        Горные лыжи. Кубок мира. Куршевель. Женщины. Слалом. 1-я попытка (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="eurosport 1 hd">
+                            <a href="eurosport1hd.html">
+                                <div class="channel-logo">
+                                    <img src="images/eurosport1hd.jpg" alt="Eurosport 1 HD">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Eurosport 1 HD</div>
+                                    <div class="channel-cat">
+                                        Горные лыжи. Кубок мира. Куршевель. Женщины. Слалом. 1-я попытка (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="eurosport 2">
+                            <a href="eurosport2.html">
+                                <div class="channel-logo">
+                                    <img src="images/eurosport2.jpg" alt="Eurosport 2">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Eurosport 2</div>
+                                    <div class="channel-cat">
+                                                                            </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="eurosport 2 hd">
+                            <a href="eurosport2hd.html">
+                                <div class="channel-logo">
+                                    <img src="images/eurosport2hd.jpg" alt="Eurosport 2 HD">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Eurosport 2 HD</div>
+                                    <div class="channel-cat">
+                                                                            </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="setanta sports eurasia hd">
+                            <a href="setantasportshd.html">
+                                <div class="channel-logo">
+                                    <img src="images/setantasportshd.jpg" alt="Setanta Sports Eurasia HD">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Setanta Sports Eurasia HD</div>
+                                    <div class="channel-cat">
+                                        Футбол: Серия A: Рома - Комо (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="setanta sports+ eurasia hd">
+                            <a href="setantasportsplushd.html">
+                                <div class="channel-logo">
+                                    <img src="images/setantasportsplushd.jpg" alt="Setanta Sports+ Eurasia HD">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Setanta Sports+ Eurasia HD</div>
+                                    <div class="channel-cat">
+                                                                            </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="viju+ sport">
+                            <a href="viasatsport.html">
+                                <div class="channel-logo">
+                                    <img src="images/viasatsport.jpg" alt="viju+ Sport">
+                                </div>
+                                <div>
+                                    <div class="channel-name">viju+ Sport</div>
+                                    <div class="channel-cat">
+                                        Снукер: Viju Snooker Cup Плей-офф. Финал: Иван Каковский - Артем Истомин. Матч до 5 побед (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="viju+ sport hd">
+                            <a href="viasatsporthd.html">
+                                <div class="channel-logo">
+                                    <img src="images/viasatsporthd.jpg" alt="viju+ Sport HD">
+                                </div>
+                                <div>
+                                    <div class="channel-name">viju+ Sport HD</div>
+                                    <div class="channel-cat">
+                                        Снукер: Viju Snooker Cup Плей-офф. Финал: Иван Каковский - Артем Истомин. Матч до 5 побед (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="беларусь 5">
+                            <a href="belarus5.html">
+                                <div class="channel-logo">
+                                    <img src="images/belarus5.jpg" alt="Беларусь 5">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Беларусь 5</div>
+                                    <div class="channel-cat">
+                                        Перерыв в вещании (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="матч тв">
+                            <a href="match.html">
+                                <div class="channel-logo">
+                                    <img src="images/match.jpg" alt="Матч ТВ">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Матч ТВ</div>
+                                    <div class="channel-cat">
+                                        Футбол. Чемпионат Испании. Обзор тура (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="матч тв hd">
+                            <a href="matchhd.html">
+                                <div class="channel-logo">
+                                    <img src="images/matchhd.jpg" alt="Матч ТВ HD">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Матч ТВ HD</div>
+                                    <div class="channel-cat">
+                                        Футбол. Чемпионат Испании. Обзор тура (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="футбол">
+                            <a href="futbol.html">
+                                <div class="channel-logo">
+                                    <img src="images/futbol.jpg" alt="Футбол">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Футбол</div>
+                                    <div class="channel-cat">
+                                        Порту-Гимарайнш. Кубок Португальской Лиги. Сезон 25/26 (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                                                                    <li class="cat-title">Новостные</li>
+                                            <li class="" data-name="deutsche welle">
+                            <a href="dw.html">
+                                <div class="channel-logo">
+                                    <img src="images/dw.jpg" alt="Deutsche Welle">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Deutsche Welle</div>
+                                    <div class="channel-cat">
+                                        В отличной форме (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="euronews">
+                            <a href="euronews.html">
+                                <div class="channel-logo">
+                                    <img src="images/euronews.jpg" alt="EuroNews">
+                                </div>
+                                <div>
+                                    <div class="channel-name">EuroNews</div>
+                                    <div class="channel-cat">
+                                        Журнал (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="france 24">
+                            <a href="france24.html">
+                                <div class="channel-logo">
+                                    <img src="images/france24.jpg" alt="France 24">
+                                </div>
+                                <div>
+                                    <div class="channel-name">France 24</div>
+                                    <div class="channel-cat">
+                                        Scoop (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="russia today">
+                            <a href="rt.html">
+                                <div class="channel-logo">
+                                    <img src="images/rt.jpg" alt="Russia Today">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Russia Today</div>
+                                    <div class="channel-cat">
+                                        Documentary (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="известия">
+                            <a href="iz.html">
+                                <div class="channel-logo">
+                                    <img src="images/iz.jpg" alt="Известия">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Известия</div>
+                                    <div class="channel-cat">
+                                        Новости (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="мир 24">
+                            <a href="mir24.html">
+                                <div class="channel-logo">
+                                    <img src="images/mir24.jpg" alt="Мир 24">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Мир 24</div>
+                                    <div class="channel-cat">
+                                        Профилактика (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="рбк">
+                            <a href="rbc.html">
+                                <div class="channel-logo">
+                                    <img src="images/rbc.jpg" alt="РБК">
+                                </div>
+                                <div>
+                                    <div class="channel-name">РБК</div>
+                                    <div class="channel-cat">
+                                        Таманцев. Итоги (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="россия 24">
+                            <a href="vesti.html">
+                                <div class="channel-logo">
+                                    <img src="images/vesti.jpg" alt="Россия 24">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Россия 24</div>
+                                    <div class="channel-cat">
+                                        День в истории (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                                                                    <li class="cat-title">Мужские</li>
+                                            <li class="" data-name="авто 24">
+                            <a href="avto24.html">
+                                <div class="channel-logo">
+                                    <img src="images/avto24.jpg" alt="Авто 24">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Авто 24</div>
+                                    <div class="channel-cat">
+                                        Путешествие на край земли - Чукотка (1-я серия) (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="дикая рыбалка hd">
+                            <a href="dikoefishing.html">
+                                <div class="channel-logo">
+                                    <img src="images/dikoefishing.jpg" alt="Дикая Рыбалка HD">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Дикая Рыбалка HD</div>
+                                    <div class="channel-cat">
+                                        Рыбалка без границ (Бразилия) (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="драйв тв">
+                            <a href="drive.html">
+                                <div class="channel-logo">
+                                    <img src="images/drive.jpg" alt="Драйв ТВ">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Драйв ТВ</div>
+                                    <div class="channel-cat">
+                                        Потестим на &quot;Драйве&quot; (HONGQI HS5) (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="мужской">
+                            <a href="mans.html">
+                                <div class="channel-logo">
+                                    <img src="images/mans.jpg" alt="Мужской">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Мужской</div>
+                                    <div class="channel-cat">
+                                        Как это работает? (90-я серия) (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="охота и рыбалка">
+                            <a href="ohotairybalka.html">
+                                <div class="channel-logo">
+                                    <img src="images/ohotairybalka.jpg" alt="Охота и рыбалка">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Охота и рыбалка</div>
+                                    <div class="channel-cat">
+                                        Охота на хищника (23-я серия) (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="охотник и рыболов">
+                            <a href="ohotnikirybolov.html">
+                                <div class="channel-logo">
+                                    <img src="images/ohotnikirybolov.jpg" alt="Охотник и рыболов">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Охотник и рыболов</div>
+                                    <div class="channel-cat">
+                                        Речная ресторация (Жареная горная форель с соусом из фенхеля) (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="техно 24">
+                            <a href="techno24.html">
+                                <div class="channel-logo">
+                                    <img src="images/techno24.jpg" alt="Техно 24">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Техно 24</div>
+                                    <div class="channel-cat">
+                                        Исходный код (16+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                                                                    <li class="cat-title">Региональные</li>
+                                            <li class="" data-name="беларусь 1">
+                            <a href="belarus.html">
+                                <div class="channel-logo">
+                                    <img src="images/belarus.jpg" alt="Беларусь 1">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Беларусь 1</div>
+                                    <div class="channel-cat">
+                                        Доброе утро, Беларусь! (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="беларусь 24">
+                            <a href="belarus24.html">
+                                <div class="channel-logo">
+                                    <img src="images/belarus24.jpg" alt="Беларусь 24">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Беларусь 24</div>
+                                    <div class="channel-cat">
+                                        Доброе утро, Беларусь! (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="крым 24">
+                            <a href="krym24.html">
+                                <div class="channel-logo">
+                                    <img src="images/krym24.jpg" alt="Крым 24">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Крым 24</div>
+                                    <div class="channel-cat">
+                                                                            </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="москва 24">
+                            <a href="m24.html">
+                                <div class="channel-logo">
+                                    <img src="images/m24.jpg" alt="Москва 24">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Москва 24</div>
+                                    <div class="channel-cat">
+                                        Утреннее вещание (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="москва доверие">
+                            <a href="moskvadoverie.html">
+                                <div class="channel-logo">
+                                    <img src="images/moskvadoverie.jpg" alt="Москва Доверие">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Москва Доверие</div>
+                                    <div class="channel-cat">
+                                        Это было смешно (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="первый крымский hd">
+                            <a href="1tvcrimea.html">
+                                <div class="channel-logo">
+                                    <img src="images/1tvcrimea.jpg" alt="Первый крымский HD">
+                                </div>
+                                <div>
+                                    <div class="channel-name">Первый крымский HD</div>
+                                    <div class="channel-cat">
+                                                                            </div>
+                                </div>
+                            </a>
+                        </li>
+                                            <li class="" data-name="тро союза">
+                            <a href="tro.html">
+                                <div class="channel-logo">
+                                    <img src="images/tro.jpg" alt="ТРО Союза">
+                                </div>
+                                <div>
+                                    <div class="channel-name">ТРО Союза</div>
+                                    <div class="channel-cat">
+                                        Москва-Минск (12+)                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                                                        </ul>
+        <div class="notice">Всего каналов: 205</div>
+    </aside>
+
+    <!-- Main section -->
+    <section class="main">
+		
+		<div id="vid_vpaut_div" style=" display:inline-block;width:600px;height:320px;border-radius:12px;margin-bottom:10px;" vid_vpaut_pl="30894"></div><script type="text/javascript" src="js/vid_vpaut_script.js" async=""></script>		
+                    <div class="player">
+                <video id="video" controls="" autoplay="" playsinline=""></video>
+                <div class="badges">
+                    <span class="badge live">LIVE</span>
+                    <span class="badge">Детский мир</span>
+                </div>
+            </div>
+            <div class="meta">
+                <div class="title"><h1>Детский мир онлайн — смотреть мультфильмы и сказки</h1></div>
+                <div class="muted">Детские</div>
+                <div class="text">Детский мир онлайн — это сказочный мир, который всегда с вами. Герои любимых мультфильмов, волшебные истории и веселые игры. Включайте прямой эфир и погрузитесь в детство.</div>
+            </div>
+            <script>
+                (function(){
+                    var src = "http:\/\/178.212.71.253:8000\/play\/52\/index.m3u8";
+                    var video = document.getElementById('video');
+                    if (!src) { console.warn('Для канала нет m3u8'); return; }
+                    if (Hls.isSupported()) {
+                        var hls = new Hls({maxBufferLength:30});
+                        hls.loadSource(src);
+                        hls.attachMedia(video);
+                    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                        video.src = src;
+                    } else {
+                        video.src = src;
+                    }
+                })();
+
+                function filterChannels(){
+                    var q = document.getElementById('q').value.trim().toLowerCase();
+                    var lis = document.querySelectorAll('#list > li');
+                    lis.forEach(function(li){
+                        var n = li.getAttribute('data-name');
+                        li.style.display = (!q || (n && n.indexOf(q) !== -1)) ? '' : 'none';
+                    });
+                }
+            </script>
+            </section>
+
+    <!-- EPG Sidebar -->
+    <aside class="epg">
+        <h2>Программа на сегодня</h2>
+        <ul class="epg-list">
+                            <li class="epg-item last">
+                    <div class="epg-time">00:00–00:05</div>
+                    <div>
+                        <div class="epg-title">Рейнбоу Хай (9-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item last">
+                    <div class="epg-time">00:05–00:10</div>
+                    <div>
+                        <div class="epg-title">Рейнбоу Хай (10-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item last">
+                    <div class="epg-time">00:10–00:15</div>
+                    <div>
+                        <div class="epg-title">Рейнбоу Хай (11-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item last">
+                    <div class="epg-time">00:15–00:25</div>
+                    <div>
+                        <div class="epg-title">Рейнбоу Хай (12-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item last">
+                    <div class="epg-time">00:25–00:30</div>
+                    <div>
+                        <div class="epg-title">Цветняшки (Подзорная труба) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item last">
+                    <div class="epg-time">00:30–00:35</div>
+                    <div>
+                        <div class="epg-title">Цветняшки (Жили-были зубки) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item last">
+                    <div class="epg-time">00:35–00:40</div>
+                    <div>
+                        <div class="epg-title">Цветняшки (Примирение) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item last">
+                    <div class="epg-time">00:40–01:05</div>
+                    <div>
+                        <div class="epg-title">Пакман в мире привидений (Предателюс поддает жару) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item last">
+                    <div class="epg-time">01:05–01:25</div>
+                    <div>
+                        <div class="epg-title">Пакман в мире привидений (Лихорадка Пак-Понга) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item last">
+                    <div class="epg-time">01:25–01:50</div>
+                    <div>
+                        <div class="epg-title">Робозуна (3-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item last">
+                    <div class="epg-time">01:50–01:55</div>
+                    <div>
+                        <div class="epg-title">Блупис (8-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item last">
+                    <div class="epg-time">01:55–02:00</div>
+                    <div>
+                        <div class="epg-title">Корги по имени Моко. Новый питомец (26-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item last">
+                    <div class="epg-time">02:00–02:05</div>
+                    <div>
+                        <div class="epg-title">Корги по имени Моко. Новый питомец (31-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item last">
+                    <div class="epg-time">02:05–02:10</div>
+                    <div>
+                        <div class="epg-title">Корги по имени Моко. Новый питомец (36-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item last">
+                    <div class="epg-time">02:10–02:15</div>
+                    <div>
+                        <div class="epg-title">Корги по имени Моко. Новый питомец (41-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item last">
+                    <div class="epg-time">02:15–02:25</div>
+                    <div>
+                        <div class="epg-title">Корги по имени Моко. Новый питомец (47-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item last">
+                    <div class="epg-time">02:25–02:30</div>
+                    <div>
+                        <div class="epg-title">Край Бебис Мэджик Тирс (Кристал не здоровится) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item last">
+                    <div class="epg-time">02:30–02:35</div>
+                    <div>
+                        <div class="epg-title">Край Бебис Мэджик Тирс (Мороженое с разными вкусами) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item last">
+                    <div class="epg-time">02:35–02:45</div>
+                    <div>
+                        <div class="epg-title">Край Бебис Мэджик Тирс (Лена на ютубе) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item last">
+                    <div class="epg-time">02:45–02:55</div>
+                    <div>
+                        <div class="epg-title">Патруль Дино (27-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item last">
+                    <div class="epg-time">02:55–03:10</div>
+                    <div>
+                        <div class="epg-title">Патруль Дино (28-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item last">
+                    <div class="epg-time">03:10–03:30</div>
+                    <div>
+                        <div class="epg-title">Патруль Дино (29-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item last">
+                    <div class="epg-time">03:30–03:40</div>
+                    <div>
+                        <div class="epg-title">Тобот Атлон (7-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item last">
+                    <div class="epg-time">03:40–03:50</div>
+                    <div>
+                        <div class="epg-title">Тобот Атлон (8-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item last">
+                    <div class="epg-time">03:50–04:05</div>
+                    <div>
+                        <div class="epg-title">Тобот Атлон (9-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item last">
+                    <div class="epg-time">04:05–04:15</div>
+                    <div>
+                        <div class="epg-title">Смарта и чудо-сумка (Бездомный котенок) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item last">
+                    <div class="epg-time">04:15–04:20</div>
+                    <div>
+                        <div class="epg-title">Смарта и чудо-сумка (Лох-несское чудовище) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item last">
+                    <div class="epg-time">04:20–04:40</div>
+                    <div>
+                        <div class="epg-title">Смарта и чудо-сумка (Смарта - супергерой) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item last">
+                    <div class="epg-time">04:40–04:55</div>
+                    <div>
+                        <div class="epg-title">Тобот. Герои Дэйдо (Коварная засада) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item last">
+                    <div class="epg-time">04:55–05:05</div>
+                    <div>
+                        <div class="epg-title">Шушумагия (43-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item last">
+                    <div class="epg-time">05:05–05:15</div>
+                    <div>
+                        <div class="epg-title">Команда Флоры (11-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item last">
+                    <div class="epg-time">05:15–05:30</div>
+                    <div>
+                        <div class="epg-title">Команда Флоры (12-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item last">
+                    <div class="epg-time">05:30–05:45</div>
+                    <div>
+                        <div class="epg-title">Карбот (Рождение Торнадо) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item last">
+                    <div class="epg-time">05:45–06:00</div>
+                    <div>
+                        <div class="epg-title">Карбот (Остановить навозного жука) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item last">
+                    <div class="epg-time">06:00–06:05</div>
+                    <div>
+                        <div class="epg-title">Рейнбоу Хай (13-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item last">
+                    <div class="epg-time">06:05–06:10</div>
+                    <div>
+                        <div class="epg-title">Рейнбоу Хай (14-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item last">
+                    <div class="epg-time">06:10–06:15</div>
+                    <div>
+                        <div class="epg-title">Рейнбоу Хай (15-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item last">
+                    <div class="epg-time">06:15–06:20</div>
+                    <div>
+                        <div class="epg-title">Рейнбоу Хай (16-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item last">
+                    <div class="epg-time">06:20–06:30</div>
+                    <div>
+                        <div class="epg-title">Цветняшки (Космонавты) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item last">
+                    <div class="epg-time">06:30–06:35</div>
+                    <div>
+                        <div class="epg-title">Цветняшки (Бутылочки) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item last">
+                    <div class="epg-time">06:35–06:40</div>
+                    <div>
+                        <div class="epg-title">Цветняшки (Баскетбол) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item now">
+                    <div class="epg-time">06:40–07:05</div>
+                    <div>
+                        <div class="epg-title">Пакман в мире привидений (Индиана Пак) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">07:05–07:25</div>
+                    <div>
+                        <div class="epg-title">Пакман в мире привидений (Пак за рулем) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">07:25–07:50</div>
+                    <div>
+                        <div class="epg-title">Робозуна (4-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">07:50–07:55</div>
+                    <div>
+                        <div class="epg-title">Ювик с планеты Ю (Цветной мир) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">07:55–08:00</div>
+                    <div>
+                        <div class="epg-title">Корги по имени Моко. Новый питомец (52-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">08:00–08:05</div>
+                    <div>
+                        <div class="epg-title">Корги по имени Моко. Новый питомец (58-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">08:05–08:10</div>
+                    <div>
+                        <div class="epg-title">Корги по имени Моко. Новый питомец (63-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">08:10–08:20</div>
+                    <div>
+                        <div class="epg-title">Корги по имени Моко. Новый питомец (69-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">08:20–08:25</div>
+                    <div>
+                        <div class="epg-title">Корги по имени Моко. Новый питомец (74-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">08:25–08:30</div>
+                    <div>
+                        <div class="epg-title">Край Бебис Мэджик Тирс (Тайны Хэллоуина) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">08:30–08:35</div>
+                    <div>
+                        <div class="epg-title">Край Бебис Мэджик Тирс (Вэнди все починит) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">08:35–08:45</div>
+                    <div>
+                        <div class="epg-title">Край Бебис Мэджик Тирс (Большое приключение) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">08:45–08:55</div>
+                    <div>
+                        <div class="epg-title">Тобот Атлон (10-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">08:55–09:05</div>
+                    <div>
+                        <div class="epg-title">Тобот Атлон (11-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">09:05–09:25</div>
+                    <div>
+                        <div class="epg-title">Тобот Атлон (12-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">09:25–09:30</div>
+                    <div>
+                        <div class="epg-title">Смарта и чудо-сумка (Сильный ветер) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">09:30–09:35</div>
+                    <div>
+                        <div class="epg-title">Смарта и чудо-сумка (Тайна потерянных варежек) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">09:35–09:55</div>
+                    <div>
+                        <div class="epg-title">Смарта и чудо-сумка (Смарта в погоне за дожде?м) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">09:55–10:10</div>
+                    <div>
+                        <div class="epg-title">Тобот. Герои Дэйдо (Трудные решения и неудержимые злодеи) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">10:10–10:20</div>
+                    <div>
+                        <div class="epg-title">Шушумагия (44-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">10:20–10:30</div>
+                    <div>
+                        <div class="epg-title">Команда Флоры (13-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">10:30–10:45</div>
+                    <div>
+                        <div class="epg-title">Команда Флоры (14-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">10:45–11:00</div>
+                    <div>
+                        <div class="epg-title">Карбот (День на реке Хан) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">11:00–11:15</div>
+                    <div>
+                        <div class="epg-title">Карбот (Падение метеорита) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">11:15–11:30</div>
+                    <div>
+                        <div class="epg-title">Патруль Дино (30-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">11:30–11:40</div>
+                    <div>
+                        <div class="epg-title">Патруль Дино (1-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">11:40–12:00</div>
+                    <div>
+                        <div class="epg-title">Патруль Дино (2-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">12:00–12:05</div>
+                    <div>
+                        <div class="epg-title">Рейнбоу Хай (13-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">12:05–12:10</div>
+                    <div>
+                        <div class="epg-title">Рейнбоу Хай (14-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">12:10–12:15</div>
+                    <div>
+                        <div class="epg-title">Рейнбоу Хай (15-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">12:15–12:20</div>
+                    <div>
+                        <div class="epg-title">Рейнбоу Хай (16-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">12:20–12:30</div>
+                    <div>
+                        <div class="epg-title">Цветняшки (Космонавты) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">12:30–12:35</div>
+                    <div>
+                        <div class="epg-title">Цветняшки (Бутылочки) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">12:35–12:40</div>
+                    <div>
+                        <div class="epg-title">Цветняшки (Баскетбол) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">12:40–13:05</div>
+                    <div>
+                        <div class="epg-title">Пакман в мире привидений (Индиана Пак) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">13:05–13:25</div>
+                    <div>
+                        <div class="epg-title">Пакман в мире привидений (Пак за рулем) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">13:25–13:50</div>
+                    <div>
+                        <div class="epg-title">Робозуна (4-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">13:50–13:55</div>
+                    <div>
+                        <div class="epg-title">Блупис (9-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">13:55–14:00</div>
+                    <div>
+                        <div class="epg-title">Корги по имени Моко. Новый питомец (52-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">14:00–14:05</div>
+                    <div>
+                        <div class="epg-title">Корги по имени Моко. Новый питомец (58-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">14:05–14:10</div>
+                    <div>
+                        <div class="epg-title">Корги по имени Моко. Новый питомец (63-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">14:10–14:20</div>
+                    <div>
+                        <div class="epg-title">Корги по имени Моко. Новый питомец (69-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">14:20–14:25</div>
+                    <div>
+                        <div class="epg-title">Корги по имени Моко. Новый питомец (74-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">14:25–14:30</div>
+                    <div>
+                        <div class="epg-title">Край Бебис Мэджик Тирс (Тайны Хэллоуина) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">14:30–14:35</div>
+                    <div>
+                        <div class="epg-title">Край Бебис Мэджик Тирс (Вэнди все починит) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">14:35–14:45</div>
+                    <div>
+                        <div class="epg-title">Край Бебис Мэджик Тирс (Большое приключение) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">14:45–14:55</div>
+                    <div>
+                        <div class="epg-title">Патруль Дино (30-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">14:55–15:10</div>
+                    <div>
+                        <div class="epg-title">Патруль Дино (1-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">15:10–15:30</div>
+                    <div>
+                        <div class="epg-title">Патруль Дино (2-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">15:30–15:40</div>
+                    <div>
+                        <div class="epg-title">Тобот Атлон (10-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">15:40–15:50</div>
+                    <div>
+                        <div class="epg-title">Тобот Атлон (11-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">15:50–16:05</div>
+                    <div>
+                        <div class="epg-title">Тобот Атлон (12-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">16:05–16:15</div>
+                    <div>
+                        <div class="epg-title">Смарта и чудо-сумка (Сильный ветер) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">16:15–16:20</div>
+                    <div>
+                        <div class="epg-title">Смарта и чудо-сумка (Тайна потерянных варежек) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">16:20–16:40</div>
+                    <div>
+                        <div class="epg-title">Смарта и чудо-сумка (Смарта в погоне за дожде?м) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">16:40–16:55</div>
+                    <div>
+                        <div class="epg-title">Тобот. Герои Дэйдо (Трудные решения и неудержимые злодеи) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">16:55–17:05</div>
+                    <div>
+                        <div class="epg-title">Шушумагия (44-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">17:05–17:15</div>
+                    <div>
+                        <div class="epg-title">Команда Флоры (13-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">17:15–17:30</div>
+                    <div>
+                        <div class="epg-title">Команда Флоры (14-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">17:30–17:45</div>
+                    <div>
+                        <div class="epg-title">Карбот (День на реке Хан) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">17:45–18:00</div>
+                    <div>
+                        <div class="epg-title">Карбот (Падение метеорита) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">18:00–18:05</div>
+                    <div>
+                        <div class="epg-title">Рейнбоу Хай (13-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">18:05–18:10</div>
+                    <div>
+                        <div class="epg-title">Рейнбоу Хай (14-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">18:10–18:15</div>
+                    <div>
+                        <div class="epg-title">Рейнбоу Хай (15-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">18:15–18:20</div>
+                    <div>
+                        <div class="epg-title">Рейнбоу Хай (16-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">18:20–18:30</div>
+                    <div>
+                        <div class="epg-title">Цветняшки (Космонавты) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">18:30–18:35</div>
+                    <div>
+                        <div class="epg-title">Цветняшки (Бутылочки) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">18:35–18:40</div>
+                    <div>
+                        <div class="epg-title">Цветняшки (Баскетбол) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">18:40–19:05</div>
+                    <div>
+                        <div class="epg-title">Пакман в мире привидений (Индиана Пак) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">19:05–19:25</div>
+                    <div>
+                        <div class="epg-title">Пакман в мире привидений (Пак за рулем) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">19:25–19:50</div>
+                    <div>
+                        <div class="epg-title">Робозуна (4-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">19:50–19:55</div>
+                    <div>
+                        <div class="epg-title">Ювик с планеты Ю (Цветной мир) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">19:55–20:00</div>
+                    <div>
+                        <div class="epg-title">Корги по имени Моко. Новый питомец (52-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">20:00–20:05</div>
+                    <div>
+                        <div class="epg-title">Корги по имени Моко. Новый питомец (58-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">20:05–20:10</div>
+                    <div>
+                        <div class="epg-title">Корги по имени Моко. Новый питомец (63-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">20:10–20:20</div>
+                    <div>
+                        <div class="epg-title">Корги по имени Моко. Новый питомец (69-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">20:20–20:25</div>
+                    <div>
+                        <div class="epg-title">Корги по имени Моко. Новый питомец (74-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">20:25–20:30</div>
+                    <div>
+                        <div class="epg-title">Край Бебис Мэджик Тирс (Тайны Хэллоуина) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">20:30–20:35</div>
+                    <div>
+                        <div class="epg-title">Край Бебис Мэджик Тирс (Вэнди все починит) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">20:35–20:45</div>
+                    <div>
+                        <div class="epg-title">Край Бебис Мэджик Тирс (Большое приключение) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">20:45–20:55</div>
+                    <div>
+                        <div class="epg-title">Тобот Атлон (10-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">20:55–21:05</div>
+                    <div>
+                        <div class="epg-title">Тобот Атлон (11-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">21:05–21:25</div>
+                    <div>
+                        <div class="epg-title">Тобот Атлон (12-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">21:25–21:30</div>
+                    <div>
+                        <div class="epg-title">Смарта и чудо-сумка (Сильный ветер) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">21:30–21:35</div>
+                    <div>
+                        <div class="epg-title">Смарта и чудо-сумка (Тайна потерянных варежек) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">21:35–21:55</div>
+                    <div>
+                        <div class="epg-title">Смарта и чудо-сумка (Смарта в погоне за дожде?м) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">21:55–22:05</div>
+                    <div>
+                        <div class="epg-title">Бабушкины сказки (Красавица и чудовище) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">22:05–22:20</div>
+                    <div>
+                        <div class="epg-title">Бабушкины сказки (Красавица и чудовище) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">22:20–22:30</div>
+                    <div>
+                        <div class="epg-title">Команда Флоры (13-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">22:30–22:45</div>
+                    <div>
+                        <div class="epg-title">Команда Флоры (14-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">22:45–23:00</div>
+                    <div>
+                        <div class="epg-title">Карбот (День на реке Хан) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">23:00–23:15</div>
+                    <div>
+                        <div class="epg-title">Карбот (Падение метеорита) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">23:15–23:30</div>
+                    <div>
+                        <div class="epg-title">Патруль Дино (30-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">23:30–23:40</div>
+                    <div>
+                        <div class="epg-title">Патруль Дино (1-я серия) (12+)</div>
+                                            </div>
+                </li>
+                            <li class="epg-item ">
+                    <div class="epg-time">23:40–00:00</div>
+                    <div>
+                        <div class="epg-title">Патруль Дино (2-я серия) (12+)</div>
+                                            </div>
+                </li>
+                    </ul>
+    </aside>
+
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container" style="grid-template-columns:1fr; display:flex; justify-content:space-between; align-items:center;">
+        <div>© 2025 Smotrim — онлайн телевидение бесплатно. Прямые эфиры популярных каналов: новости, спорт, фильмы, сериалы и передачи.</div>
+        <div>Адрес электронной почты: <a href="mailto:info@smotrim.org">info@smotrim.org</a></div>
+    </div>
+</footer>
+
+<!-- Scripts -->
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+    function scrollIntoParentView(item, parentSelector) {
+        if (!item) return;
+        var parent = document.querySelector(parentSelector);
+        if (!parent) return;
+
+        var parentRect = parent.getBoundingClientRect();
+        var itemRect   = item.getBoundingClientRect();
+        var offset     = (itemRect.top - parentRect.top) + parent.scrollTop;
+        var targetTop  = offset - Math.round((parent.clientHeight - item.offsetHeight) / 2);
+
+        if (targetTop < 0) targetTop = 0;
+        if (targetTop > parent.scrollHeight - parent.clientHeight) {
+            targetTop = parent.scrollHeight - parent.clientHeight;
+        }
+        parent.scrollTo({ top: targetTop, behavior: 'smooth' });
+    }
+
+    scrollIntoParentView(document.querySelector('.channel-list li.active'), '.channel-list');
+    scrollIntoParentView(document.querySelector('.epg-item.now'), '.epg-list');
+
+    window.filterChannels = function(){
+        var q = document.getElementById('q').value.trim().toLowerCase();
+        var lis = document.querySelectorAll('#list > li');
+        lis.forEach(function(li){
+            var n = li.getAttribute('data-name');
+            li.style.display = (!q || (n && n.indexOf(q) !== -1)) ? '' : 'none';
+        });
+    };
+});
+</script>
+
+<!--LiveInternet counter--><script>new Image().src = "//counter.yadro.ru/hit?r"+escape(document.referrer)+((typeof(screen)=="undefined")?"":";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+";h"+escape(document.title.substring(0,150))+";"+Math.random();</script><!--/LiveInternet--></body>
+</html>
